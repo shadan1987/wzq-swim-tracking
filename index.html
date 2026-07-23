@@ -1,0 +1,4428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>王子期游泳比赛成绩追踪</title>
+<style>
+/* ==================== 设计变量 ==================== */
+:root {
+    --bg-base: #eef2f7;
+    --bg-card: #ffffff;
+    --bg-hover: #f5f7fa;
+    --bg-soft: #f0f4f8;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --brand: #4f46e5;
+    --brand-light: #6366f1;
+    --brand-dark: #4338ca;
+    --brand-soft: #eef2ff;
+    --accent: #06b6d4;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --border: #e2e8f0;
+    --border-soft: #f1f5f9;
+    --shadow-sm: 0 1px 2px rgba(15,23,42,.04), 0 1px 3px rgba(15,23,42,.06);
+    --shadow-md: 0 4px 6px rgba(15,23,42,.04), 0 2px 4px rgba(15,23,42,.06);
+    --shadow-lg: 0 10px 15px rgba(15,23,42,.05), 0 4px 6px rgba(15,23,42,.08);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-full: 999px;
+    --transition: all .2s cubic-bezier(.4,0,.2,1);
+}
+
+* { margin:0; padding:0; box-sizing: border-box; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ==================== Header ==================== */
+.header {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4338ca 100%);
+    color: white;
+    padding: 32px 40px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--brand-light), var(--accent), var(--brand-light), transparent);
+}
+.header h1 { font-size: 26px; font-weight: 700; letter-spacing: 1px; }
+.header .sub { font-size: 13px; color: #c7d2fe; margin-top: 6px; }
+.header .info-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: var(--radius-full);
+    padding: 4px 14px;
+    margin: 8px 3px 0;
+    font-size: 12px;
+    font-weight: 500;
+    transition: var(--transition);
+}
+.header .info-badge:hover { background: rgba(255,255,255,0.22); }
+.container { max-width: 1300px; margin: 0 auto; padding: 24px 24px 48px; }
+
+/* ==================== 导航栏 ==================== */
+.topnav {
+    display: flex;
+    gap: 4px;
+    padding: 0 40px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4338ca 100%);
+    padding-bottom: 0;
+}
+.topnav-btn {
+    background: transparent;
+    color: #c7d2fe;
+    border: none;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 10px 10px 0 0;
+    transition: var(--transition);
+    position: relative;
+    border-bottom: 3px solid transparent;
+}
+.topnav-btn:hover { background: rgba(255,255,255,0.10); color: #fff; }
+.topnav-btn.active {
+    background: var(--bg-base);
+    color: var(--text-primary);
+    border-bottom-color: var(--brand);
+    font-weight: 700;
+}
+
+/* ==================== 筛选栏 ==================== */
+.filter-bar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-soft);
+}
+.filter-bar label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+.filter-bar select, .filter-bar input[type="text"] {
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    background: var(--bg-card);
+    cursor: pointer;
+    transition: var(--transition);
+}
+.filter-bar select:hover, .filter-bar input[type="text"]:hover { border-color: var(--brand-light); }
+.filter-bar select:focus, .filter-bar input[type="text"]:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px var(--brand-soft);
+}
+.filter-bar .search-box { display: flex; gap: 6px; align-items: center; }
+.filter-bar .btn-small { padding: 6px 14px; font-size: 12px; }
+
+/* ==================== 统计卡片 ==================== */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-soft);
+    border-top: 4px solid var(--brand);
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+}
+.stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.stat-card:nth-child(2) { border-top-color: var(--brand-light); }
+.stat-card:nth-child(3) { border-top-color: var(--accent); }
+.stat-card:nth-child(4) { border-top-color: var(--warning); }
+.stat-card:nth-child(5) { border-top-color: var(--success); }
+.stat-card .event-name { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; word-break: break-all; line-height: 1.4; }
+.stat-card .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; }
+.stat-card .value { font-size: 26px; font-weight: 800; color: var(--text-primary); margin: 4px 0; }
+.stat-card .detail { font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin-top: 6px; }
+
+/* ==================== 图表 ==================== */
+.charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.chart-box {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-soft);
+    overflow: hidden;
+    transition: var(--transition);
+}
+.chart-box:hover { box-shadow: var(--shadow-md); }
+.chart-box h3 { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+.chart-placeholder { text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 14px; }
+
+/* ==================== 表格 ==================== */
+.table-container {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-soft);
+    overflow-x: auto;
+}
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+    background: var(--bg-soft);
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+}
+td { padding: 9px 12px; border-bottom: 1px solid var(--border-soft); word-break: break-all; }
+tr { transition: var(--transition); }
+tr:hover { background: var(--bg-hover); }
+tr.wzq-row { background: #eef2ff; }
+tr.wzq-row:hover { background: #e0e7ff; }
+.no-data { text-align: center; padding: 40px; color: var(--text-muted); font-size: 14px; }
+
+/* ==================== 按钮 ==================== */
+.btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.btn-pink { background: var(--brand); color: white; }
+.btn-pink:hover { background: var(--brand-dark); box-shadow: 0 4px 12px rgba(79,70,229,.3); }
+.btn-gray { background: var(--bg-soft); color: var(--text-secondary); }
+.btn-gray:hover { background: var(--border); }
+.btn-green { background: var(--success); color: white; }
+.btn-green:hover { background: #059669; box-shadow: 0 4px 12px rgba(16,185,129,.3); }
+.btn-blue { background: var(--brand); color: white; }
+.btn-blue:hover { background: var(--brand-dark); box-shadow: 0 4px 12px rgba(79,70,229,.3); }
+.btn-sm { padding: 5px 12px; font-size: 12px; }
+
+/* ==================== 弹窗 ==================== */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.5); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; }
+.modal-overlay.active { display: flex; animation: fadeIn .2s ease; }
+.modal {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    max-width: 700px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp .25s cubic-bezier(.4,0,.2,1);
+}
+.modal h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+.modal textarea { width: 100%; height: 200px; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: 'Consolas', monospace; resize: vertical; transition: var(--transition); }
+.modal textarea:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
+.modal .hint { font-size: 12px; color: var(--text-muted); margin: 8px 0 12px; line-height: 1.6; }
+.modal .actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
+
+/* ==================== 对比标签 ==================== */
+.compare-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.compare-tag { display: inline-flex; align-items: center; gap: 4px; background: var(--brand-soft); color: var(--brand-dark); padding: 4px 12px; border-radius: var(--radius-full); font-size: 12px; font-weight: 600; transition: var(--transition); }
+.compare-tag:hover { background: #e0e7ff; }
+.compare-tag .remove { cursor: pointer; font-size: 14px; opacity: .6; transition: var(--transition); }
+.compare-tag .remove:hover { opacity: 1; color: var(--danger); }
+.diff-better { color: var(--success); font-weight: 600; }
+.diff-worse { color: var(--danger); font-weight: 600; }
+.opp-name { font-size: 11px; color: var(--brand-light); font-weight: 600; }
+
+/* ==================== 上传预览 ==================== */
+.upload-preview { max-height:300px; overflow-y:auto; margin:12px 0; border:1px solid var(--border); border-radius:var(--radius-sm); }
+.upload-preview table { width:100%; font-size:12px; border-collapse:collapse; }
+.upload-preview th { background:var(--bg-soft); padding:6px 8px; text-align:left; font-size:11px; color:var(--text-secondary); position:sticky; top:0; }
+.upload-preview td { padding:4px 8px; border-bottom:1px solid var(--border-soft); }
+.upload-preview tr:hover { background:var(--bg-hover); }
+.upload-summary { font-size:13px; color:var(--text-secondary); margin-bottom:8px; }
+.upload-summary b { color:var(--text-primary); }
+.upload-tabs { display:flex; gap:0; margin-bottom:12px; border-bottom:2px solid var(--border); }
+.upload-tab { padding:6px 16px; cursor:pointer; font-size:13px; color:var(--text-secondary); border:none; background:none; border-bottom:2px solid transparent; margin-bottom:-2px; transition:var(--transition); }
+.upload-tab.active { color:var(--brand); border-bottom-color:var(--brand); font-weight:600; }
+.upload-area { border:2px dashed var(--border); border-radius:var(--radius-md); padding:30px; text-align:center; cursor:pointer; transition:var(--transition); }
+.upload-area:hover { border-color:var(--brand); background:var(--brand-soft); }
+.upload-area.dragover { border-color:var(--brand); background:#e0e7ff; }
+.upload-area-icon { font-size:32px; margin-bottom:8px; }
+.upload-area-text { font-size:13px; color:var(--text-secondary); }
+
+/* ==================== 身高体重 ==================== */
+.growth-form label { font-size:13px; font-weight:600; color:var(--text-secondary); display:block; margin-bottom:4px; }
+.growth-form input { padding:7px 10px; border:1px solid var(--border); border-radius:var(--radius-sm); font-size:13px; transition:var(--transition); }
+.growth-form input:focus { outline:none; border-color:var(--brand); box-shadow:0 0 0 3px var(--brand-soft); }
+.growth-add { background:var(--brand); color:#fff; border:none; padding:9px 18px; border-radius:var(--radius-sm); font-size:13px; font-weight:600; cursor:pointer; transition:var(--transition); }
+.growth-add:hover { background:var(--brand-dark); box-shadow:0 4px 12px rgba(79,70,229,.3); }
+#growthStatus b { color:var(--text-primary); }
+
+/* ==================== 年度增长对比 ==================== */
+.gr-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.gr-table th { background: var(--bg-soft); padding: 8px 10px; text-align: center; font-weight: 700; color: var(--text-secondary); border-bottom: 2px solid var(--border); font-size: 12px; white-space: nowrap; }
+.gr-table th:first-child { text-align: left; }
+.gr-table td { padding: 8px 10px; border-bottom: 1px solid var(--border-soft); text-align: center; }
+.gr-table td:first-child { text-align: left; font-weight: 600; color: var(--text-secondary); }
+.gr-table tr:last-child td { border-bottom: none; }
+.gr-rate-good { color: var(--success); font-weight: 700; }
+.gr-rate-normal { color: var(--text-primary); font-weight: 600; }
+.gr-rate-low { color: var(--warning); font-weight: 700; }
+.gr-rate-bad { color: var(--danger); font-weight: 700; }
+.gr-ref { font-size: 11px; color: var(--text-muted); }
+.gr-badge { display: inline-block; padding: 2px 10px; border-radius: var(--radius-full); font-size: 11px; font-weight: 600; transition: var(--transition); }
+.gr-badge.good { background: #d1fae5; color: #065f46; }
+.gr-badge.normal { background: var(--brand-soft); color: var(--brand-dark); }
+.gr-badge.low { background: #fef3c7; color: #92400e; }
+.gr-badge.bad { background: #fee2e2; color: #991b1b; }
+
+/* ==================== 训练记录 ==================== */
+.tr-tab-btn { background: var(--bg-soft); color: var(--text-secondary); border: none; padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: var(--radius-sm); transition: var(--transition); }
+.tr-tab-btn:hover { background: var(--border); }
+.tr-tab-btn.active { background: var(--brand); color: #fff; box-shadow: 0 2px 8px rgba(79,70,229,.25); }
+.tr-form label { font-size:12px; font-weight:600; color:var(--text-secondary); display:block; margin-bottom:3px; }
+.tr-form input, .tr-form select { padding:7px 10px; border:1px solid var(--border); border-radius:var(--radius-sm); font-size:13px; transition:var(--transition); }
+.tr-form input:focus, .tr-form select:focus { outline:none; border-color:var(--brand); box-shadow:0 0 0 3px var(--brand-soft); }
+.tr-summary-card { background:var(--bg-soft); border-radius:var(--radius-md); padding:14px 16px; border:1px solid var(--border-soft); }
+.tr-summary-card .ts-title { font-weight:700; font-size:14px; color:var(--text-primary); margin-bottom:8px; }
+.tr-week-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
+.tr-week-day { background:var(--bg-card); border-radius:var(--radius-sm); padding:8px 6px; text-align:center; font-size:11px; border:1px solid var(--border-soft); transition:var(--transition); }
+.tr-week-day.has-training { border-color:var(--brand-light); background:var(--brand-soft); }
+.tr-week-day.has-test { border-color:var(--warning); background:#fef3c7; }
+.tr-week-day:hover { transform:scale(1.05); }
+.tr-week-day .wd-name { font-weight:700; color:var(--text-secondary); }
+.tr-week-day .wd-info { color:var(--brand-light); font-weight:600; margin-top:2px; }
+.tr-event-card { border:1px solid var(--border-soft); border-radius:var(--radius-md); overflow:hidden; margin-bottom:12px; box-shadow:var(--shadow-sm); transition:var(--transition); }
+.tr-event-card:hover { box-shadow:var(--shadow-md); }
+.tr-event-card .tec-header { background:var(--bg-soft); padding:10px 14px; font-weight:700; color:var(--text-primary); display:flex; justify-content:space-between; align-items:center; }
+.tr-event-card .tec-body { padding:0; }
+.tr-event-card table { width:100%; border-collapse:collapse; font-size:12px; }
+.tr-event-card th { background:var(--bg-soft); padding:6px 8px; text-align:center; font-weight:600; color:var(--text-secondary); border-bottom:1px solid var(--border); }
+.tr-event-card td { padding:6px 8px; text-align:center; border-bottom:1px solid var(--border-soft); }
+.tr-event-card .best-time { color:var(--brand); font-weight:700; }
+.tr-gap-pos { color:var(--danger); font-weight:600; }
+.tr-gap-neg { color:var(--success); font-weight:600; }
+
+/* ==================== 等级达标分析 ==================== */
+.grade-section { margin-bottom: 24px; }
+.grade-section h3 { font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.grade-section h3 .grade-hint { font-size: 12px; font-weight: 400; color: var(--text-muted); }
+.grade-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+.grade-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-soft);
+    border-top: 4px solid var(--brand);
+    transition: var(--transition);
+}
+.grade-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.grade-card .gc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.grade-card .gc-event { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+.grade-card .gc-best { font-size: 22px; font-weight: 800; color: var(--brand); }
+.grade-card .gc-best small { font-size: 12px; font-weight: 400; color: var(--text-muted); margin-left: 4px; }
+.grade-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+.grade-table th { background: var(--bg-soft); padding: 7px 10px; text-align: center; font-weight: 700; color: var(--text-secondary); border-bottom: 2px solid var(--border); font-size: 12px; }
+.grade-table th:first-child { text-align: left; }
+.grade-table td { padding: 7px 10px; border-bottom: 1px solid var(--border-soft); text-align: center; }
+.grade-table td:first-child { text-align: left; font-weight: 600; color: var(--text-secondary); }
+.grade-table tr:last-child td { border-bottom: none; }
+.grade-gap-positive { color: var(--danger); font-weight: 700; }
+.grade-gap-negative { color: var(--success); font-weight: 700; }
+.grade-gap-zero { color: var(--brand); font-weight: 700; }
+.grade-predict-tag { display: inline-block; padding: 2px 10px; border-radius: var(--radius-full); font-size: 11px; font-weight: 600; margin-top: 2px; transition: var(--transition); }
+.grade-predict-tag.achieved { background: #d1fae5; color: #065f46; }
+.grade-predict-tag.predicted { background: #dbeafe; color: #1e40af; }
+.grade-predict-tag.far { background: #fef3c7; color: #92400e; }
+.grade-predict-tag.very-far { background: #fee2e2; color: #991b1b; }
+.grade-summary-bar { background: var(--bg-card); border-radius: var(--radius-md); padding: 16px 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-soft); margin-bottom: 16px; }
+.grade-summary-bar .summary-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+.grade-summary-bar .summary-content { font-size: 13px; color: var(--text-secondary); line-height: 1.8; }
+.grade-summary-bar .summary-content b { color: var(--text-primary); }
+
+/* ==================== 动画 ==================== */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .charts-row { grid-template-columns: 1fr; }
+    .header { padding: 20px 16px; }
+    .topnav { padding: 0 16px; }
+    .container { padding: 16px; }
+    .topnav-btn { padding: 10px 14px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <h1>王子期游泳比赛成绩追踪</h1>
+    <div class="sub">2015-10-10 出生 | 广州 | 宸汐体育/凯越体育</div>
+    <div>
+        <span class="info-badge">蝶泳主攻</span>
+        <span class="info-badge">U11组</span>
+        <span class="info-badge">最佳 100米蝶泳 1:28.66</span>
+    </div>
+    <div style="margin-top:8px; font-size:11px; color:#64748b;">
+        📡 数据源：<a href="http://swiminfo.cc/searchresult.aspx?bsid=733&xlid=0" target="_blank" style="color:#8b5cf6;">swiminfo.cc (bsid=733)</a>
+        | 更新数据：打开源网站→竞赛成绩→F12控制台→运行 <a href="swiminfo_scraper.js" download style="color:#0070f3;">scraper脚本</a>→复制JSON发给我
+    </div>
+</div>
+
+<!-- Top Nav -->
+<div class="topnav">
+    <button class="topnav-btn active" data-tab="scores" onclick="switchTab('scores')">🏊 比赛成绩</button>
+    <button class="topnav-btn" data-tab="training" onclick="switchTab('training')">🏋️ 训练记录</button>
+    <button class="topnav-btn" data-tab="study" onclick="switchTab('study')">📚 学习记录</button>
+    <button class="topnav-btn" data-tab="growth" onclick="switchTab('growth')">📏 身高体重</button>
+</div>
+
+<div id="view-scores" class="container">
+
+<!-- Filter bar -->
+<div class="filter-bar">
+    <label>泳姿筛选：</label>
+    <select id="strokeFilter" onchange="refreshAll()">
+        <option value="all">全部泳姿</option>
+        <option value="蝶泳">蝶泳</option>
+        <option value="自由泳">自由泳</option>
+        <option value="蛙泳">蛙泳</option>
+        <option value="仰泳">仰泳</option>
+        <option value="混合泳">混合泳</option>
+    </select>
+    <label>池型：</label>
+    <select id="poolTypeFilter" onchange="refreshAll()" title="等级标准按池型切换：25米池标准约比50米池快1~3秒">
+        <option value="50米池">50米池（标准池）</option>
+        <option value="25米池">25米池（短池）</option>
+    </select>
+
+    <div class="search-box">
+        <label>对比选手：</label>
+        <input type="text" id="compareInput" placeholder="输入姓名搜索..." onkeyup="if(event.key==='Enter')searchCompare()">
+        <button class="btn btn-sm btn-gray" onclick="searchCompare()">搜索</button>
+        <span id="quickCompareButtons" style="display:inline-flex;gap:4px;flex-wrap:wrap;"></span>
+    </div>
+    <div class="compare-tags" id="compareTags"></div>
+
+    <div style="margin-left:auto; display:flex; gap:8px;">
+        <button class="btn btn-sm btn-green" onclick="openAddModal()">+ 批量添加</button>
+        <button class="btn btn-sm btn-blue" onclick="document.getElementById('uploadExcelInput').click()">📤 上传成绩文件</button>
+        <input type="file" id="uploadExcelInput" accept=".xls,.xlsx,.csv,.html,.htm" style="display:none;" onchange="handleExcelUpload(this)">
+        <button class="btn btn-sm btn-gray" onclick="exportData()">导出JSON</button>
+        <button class="btn btn-sm btn-gray" onclick="importData()">导入JSON</button>
+        <button class="btn btn-sm btn-gray" onclick="clearData()">清空数据</button>
+    </div>
+</div>
+<!-- Stats -->
+<div class="stats-grid" id="statsGrid"></div>
+
+<!-- Grade Analysis -->
+<div class="grade-section" id="gradeSection">
+    <h3>🏅 运动员等级达标分析 <span class="grade-hint">（参照2025年新版《游泳运动员技术等级标准》男子标准，当前：<span id="gradePoolLabel">50米池</span>。成绩越低越好）</span></h3>
+    <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">📋 数据来源：国家体育总局2025年1月1日起施行的《游泳运动员技术等级标准》| 可在上方"池型"下拉框切换25米池/50米池标准</div>
+    <div class="grade-summary-bar" id="gradeSummaryBar">
+        <div class="summary-title">📊 等级达标总览</div>
+        <div class="summary-content" id="gradeSummaryContent">加载中...</div>
+    </div>
+    <div class="grade-grid" id="gradeGrid"></div>
+</div>
+
+<!-- Charts -->
+<div class="charts-row">
+    <div class="chart-box">
+        <h3>成绩变化趋势（按比赛日期）
+            <select id="chart1Filter" onchange="updateChart1()" style="margin-left:12px; padding:6px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-weight:600; color:#0f172a;">
+                <option value="all">全部项目</option>
+            </select>
+        </h3>
+        <canvas id="chart1"></canvas>
+    </div>
+    <div class="chart-box">
+        <h3>成绩进步趋势（按项目）
+            <select id="progressEvent" onchange="updateChart2()" style="margin-left:12px; padding:6px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-weight:600; color:#0f172a;">
+                <option value="auto">自动选择</option>
+                <option value="all">全部项目</option>
+            </select>
+        </h3>
+        <canvas id="chart2"></canvas>
+        <div id="chart2Summary" style="margin-top:10px; padding:8px 14px; background:#fdf2fe; border-radius:8px; font-size:13px; color:#a21caf; font-weight:600; display:none; word-break:break-all; overflow-wrap:break-word; line-height:1.6; overflow:hidden;"></div>
+    </div>
+</div>
+
+<!-- Table -->
+<div class="table-container" id="tableContainer">
+    <h3 style="margin-bottom:12px; color:#0f172a;">比赛记录（王子期）</h3>
+    <table id="dataTable">
+        <thead id="tableHead">
+            <tr>
+                <th>日期</th><th>年龄</th><th>项目</th><th>成绩</th>
+                <th>比赛名称</th><th>组别</th><th>名次</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
+
+</div>
+
+<!-- ============ 身高体重视图 ============ -->
+<div id="view-training" class="container" style="display:none;">
+    <h2 style="margin:6px 0 2px; color:#0f172a;">🏋️ 王子期 训练记录</h2>
+    <p style="color:#64748b; font-size:13px; margin-bottom:14px;">记录每日训练数据与训练后测试成绩，追踪训练进度与达级差距</p>
+
+    <!-- 每周训练节奏概览 -->
+    <div id="trainingWeeklySummary" style="margin-bottom:16px;"></div>
+
+    <!-- 录入表单 -->
+    <div style="background:#fff; border-radius:12px; padding:18px 20px; box-shadow:0 1px 4px rgba(0,0,0,.06); margin-bottom:16px;">
+        <div style="display:flex; gap:8px; margin-bottom:14px;">
+            <button class="tr-tab-btn active" id="trTabDaily" onclick="switchTrTab('daily')">📝 每日训练</button>
+            <button class="tr-tab-btn" id="trTabTest" onclick="switchTrTab('test')">⏱️ 测试成绩</button>
+        </div>
+
+        <!-- 每日训练表单 -->
+        <div id="trFormDaily" class="tr-form">
+            <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:flex-end;">
+                <div><label>训练日期</label><input type="date" id="trDailyDate" style="width:150px;"></div>
+                <div><label>训练时长(分钟)</label><input type="number" id="trDailyDuration" placeholder="如 120" style="width:120px;"></div>
+                <div><label>强度</label>
+                    <select id="trDailyIntensity" style="width:100px; padding:7px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;">
+                        <option value="">-</option>
+                        <option value="低">低</option>
+                        <option value="中">中</option>
+                        <option value="高">高</option>
+                        <option value="极高">极高</option>
+                    </select>
+                </div>
+                <div style="flex:1; min-width:200px;"><label>训练内容</label><input type="text" id="trDailyContent" placeholder="如 蝶泳技术+耐力训练 4x50m" style="width:100%;"></div>
+                <div style="flex:1; min-width:150px;"><label>备注</label><input type="text" id="trDailyNotes" placeholder="可选" style="width:100%;"></div>
+                <button class="growth-add" onclick="addTrainingDaily()">＋ 添加</button>
+            </div>
+        </div>
+
+        <!-- 测试成绩表单 -->
+        <div id="trFormTest" class="tr-form" style="display:none;">
+            <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:flex-end;">
+                <div><label>测试日期</label><input type="date" id="trTestDate" style="width:150px;"></div>
+                <div><label>项目</label>
+                    <select id="trTestEvent" style="width:160px; padding:7px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;">
+                        <option value="50米自由泳">50米自由泳</option>
+                        <option value="100米自由泳">100米自由泳</option>
+                        <option value="200米自由泳">200米自由泳</option>
+                        <option value="50米仰泳">50米仰泳</option>
+                        <option value="100米仰泳">100米仰泳</option>
+                        <option value="50米蛙泳">50米蛙泳</option>
+                        <option value="100米蛙泳">100米蛙泳</option>
+                        <option value="50米蝶泳">50米蝶泳</option>
+                        <option value="100米蝶泳">100米蝶泳</option>
+                        <option value="200米蝶泳">200米蝶泳</option>
+                        <option value="200米混合泳">200米混合泳</option>
+                    </select>
+                </div>
+                <div><label>池型</label>
+                    <select id="trTestPool" style="width:100px; padding:7px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;">
+                        <option value="25米池">25米池</option>
+                        <option value="50米池">50米池</option>
+                    </select>
+                </div>
+                <div><label>成绩</label><input type="text" id="trTestTime" placeholder="如 39.00 或 1:12.50" style="width:140px;"></div>
+                <div style="flex:1; min-width:150px;"><label>备注</label><input type="text" id="trTestNotes" placeholder="可选" style="width:100%;"></div>
+                <button class="growth-add" onclick="addTrainingTest()">＋ 添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 测试成绩汇总（按项目分组，含达级参考） -->
+    <div style="background:#fff; border-radius:12px; padding:18px 20px; box-shadow:0 1px 4px rgba(0,0,0,.06); margin-bottom:16px;">
+        <div style="font-weight:700; color:#0f172a; margin-bottom:4px; font-size:15px;">⏱️ 测试成绩汇总（按项目，含达级差距参考）</div>
+        <div style="font-size:12px; color:#94a3b8; margin-bottom:12px;">达级参考依据2025新版《游泳运动员技术等级标准》男子标准。25米池按50米池标准约减1~2秒估算。</div>
+        <div id="trainingTestSummary"></div>
+    </div>
+
+    <!-- 测试成绩进步趋势图（每种泳姿单独一张图） -->
+    <div id="trainingTrendCards" style="margin-bottom:16px;"></div>
+    <div id="trainingTrendEmpty" style="background:#fff; border-radius:12px; padding:20px; box-shadow:0 1px 4px rgba(0,0,0,.06); margin-bottom:16px; color:#94a3b8; font-size:13px; text-align:center; display:none;">暂无测试数据，无法绘制趋势图</div>
+
+    <!-- 训练记录明细表 -->
+    <div class="table-container">
+        <h3 style="margin-bottom:12px; color:#0f172a;">📋 训练记录明细</h3>
+        <table>
+            <thead><tr>
+                <th>日期</th><th>类型</th><th>项目</th><th>池型</th><th>成绩</th>
+                <th>训练内容</th><th>时长</th><th>强度</th><th>备注</th><th>操作</th>
+            </tr></thead>
+            <tbody id="trainingBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<div id="view-study" class="container" style="display:none;">
+    <h2 style="margin:6px 0 2px; color:#0f172a;">📚 王子期 学习成绩记录</h2>
+    <p style="color:#64748b; font-size:13px; margin-bottom:14px;">记录各学期期中、期末及日常测验成绩，生成各科学习趋势曲线</p>
+
+    <!-- 科目概览卡片 -->
+    <div id="studyOverview" style="margin-bottom:16px;"></div>
+
+    <!-- 录入表单 -->
+    <div style="background:#fff; border-radius:12px; padding:18px 20px; box-shadow:0 1px 4px rgba(0,0,0,.06); margin-bottom:16px;">
+        <div style="font-weight:700; color:#0f172a; margin-bottom:12px; font-size:15px;">➕ 添加成绩记录</div>
+        <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:flex-end;">
+            <div><label style="font-size:12px; font-weight:600; color:#475569; display:block; margin-bottom:3px;">考试日期</label><input type="date" id="studyDate" style="width:150px; padding:7px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;"></div>
+            <div><label style="font-size:12px; font-weight:600; color:#475569; display:block; margin-bottom:3px;">学期</label>
+                <select id="studySemester" style="width:120px; padding:7px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;">
+                    <option value="一年级上">一年级上</option>
+                    <option value="一年级下">一年级下</option>
+                    <option value="二年级上">二年级上</option>
+                    <option value="二年级下">二年级下</option>
+                    <option value="三年级上">三年级上</option>
+                    <option value="三年级下">三年级下</option>
+                    <option value="四年级上">四年级上</option>
+                    <option value="四年级下">四年级下</option>
+                    <option value="五年级上">五年级上</option>
+                    <option value="五年级下">五年级下</option>
+                </select>
+            </div>
+            <div><label style="font-size:12px; font-weight:600; color:#475569; display:block; margin-bottom:3px;">考试类型</label>
+                <select id="studyExamType" style="width:100px; padding:7px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;">
+                    <option value="测验">测验</option>
+                    <option value="月考">月考</option>
+                    <option value="期中">期中</option>
+                    <option value="期末">期末</option>
+                </select>
+            </div>
+            <div><label style="font-size:12px; font-weight:600; color:#475569; display:block; margin-bottom:3px;">科目</label>
+                <select id="studySubject" style="width:130px; padding:7px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;">
+                    <option value="语文">语文</option>
+                    <option value="数学">数学</option>
+                    <option value="英语">英语</option>
+                    <option value="科学">科学</option>
+                    <option value="道德与法治">道德与法治</option>
+                    <option value="体育">体育</option>
+                    <option value="音乐">音乐</option>
+                    <option value="美术">美术</option>
+                    <option value="信息科技">信息科技</option>
+                    <option value="综合实践活动">综合实践活动</option>
+                    <option value="劳动">劳动</option>
+                </select>
+            </div>
+            <div><label style="font-size:12px; font-weight:600; color:#475569; display:block; margin-bottom:3px;">分数</label><input type="number" id="studyScore" step="0.5" placeholder="如 95" style="width:90px; padding:7px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;"></div>
+            <div><label style="font-size:12px; font-weight:600; color:#475569; display:block; margin-bottom:3px;">满分</label><input type="number" id="studyFullScore" value="100" step="10" style="width:80px; padding:7px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;"></div>
+            <div><label style="font-size:12px; font-weight:600; color:#475569; display:block; margin-bottom:3px;">排名/等级</label><input type="text" id="studyRank" placeholder="如 5 / A" style="width:80px; padding:7px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;"></div>
+            <div><label style="font-size:12px; font-weight:600; color:#475569; display:block; margin-bottom:3px;">备注</label><input type="text" id="studyNotes" placeholder="可选" style="width:140px; padding:7px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;"></div>
+            <button class="growth-add" onclick="addStudyRecord()">＋ 添加</button>
+        </div>
+    </div>
+
+    <!-- 各科成绩曲线 -->
+    <div id="studyCharts" style="margin-bottom:16px;"></div>
+
+    <!-- 学期成绩汇总表 -->
+    <div style="background:#fff; border-radius:12px; padding:18px 20px; box-shadow:0 1px 4px rgba(0,0,0,.06); margin-bottom:16px;">
+        <div style="font-weight:700; color:#0f172a; margin-bottom:12px; font-size:15px;">📋 学期成绩汇总（期中/期末）</div>
+        <div id="studySemesterSummary"></div>
+    </div>
+
+    <!-- 成绩明细表 -->
+    <div class="table-container">
+        <h3 style="margin-bottom:12px; color:#0f172a;">📝 成绩明细记录</h3>
+        <table>
+            <thead><tr>
+                <th>日期</th><th>学期</th><th>类型</th><th>科目</th><th>分数</th><th>满分</th><th>得分率</th><th>排名/等级</th><th>备注</th><th>操作</th>
+            </tr></thead>
+            <tbody id="studyBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<div id="view-growth" class="container" style="display:none;">
+    <h2 style="margin:6px 0 2px; color:#0f172a;">📏 王子期 身高体重记录</h2>
+    <p style="color:#64748b; font-size:13px; margin-bottom:14px;">出生：2015-10-10（按此计算年龄）｜数据持久化于后端 data/store.json，浏览器仅作缓存</p>
+
+    <div class="growth-form" style="background:#fff; border-radius:12px; padding:18px 20px; box-shadow:0 1px 4px rgba(0,0,0,.06); margin-bottom:16px;">
+        <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:flex-end;">
+            <div><label>测量日期</label><input type="date" id="gDate" style="width:150px;"></div>
+            <div><label>身高 (cm)</label><input type="number" id="gHeight" step="0.1" placeholder="如 145.3" style="width:120px;"></div>
+            <div><label>体重 (kg)</label><input type="number" id="gWeight" step="0.1" placeholder="如 38.0" style="width:120px;"></div>
+            <button class="growth-add" onclick="addGrowth()">＋ 添加记录</button>
+        </div>
+    </div>
+
+    <div id="growthStatus" style="margin-bottom:16px; padding:12px 16px; background:#f0f9ff; border-radius:10px; font-size:14px; color:#0f172a; line-height:1.8;"></div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(380px,1fr)); gap:16px; margin-bottom:18px;">
+        <div style="background:#fff; border-radius:12px; padding:16px; box-shadow:0 1px 4px rgba(0,0,0,.06);">
+            <div style="font-weight:700; color:#0f172a; margin-bottom:10px;">📏 身高生长曲线（对比标准）</div>
+            <div style="position:relative; height:300px;"><canvas id="growthHeightChart"></canvas></div>
+        </div>
+        <div style="background:#fff; border-radius:12px; padding:16px; box-shadow:0 1px 4px rgba(0,0,0,.06);">
+            <div style="font-weight:700; color:#0f172a; margin-bottom:10px;">⚖️ 体重生长曲线（对比标准）</div>
+            <div style="position:relative; height:300px;"><canvas id="growthWeightChart"></canvas></div>
+        </div>
+    </div>
+
+    <!-- 体重减重目标曲线 -->
+    <div style="background:#fff; border-radius:12px; padding:18px 20px; box-shadow:0 1px 4px rgba(0,0,0,.06); margin-bottom:18px;">
+        <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:4px;">
+            <div style="font-weight:700; color:#0f172a; font-size:15px;">🎯 体重减重目标曲线</div>
+            <div style="font-size:13px; color:#0f172a;">
+                <span style="font-weight:600; color:#E8463A;">当前 39.2kg</span>
+                <span style="color:#94a3b8; margin:0 6px;">→</span>
+                <span style="font-weight:600; color:#1DC981;">目标 34.2kg</span>
+                <span style="color:#94a3b8; font-size:11px; margin-left:6px;">(减重10斤，截止2026-08-31)</span>
+            </div>
+        </div>
+        <div style="font-size:12px; color:#94a3b8; margin-bottom:12px;">绿色实线=目标减重曲线，蓝色圆点=实际体重记录</div>
+        <div style="position:relative; height:clamp(240px, 30vw, 340px);">
+            <canvas id="weightTargetChart"></canvas>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead><tr><th>日期</th><th>年龄</th><th>身高 (cm)</th><th>体重 (kg)</th><th>BMI</th><th>操作</th></tr></thead>
+            <tbody id="growthBody"></tbody>
+        </table>
+    </div>
+
+    <p style="margin-top:14px; font-size:12px; color:#94a3b8; line-height:1.6;">
+        参考曲线：中国《7岁~18岁儿童青少年身高/体重发育等级评价》(WS/T 456/457-2014) 标准的近似值（P3 / P50 / P97 三条百分位曲线），
+        仅供趋势观察，<b>不作为医学诊断依据</b>。如需精确评估请以官方标准表或儿保医生测量为准。
+    </p>
+
+    <!-- 年度增长幅度对比 -->
+    <div style="background:#fff; border-radius:12px; padding:18px 20px; box-shadow:0 1px 4px rgba(0,0,0,.06); margin-top:18px;">
+        <div style="font-weight:700; color:#0f172a; margin-bottom:4px; font-size:15px;">📊 年度增长幅度对比（对比正常儿童发育速率）</div>
+        <div style="font-size:12px; color:#94a3b8; margin-bottom:12px;">正常参考值依据中国儿童青少年发育标准近似值，仅供趋势参考，不作为医学诊断依据。</div>
+        <div id="growthRateContent"></div>
+    </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal-overlay" id="addModal">
+    <div class="modal">
+        <h2>批量添加比赛记录</h2>
+        <div class="hint">
+            格式：每行一条记录，字段用逗号分隔。<br>
+            字段顺序：姓名, 日期, 年龄, 项目, 成绩, 比赛名称, 名次, 组别, 单位<br>
+            示例：王子期, 2024-08-15, 8, 100米蝶泳, 1:44.48, 2024年广东省少儿游泳公开赛, 6, U9组, 宸汐体育<br>
+            成绩用 分:秒.毫秒 或 秒.毫秒 格式。
+        </div>
+        <textarea id="batchInput" placeholder="粘贴或输入比赛记录..."></textarea>
+        <div class="actions">
+            <button class="btn btn-gray" onclick="closeAddModal()">取消</button>
+            <button class="btn btn-pink" onclick="batchAdd()">添加</button>
+        </div>
+    </div>
+</div>
+
+<!-- Upload Preview Modal -->
+<div class="modal-overlay" id="uploadModal">
+    <div class="modal" style="max-width:720px;">
+        <h2>📤 上传Excel / HTML表格</h2>
+        <div class="upload-tabs">
+            <button class="upload-tab active" onclick="switchUploadTab('file',this)">📁 选择文件</button>
+            <button class="upload-tab" onclick="switchUploadTab('paste',this)">📋 粘贴HTML表格</button>
+        </div>
+        <!-- File upload -->
+        <div id="uploadTabFile">
+            <div class="upload-area" id="uploadDropArea" onclick="document.getElementById('uploadExcelInput2').click()">
+                <div class="upload-area-icon">📁</div>
+                <div class="upload-area-text">点击选择文件，或将 .xls / .html 文件拖拽到此处</div>
+                <div style="font-size:11px;color:#94a3b8;margin-top:4px;">支持 swiminfo.cc 导出的 HTML 表格文件</div>
+            </div>
+            <input type="file" id="uploadExcelInput2" accept=".xls,.xlsx,.html,.htm" style="display:none;" onchange="handleExcelUpload(this)">
+        </div>
+        <!-- Paste HTML -->
+        <div id="uploadTabPaste" style="display:none;">
+            <textarea id="htmlPasteInput" placeholder="粘贴 swiminfo.cc 的 HTML 表格内容（从 &lt;table&gt; 到 &lt;/table&gt;）..." style="width:100%;height:150px;font-family:monospace;font-size:11px;padding:10px;border:1px solid #e2e8f0;border-radius:6px;resize:vertical;"></textarea>
+            <button class="btn btn-sm btn-blue" onclick="parsePastedHtml()" style="margin-top:8px;">解析HTML</button>
+        </div>
+        <!-- Preview -->
+        <div id="uploadPreview" style="display:none;">
+            <div class="upload-summary" id="uploadSummary"></div>
+            <div class="upload-preview" id="uploadPreviewTable"></div>
+            <div style="font-size:12px;color:#64748b;margin:8px 0;">
+                <label><input type="checkbox" id="uploadSkipRelay" checked> 跳过接力项目</label>
+                &nbsp;&nbsp;
+                <label><input type="checkbox" id="uploadSkipDup" checked> 跳过已存在的记录</label>
+            </div>
+        </div>
+        <div class="actions">
+            <button class="btn btn-gray" onclick="closeUploadModal()">取消</button>
+            <button class="btn btn-green" onclick="confirmUpload()" id="confirmUploadBtn" disabled>确认导入</button>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts: load at end of body for correct order -->
+<script>/* 王子期及对手成绩数据 内联，保证单文件自包含（不再依赖外部 swimming_data.js） */
+var REAL_DATA = [
+  {
+    "name": "查思澈",
+    "date": "2024-07-15",
+    "age": 9,
+    "event": "100米自由泳",
+    "time": "1:28.92",
+    "meet": "2024年广东省少儿游泳公开赛分站赛（第4站）",
+    "rank": "12",
+    "group": "U9组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2024-07-15",
+    "age": 9,
+    "event": "50米自由泳",
+    "time": "39.75",
+    "meet": "2024年广东省少儿游泳公开赛分站赛（第4站）",
+    "rank": "21",
+    "group": "U9组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2024-07-15",
+    "age": 9,
+    "event": "50米蝶泳",
+    "time": "46.62",
+    "meet": "2024年广东省少儿游泳公开赛分站赛（第4站）",
+    "rank": "13",
+    "group": "U9组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2024-08-15",
+    "age": 9,
+    "event": "100米自由泳",
+    "time": "1:25.08",
+    "meet": "2024年广东省少儿游泳公开赛分站赛（第5站）",
+    "rank": "5",
+    "group": "U9组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2024-08-15",
+    "age": 9,
+    "event": "100米蝶泳",
+    "time": "1:48.84",
+    "meet": "2024年广东省少儿游泳公开赛分站赛（第5站）",
+    "rank": "8",
+    "group": "U9组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2024-08-15",
+    "age": 9,
+    "event": "50米蛙泳",
+    "time": "51.74",
+    "meet": "2024年广东省少儿游泳公开赛分站赛（第5站）",
+    "rank": "15",
+    "group": "U9组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2024-08-15",
+    "age": 9,
+    "event": "50米蝶泳",
+    "time": "43.71",
+    "meet": "2024年广东省少儿游泳公开赛分站赛（第5站）",
+    "rank": "11",
+    "group": "U9组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2024-08-15",
+    "age": 8,
+    "event": "100米蝶泳",
+    "time": "1:44.48",
+    "meet": "2024年广东省少儿游泳公开赛分站赛（第5站）",
+    "rank": "6",
+    "group": "U9组",
+    "unit": "宸汐体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2024-08-15",
+    "age": 8,
+    "event": "50米蝶泳",
+    "time": "44.58",
+    "meet": "2024年广东省少儿游泳公开赛分站赛（第5站）",
+    "rank": "15",
+    "group": "U9组",
+    "unit": "宸汐体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2024-09-15",
+    "age": 9,
+    "event": "50米自由泳",
+    "time": "39.70",
+    "meet": "2024年广州市青少年体育俱乐部游泳比赛",
+    "rank": "",
+    "group": "儿童D组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2024-10-15",
+    "age": 9,
+    "event": "100米蝶泳",
+    "time": "1:44.26",
+    "meet": "2024年黄埔区中小学生游泳比赛",
+    "rank": "4",
+    "group": "小学乙组",
+    "unit": "玉泉学校"
+  },
+  {
+    "name": "王子期",
+    "date": "2024-10-15",
+    "age": 9,
+    "event": "50米蝶泳",
+    "time": "48.26",
+    "meet": "2024年黄埔区中小学生游泳比赛",
+    "rank": "8",
+    "group": "小学乙组",
+    "unit": "玉泉学校"
+  },
+  {
+    "name": "王子期",
+    "date": "2024-10-20",
+    "age": 8,
+    "event": "100米蝶泳",
+    "time": "1:44.26",
+    "meet": "2024年黄埔区中小学生游泳比赛",
+    "rank": "4",
+    "group": "小学乙组",
+    "unit": "玉泉学校"
+  },
+  {
+    "name": "王子期",
+    "date": "2024-10-20",
+    "age": 8,
+    "event": "50米蝶泳",
+    "time": "48.26",
+    "meet": "2024年黄埔区中小学生游泳比赛",
+    "rank": "8",
+    "group": "小学乙组",
+    "unit": "玉泉学校"
+  },
+  {
+    "name": "查思澈",
+    "date": "2024-11-15",
+    "age": 9,
+    "event": "100米自由泳",
+    "time": "1:22.99",
+    "meet": "2024年广东省少儿游泳公开赛总决赛",
+    "rank": "15",
+    "group": "U9组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2024-11-15",
+    "age": 9,
+    "event": "100米蝶泳",
+    "time": "1:43.42",
+    "meet": "2024年广东省少儿游泳公开赛总决赛",
+    "rank": "8",
+    "group": "U9组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2024-11-15",
+    "age": 9,
+    "event": "50米蝶泳",
+    "time": "44.52",
+    "meet": "2024年广东省少儿游泳公开赛总决赛",
+    "rank": "14",
+    "group": "U9组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2024-11-15",
+    "age": 9,
+    "event": "100米蝶泳",
+    "time": "1:39.51",
+    "meet": "2024年黄埔区青少年体育俱乐部游泳系列赛（总决赛）",
+    "rank": "1",
+    "group": "（甲）9岁组",
+    "unit": "宸汐"
+  },
+  {
+    "name": "王子期",
+    "date": "2024-11-15",
+    "age": 9,
+    "event": "50米蝶泳",
+    "time": "43.27",
+    "meet": "2024年黄埔区青少年体育俱乐部游泳系列赛（总决赛）",
+    "rank": "1",
+    "group": "（甲）9岁组",
+    "unit": "宸汐"
+  },
+  {
+    "name": "王子期",
+    "date": "2024-12-15",
+    "age": 9,
+    "event": "100米蝶泳",
+    "time": "1:39.51",
+    "meet": "2024年黄埔区青少年体育俱乐部游泳系列赛（总决赛）",
+    "rank": "1",
+    "group": "（甲）9岁组",
+    "unit": "宸汐"
+  },
+  {
+    "name": "王子期",
+    "date": "2024-12-15",
+    "age": 9,
+    "event": "50米蝶泳",
+    "time": "43.27",
+    "meet": "2024年黄埔区青少年体育俱乐部游泳系列赛（总决赛）",
+    "rank": "1",
+    "group": "（甲）9岁组",
+    "unit": "宸汐"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-03-15",
+    "age": 9,
+    "event": "100米自由泳",
+    "time": "1:24.04",
+    "meet": "2025年广州市青少儿游泳系列赛分站赛（第一站）",
+    "rank": "33",
+    "group": "D组",
+    "unit": "宸汐"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-03-15",
+    "age": 9,
+    "event": "100米蝶泳",
+    "time": "1:40.00",
+    "meet": "2025年广州市青少儿游泳系列赛分站赛（第一站）",
+    "rank": "19",
+    "group": "D组",
+    "unit": "宸汐"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-03-15",
+    "age": 9,
+    "event": "50米蝶泳",
+    "time": "44.85",
+    "meet": "2025年广州市青少儿游泳系列赛分站赛（第一站）",
+    "rank": "28",
+    "group": "D组",
+    "unit": "宸汐"
+  },
+  {
+    "name": "查思澈",
+    "date": "2025-04-15",
+    "age": 10,
+    "event": "100米自由泳",
+    "time": "1:23.81",
+    "meet": "2025年广州市青少儿游泳系列赛分站赛（第一站）",
+    "rank": "32",
+    "group": "D组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2025-04-15",
+    "age": 10,
+    "event": "100米蝶泳",
+    "time": "1:36.75",
+    "meet": "2025年广州市青少儿游泳系列赛分站赛（第一站）",
+    "rank": "17",
+    "group": "D组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2025-04-15",
+    "age": 10,
+    "event": "50米自由泳",
+    "time": "36.14",
+    "meet": "2025年广州市青少儿游泳系列赛分站赛（第一站）",
+    "rank": "24",
+    "group": "D组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-04-15",
+    "age": 10,
+    "event": "100米自由泳",
+    "time": "1:24.04",
+    "meet": "2025年广州市青少儿游泳系列赛分站赛（第一站）",
+    "rank": "33",
+    "group": "D组",
+    "unit": "宸汐"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-04-15",
+    "age": 10,
+    "event": "100米蝶泳",
+    "time": "1:40.00",
+    "meet": "2025年广州市青少儿游泳系列赛分站赛（第一站）",
+    "rank": "19",
+    "group": "D组",
+    "unit": "宸汐"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-04-15",
+    "age": 10,
+    "event": "50米蝶泳",
+    "time": "44.85",
+    "meet": "2025年广州市青少儿游泳系列赛分站赛（第一站）",
+    "rank": "28",
+    "group": "D组",
+    "unit": "宸汐"
+  },
+  {
+    "name": "查思澈",
+    "date": "2025-05-15",
+    "age": 10,
+    "event": "200米自由泳",
+    "time": "2:46.44",
+    "meet": "2025年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "39",
+    "group": "U10组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-05-15",
+    "age": 10,
+    "event": "100米自由泳",
+    "time": "1:21.64",
+    "meet": "2025年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "55",
+    "group": "U10组",
+    "unit": "宸汐体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-05-15",
+    "age": 10,
+    "event": "100米蝶泳",
+    "time": "1:36.74",
+    "meet": "2025年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "31",
+    "group": "U10组",
+    "unit": "宸汐体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-05-15",
+    "age": 10,
+    "event": "200米自由泳",
+    "time": "2:59.52",
+    "meet": "2025年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "59",
+    "group": "U10组",
+    "unit": "宸汐体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-05-15",
+    "age": 10,
+    "event": "200米蝶泳",
+    "time": "3:40.95",
+    "meet": "2025年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "14",
+    "group": "U10组",
+    "unit": "宸汐体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2025-05-20",
+    "age": 10,
+    "event": "50米蝶泳",
+    "time": "39.66",
+    "meet": "2025年海珠区中小学生游泳锦标赛",
+    "rank": "4",
+    "group": "小学丁组",
+    "unit": "新港中"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-05-20",
+    "age": 9,
+    "event": "100米自由泳",
+    "time": "1:21.64",
+    "meet": "2025年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "55",
+    "group": "U10组",
+    "unit": "宸汐体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-05-20",
+    "age": 9,
+    "event": "100米蝶泳",
+    "time": "1:36.74",
+    "meet": "2025年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "31",
+    "group": "U10组",
+    "unit": "宸汐体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-05-20",
+    "age": 9,
+    "event": "200米自由泳",
+    "time": "2:59.52",
+    "meet": "2025年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "59",
+    "group": "U10组",
+    "unit": "宸汐体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-05-20",
+    "age": 9,
+    "event": "200米蝶泳",
+    "time": "3:40.95",
+    "meet": "2025年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "14",
+    "group": "U10组",
+    "unit": "宸汐体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2025-06-15",
+    "age": 10,
+    "event": "100米自由泳",
+    "time": "1:18.41",
+    "meet": "2025年广州市青少儿游泳系列赛分站赛（第二站精英组）",
+    "rank": "9",
+    "group": "D组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2025-06-15",
+    "age": 10,
+    "event": "100米蝶泳",
+    "time": "1:25.86",
+    "meet": "2025年广州市青少儿游泳系列赛分站赛（第二站精英组）",
+    "rank": "3",
+    "group": "D组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-06-15",
+    "age": 9,
+    "event": "100米自由泳",
+    "time": "1:21.46",
+    "meet": "2025年广州市青少儿游泳系列赛分站赛（第二站精英组）",
+    "rank": "13",
+    "group": "D组",
+    "unit": "宸汐"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-06-15",
+    "age": 9,
+    "event": "100米蝶泳",
+    "time": "1:32.55",
+    "meet": "2025年广州市青少儿游泳系列赛分站赛（第二站精英组）",
+    "rank": "5",
+    "group": "D组",
+    "unit": "宸汐"
+  },
+  {
+    "name": "查思澈",
+    "date": "2025-07-15",
+    "age": 10,
+    "event": "100米自由泳",
+    "time": "1:19.29",
+    "meet": "\\",
+    "rank": "7",
+    "group": "儿童C组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2025-07-15",
+    "age": 10,
+    "event": "50米蝶泳",
+    "time": "37.61",
+    "meet": "\\",
+    "rank": "3",
+    "group": "儿童C组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-07-15",
+    "age": 10,
+    "event": "100米自由泳",
+    "time": "1:20.29",
+    "meet": "“奔跑吧&#183;少年”2025年广州市青少年体育俱乐部游泳比赛",
+    "rank": "9",
+    "group": "儿童C组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-07-15",
+    "age": 10,
+    "event": "100米蝶泳",
+    "time": "1:31.93",
+    "meet": "“奔跑吧&#183;少年”2025年广州市青少年体育俱乐部游泳比赛",
+    "rank": "4",
+    "group": "儿童C组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-07-15",
+    "age": 10,
+    "event": "50米蝶泳",
+    "time": "39.17",
+    "meet": "“奔跑吧&#183;少年”2025年广州市青少年体育俱乐部游泳比赛",
+    "rank": "4",
+    "group": "儿童C组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-07-20",
+    "age": 9,
+    "event": "100米自由泳",
+    "time": "1:20.29",
+    "meet": "奔跑吧·少年2025年广州市青少年体育俱乐部游泳比赛",
+    "rank": "9",
+    "group": "儿童C组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-07-20",
+    "age": 9,
+    "event": "100米蝶泳",
+    "time": "1:31.93",
+    "meet": "奔跑吧·少年2025年广州市青少年体育俱乐部游泳比赛",
+    "rank": "4",
+    "group": "儿童C组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-07-20",
+    "age": 9,
+    "event": "50米蝶泳",
+    "time": "39.17",
+    "meet": "奔跑吧·少年2025年广州市青少年体育俱乐部游泳比赛",
+    "rank": "4",
+    "group": "儿童C组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2025-10-15",
+    "age": 10,
+    "event": "100米蝶泳",
+    "time": "1:26.59",
+    "meet": "2025年广东省中小学生秋季游泳锦标赛",
+    "rank": "6",
+    "group": "小学C组",
+    "unit": "新港中"
+  },
+  {
+    "name": "查思澈",
+    "date": "2025-10-15",
+    "age": 10,
+    "event": "50米蝶泳",
+    "time": "38.65",
+    "meet": "2025年广东省中小学生秋季游泳锦标赛",
+    "rank": "7",
+    "group": "小学C组",
+    "unit": "新港中"
+  },
+  {
+    "name": "查思澈",
+    "date": "2025-10-20",
+    "age": 10,
+    "event": "50米仰泳",
+    "time": "46.97",
+    "meet": "2025年广东省青少年游泳U系列赛分站赛（第四站）",
+    "rank": "32",
+    "group": "U10组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2025-10-20",
+    "age": 10,
+    "event": "50米蛙泳",
+    "time": "46.53",
+    "meet": "2025年广东省青少年游泳U系列赛分站赛（第四站）",
+    "rank": "19",
+    "group": "U10组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-10-20",
+    "age": 10,
+    "event": "100米蝶泳",
+    "time": "1:33.56",
+    "meet": "2025年黄埔区中小学生游泳比赛",
+    "rank": "4",
+    "group": "小学乙组",
+    "unit": "玉泉学校"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-10-20",
+    "age": 10,
+    "event": "50米蝶泳",
+    "time": "39.19",
+    "meet": "2025年黄埔区中小学生游泳比赛",
+    "rank": "5",
+    "group": "小学乙组",
+    "unit": "玉泉学校"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-11-15",
+    "age": 10,
+    "event": "100米蝶泳",
+    "time": "1:33.56",
+    "meet": "2025年黄埔区中小学生游泳比赛",
+    "rank": "4",
+    "group": "小学乙组",
+    "unit": "玉泉学校"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-11-15",
+    "age": 10,
+    "event": "50米蝶泳",
+    "time": "39.19",
+    "meet": "2025年黄埔区中小学生游泳比赛",
+    "rank": "5",
+    "group": "小学乙组",
+    "unit": "玉泉学校"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-12-01",
+    "age": 10,
+    "event": "100米自由泳",
+    "time": "1:20.34",
+    "meet": "2025年广州市青少儿游泳系列赛总决赛",
+    "rank": "21",
+    "group": "D组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-12-01",
+    "age": 10,
+    "event": "100米蝶泳",
+    "time": "1:34.99",
+    "meet": "2025年广州市青少儿游泳系列赛总决赛",
+    "rank": "10",
+    "group": "D组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-12-01",
+    "age": 10,
+    "event": "50米蝶泳",
+    "time": "39.53",
+    "meet": "2025年广州市青少儿游泳系列赛总决赛",
+    "rank": "14",
+    "group": "D组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2025-12-15",
+    "age": 10,
+    "event": "100米蝶泳",
+    "time": "1:23.20",
+    "meet": "2025年广州市青少儿游泳系列赛总决赛",
+    "rank": "6",
+    "group": "D组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2025-12-15",
+    "age": 10,
+    "event": "50米蝶泳",
+    "time": "37.80",
+    "meet": "2025年广州市青少儿游泳系列赛总决赛",
+    "rank": "10",
+    "group": "D组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-12-15",
+    "age": 10,
+    "event": "100米自由泳",
+    "time": "1:20.34",
+    "meet": "2025年广州市青少儿游泳系列赛总决赛",
+    "rank": "21",
+    "group": "D组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-12-15",
+    "age": 10,
+    "event": "100米蝶泳",
+    "time": "1:34.99",
+    "meet": "2025年广州市青少儿游泳系列赛总决赛",
+    "rank": "10",
+    "group": "D组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2025-12-15",
+    "age": 10,
+    "event": "50米蝶泳",
+    "time": "39.53",
+    "meet": "2025年广州市青少儿游泳系列赛总决赛",
+    "rank": "14",
+    "group": "D组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2026-05-10",
+    "age": 10,
+    "event": "100米自由泳",
+    "time": "1:16.71",
+    "meet": "2026年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "54",
+    "group": "U11组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2026-05-10",
+    "age": 10,
+    "event": "100米蝶泳",
+    "time": "1:28.66",
+    "meet": "2026年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "26",
+    "group": "U11组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2026-05-10",
+    "age": 10,
+    "event": "50米自由泳",
+    "time": "34.90",
+    "meet": "2026年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "47",
+    "group": "U11组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2026-05-10",
+    "age": 10,
+    "event": "50米蝶泳",
+    "time": "38.96",
+    "meet": "2026年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "42",
+    "group": "U11组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2026-05-15",
+    "age": 11,
+    "event": "100米蝶泳",
+    "time": "1:23.77",
+    "meet": "2026年广东省小学生游泳锦标赛",
+    "rank": "13",
+    "group": "丙组",
+    "unit": "新港中"
+  },
+  {
+    "name": "查思澈",
+    "date": "2026-05-20",
+    "age": 11,
+    "event": "50米自由泳",
+    "time": "33.99",
+    "meet": "2026年天河区青少年体育俱乐部游泳U系列赛（第1站）",
+    "rank": "2",
+    "group": "U11岁组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2026-05-20",
+    "age": 11,
+    "event": "50米蝶泳",
+    "time": "36.16",
+    "meet": "2026年天河区青少年体育俱乐部游泳U系列赛（第1站）",
+    "rank": "3",
+    "group": "U11岁组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2026-06-15",
+    "age": 11,
+    "event": "100米自由泳",
+    "time": "1:14.79",
+    "meet": "2026年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "44",
+    "group": "U11组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2026-06-15",
+    "age": 11,
+    "event": "100米蝶泳",
+    "time": "1:21.90",
+    "meet": "2026年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "17",
+    "group": "U11组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2026-06-15",
+    "age": 11,
+    "event": "200米混合泳",
+    "time": "3:06.96",
+    "meet": "2026年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "37",
+    "group": "U11组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "查思澈",
+    "date": "2026-06-15",
+    "age": 11,
+    "event": "200米自由泳",
+    "time": "2:43.83",
+    "meet": "2026年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "41",
+    "group": "U11组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2026-06-15",
+    "age": 11,
+    "event": "100米自由泳",
+    "time": "1:16.71",
+    "meet": "2026年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "54",
+    "group": "U11组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2026-06-15",
+    "age": 10,
+    "event": "100米蝶泳",
+    "time": "1:30.77",
+    "meet": "2026年广东省青少年游泳分区赛（第一站）（F-J组）",
+    "rank": "9",
+    "group": "F组",
+    "unit": "广州凯越"
+  },
+  {
+    "name": "王子期",
+    "date": "2026-06-15",
+    "age": 10,
+    "event": "200米混合泳",
+    "time": "3:14.97",
+    "meet": "2026年广东省青少年游泳分区赛（第一站）（F-J组）",
+    "rank": "19",
+    "group": "F组",
+    "unit": "广州凯越"
+  },
+  {
+    "name": "王子期",
+    "date": "2026-06-15",
+    "age": 10,
+    "event": "200米自由泳",
+    "time": "2:48.49",
+    "meet": "2026年广东省青少年游泳分区赛（第一站）（F-J组）",
+    "rank": "21",
+    "group": "F组",
+    "unit": "广州凯越"
+  },
+  {
+    "name": "王子期",
+    "date": "2026-06-15",
+    "age": 10,
+    "event": "50米自由泳",
+    "time": "36.04",
+    "meet": "2026年广东省青少年游泳分区赛（第一站）（F-J组）",
+    "rank": "21",
+    "group": "F组",
+    "unit": "广州凯越"
+  },
+  {
+    "name": "王子期",
+    "date": "2026-06-15",
+    "age": 11,
+    "event": "50米蝶泳",
+    "time": "38.96",
+    "meet": "2026年广东省青少年游泳U系列赛分站赛（第二站）",
+    "rank": "42",
+    "group": "U11组",
+    "unit": "凯越体育"
+  },
+  {
+    "name": "王子期",
+    "date": "2026-06-20",
+    "age": 11,
+    "event": "100米蝶泳",
+    "time": "1:30.77",
+    "meet": "2026年广东省青少年游泳分区赛（第一站）（F-J组）",
+    "rank": "9",
+    "group": "F组",
+    "unit": "广州凯越"
+  },
+  {
+    "name": "王子期",
+    "date": "2026-06-20",
+    "age": 11,
+    "event": "200米混合泳",
+    "time": "3:14.97",
+    "meet": "2026年广东省青少年游泳分区赛（第一站）（F-J组）",
+    "rank": "19",
+    "group": "F组",
+    "unit": "广州凯越"
+  },
+  {
+    "name": "王子期",
+    "date": "2026-06-20",
+    "age": 11,
+    "event": "200米自由泳",
+    "time": "2:48.49",
+    "meet": "2026年广东省青少年游泳分区赛（第一站）（F-J组）",
+    "rank": "21",
+    "group": "F组",
+    "unit": "广州凯越"
+  },
+  {
+    "name": "王子期",
+    "date": "2026-06-20",
+    "age": 11,
+    "event": "50米自由泳",
+    "time": "36.04",
+    "meet": "2026年广东省青少年游泳分区赛（第一站）（F-J组）",
+    "rank": "21",
+    "group": "F组",
+    "unit": "广州凯越"
+  }
+];
+</script>
+<script>
+// 动态加载Chart.js，优先本地文件，失败再试CDN
+(function(){
+    function tryLoad(urls, idx, onOk, onFail) {
+        if (idx >= urls.length) { onFail(); return; }
+        var s = document.createElement('script');
+        s.src = urls[idx];
+        s.onload = onOk;
+        s.onerror = function(){ tryLoad(urls, idx+1, onOk, onFail); };
+        document.head.appendChild(s);
+    }
+    window._chartLoadPromise = new Promise(function(resolve, reject){
+        tryLoad([
+            'chart.umd.min.js',
+            'https://cdn.bootcdn.net/ajax/libs/Chart.js/4.4.7/chart.umd.min.js',
+            'https://unpkg.com/chart.js@4.4.7/dist/chart.umd.min.js',
+            'https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js'
+        ], 0, resolve, reject);
+    });
+    // 加载SheetJS（用于真Excel/CSV解析）
+    window._xlsxLoadPromise = new Promise(function(resolve, reject){
+        tryLoad([
+            'xlsx.full.min.js',
+            'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js'
+        ], 0, resolve, reject);
+    });
+})();
+</script>
+<script>
+// ===== Helper functions (no dependencies) =====
+
+// 选手出生日期映射表（可扩展）
+var SWIMMER_BIRTHDAYS = {
+    '王子期': '2015-10-10',
+    '查思澈': '2015-10-10'  // 待确认，暂用同值
+};
+var DEFAULT_BIRTHDAY = '2015-10-10'; // 未知选手的默认值
+
+// 根据选手名和日期计算年龄（小数岁）
+function calcAgeAt(dateStr, swimmerName) {
+    var name = swimmerName || '';
+    var birthStr = SWIMMER_BIRTHDAYS[name] || DEFAULT_BIRTHDAY;
+    var birth = new Date(birthStr);
+    var d = new Date(dateStr);
+    var age = (d - birth) / (365.25 * 24 * 3600 * 1000);
+    return Math.round(age * 10) / 10; // 保留1位小数
+}
+
+// 根据日期计算整数年龄（年份差）
+function calcAgeYearAt(dateStr, swimmerName) {
+    var name = swimmerName || '';
+    var birthStr = SWIMMER_BIRTHDAYS[name] || DEFAULT_BIRTHDAY;
+    var birth = new Date(birthStr);
+    var d = new Date(dateStr);
+    return d.getFullYear() - birth.getFullYear();
+}
+
+function timeToSeconds(t) {
+    if (!t) return null;
+    t = String(t).trim();
+    if (t.indexOf(':') !== -1) {
+        var p = t.split(':');
+        var m = parseFloat(p[0]) || 0;
+        var s = parseFloat(p[1]) || 0;
+        return m * 60 + s;
+    }
+    return parseFloat(t) || null;
+}
+function secondsToTime(s) {
+    if (s === null || isNaN(s)) return '';
+    var m = Math.floor(s / 60);
+    var sec = (s % 60).toFixed(2);
+    if (m > 0) return m + ':' + (sec < 10 ? '0' : '') + sec;
+    return sec + '秒';
+}
+function dateToTs(dateStr) {
+    return new Date(dateStr).getTime();
+}
+function tsToLabel(ts) {
+    var d = new Date(ts);
+    return (d.getMonth() + 1) + '/' + d.getDate();
+}
+
+// ===== Global state =====
+var allData = [];
+var compareNames = [];
+var chart1 = null;
+var chart2 = null;
+
+// ===== Load data =====
+function loadData() {
+    var saved = localStorage.getItem('swimmingDataWZQ');
+    if (saved) {
+        allData = JSON.parse(saved);
+    }
+    // 合并REAL_DATA中的新对手数据（不存在的才加进去）
+    if (typeof REAL_DATA !== 'undefined' && REAL_DATA.length > 0) {
+        var existingKeys = {};
+        allData.forEach(function(r) {
+            existingKeys[r.name + '|' + r.date + '|' + r.event] = true;
+        });
+        var merged = false;
+        REAL_DATA.forEach(function(r) {
+            var key = r.name + '|' + r.date + '|' + r.event;
+            if (!existingKeys[key]) {
+                allData.push(r);
+                merged = true;
+            }
+        });
+        if (merged) {
+            allData.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+            saveData();
+        }
+    }
+}
+
+function saveData() {
+    localStorage.setItem('swimmingDataWZQ', JSON.stringify(allData));
+}
+
+// ===== Filter =====
+function getFilteredData() {
+    var stroke = document.getElementById('strokeFilter').value;
+    var data = allData;
+    if (stroke !== 'all') {
+        data = data.filter(function(r) { return r.event && r.event.indexOf(stroke) !== -1; });
+    }
+    return data;
+}
+
+// ===== Update stats =====
+function updateStats() {
+    var data = getFilteredData();
+    var wzqData = data.filter(function(r) { return r.name === '王子期'; });
+    var byEvent = {};
+    wzqData.forEach(function(r) {
+        if (!byEvent[r.event]) byEvent[r.event] = [];
+        byEvent[r.event].push(r);
+    });
+
+    var html = '';
+    var events = Object.keys(byEvent).sort();
+    events.forEach(function(event) {
+        var recs = byEvent[event];
+        var total = recs.length;
+        var avgSec = recs.map(function(r) { return timeToSeconds(r.time); }).filter(function(v) { return v !== null; });
+        var avg = avgSec.length > 0 ? avgSec.reduce(function(a, b) { return a + b; }, 0) / avgSec.length : 0;
+        var bestRec = recs.reduce(function(a, b) {
+            var ta = timeToSeconds(a.time);
+            var tb = timeToSeconds(b.time);
+            if (ta !== null && tb !== null && ta < tb) return a;
+            return b;
+        }, recs[0]);
+        html += '<div class="stat-card">'
+            + '<div class="event-name">' + event + '</div>'
+            + '<div class="label">参赛次数</div>'
+            + '<div class="value" style="font-size:24px;">' + total + ' 次</div>'
+            + '<div class="detail">最佳：' + bestRec.time + '<br>平均：' + secondsToTime(avg) + '</div>'
+            + '</div>';
+    });
+    document.getElementById('statsGrid').innerHTML = html || '<div class="no-data">当前筛选条件下暂无数据</div>';
+}
+
+// ===== Chart 1 =====
+function updateChart1() {
+    var data = getFilteredData();
+    var wzqData = data.filter(function(r) { return r.name === '王子期'; });
+    var byEvent = {};
+    wzqData.forEach(function(r) {
+        if (!byEvent[r.event]) byEvent[r.event] = [];
+        byEvent[r.event].push(r);
+    });
+
+    var colors = ['#d946ef', '#8b5cf6', '#06b6d4', '#f59e0b', '#10b981', '#ef4444', '#3b82f6'];
+    var datasets = [];
+    var colorIdx = 0;
+
+    Object.entries(byEvent).forEach(function(entry) {
+        var event = entry[0];
+        var recs = entry[1];
+        recs.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+        datasets.push({
+            label: '王子期 - ' + event,
+            data: recs.map(function(r) { return { x: dateToTs(r.date), y: timeToSeconds(r.time) }; }),
+            borderColor: colors[colorIdx % colors.length],
+            backgroundColor: colors[colorIdx % colors.length] + '30',
+            borderWidth: 3,
+            pointRadius: 5,
+            tension: 0.2,
+        });
+        colorIdx++;
+    });
+
+    // Compare
+    compareNames.forEach(function(name) {
+        var cData = data.filter(function(r) { return r.name === name; });
+        var cByEvent = {};
+        cData.forEach(function(r) {
+            if (!cByEvent[r.event]) cByEvent[r.event] = [];
+            cByEvent[r.event].push(r);
+        });
+        Object.entries(cByEvent).forEach(function(entry) {
+            var event = entry[0];
+            var recs = entry[1];
+            recs.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+            datasets.push({
+                label: name + ' - ' + event,
+                data: recs.map(function(r) { return { x: dateToTs(r.date), y: timeToSeconds(r.time) }; }),
+                borderColor: colors[colorIdx % colors.length],
+                borderWidth: 2,
+                borderDash: [6, 3],
+                pointRadius: 3,
+                tension: 0.2,
+            });
+            colorIdx++;
+        });
+    });
+
+    var ctx = document.getElementById('chart1').getContext('2d');
+    if (chart1) chart1.destroy();
+    chart1 = new Chart(ctx, {
+        type: 'line',
+        data: { datasets: datasets },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12, font: { size: 11 } } },
+                tooltip: {
+                    callbacks: {
+                        title: function(items) {
+                            if (!items || !items[0]) return '';
+                            return tsToLabel(items[0].raw.x);
+                        },
+                        label: function(ctx) {
+                            return ctx.dataset.label + ': ' + secondsToTime(ctx.raw.y);
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    type: 'linear',
+                    title: { display: true, text: '比赛日期' },
+                    ticks: {
+                        callback: function(val) { return tsToLabel(val); },
+                        maxTicksLimit: 10,
+                    }
+                },
+                y: { title: { display: true, text: '成绩（秒）' } }
+            }
+        }
+    });
+}
+
+// ===== Chart 2 =====
+function populateProgressEvents() {
+    var select = document.getElementById('progressEvent');
+    var currentVal = select.value;
+    var wzqData = allData.filter(function(r) { return r.name === '王子期'; });
+    var eventCount = {};
+    wzqData.forEach(function(r) {
+        if (!eventCount[r.event]) eventCount[r.event] = 0;
+        eventCount[r.event]++;
+    });
+    while (select.options.length > 2) select.remove(2);
+    var sortedEvents = Object.entries(eventCount)
+        .filter(function(e) { return e[1] >= 2; })
+        .sort(function(a, b) { return b[1] - a[1]; });
+    sortedEvents.forEach(function(entry) {
+        var opt = document.createElement('option');
+        opt.value = entry[0];
+        opt.textContent = entry[0] + '（' + entry[1] + '次）';
+        select.appendChild(opt);
+    });
+    if (select.querySelector('option[value="' + currentVal + '"]')) {
+        select.value = currentVal;
+    } else if (sortedEvents.length > 0) {
+        select.value = sortedEvents[0][0];
+    }
+}
+
+function updateChart2() {
+    populateProgressEvents();
+    var select = document.getElementById('progressEvent');
+    var selectedEvent = select.value;
+    // auto模式：自动选出场次最多的项目
+    if (selectedEvent === 'auto' || !selectedEvent) {
+        var wzqAll = allData.filter(function(r) { return r.name === '王子期'; });
+        var eventCount = {};
+        wzqAll.forEach(function(r) { eventCount[r.event] = (eventCount[r.event] || 0) + 1; });
+        var sorted = Object.entries(eventCount).filter(function(e){ return e[1] >= 2; }).sort(function(a,b){ return b[1]-a[1]; });
+        if (sorted.length === 0) return;
+        selectedEvent = sorted[0][0];
+        // 更新下拉框显示
+        var opt = select.querySelector('option[value="' + selectedEvent + '"]');
+        if (opt) select.value = selectedEvent;
+    }
+
+    var datasets = [];
+    var baseColors = ['#d946ef', '#8b5cf6', '#06b6d4', '#f59e0b', '#10b981', '#ef4444', '#3b82f6'];
+    var ci = 0;
+
+    var targetEvents = [];
+    if (selectedEvent === 'all') {
+        var wzqAll = allData.filter(function(r) { return r.name === '王子期'; });
+        var eventCount = {};
+        wzqAll.forEach(function(r) { if (!eventCount[r.event]) eventCount[r.event] = 0; eventCount[r.event]++; });
+        targetEvents = Object.entries(eventCount)
+            .filter(function(e) { return e[1] >= 2; })
+            .sort(function(a, b) { return b[1] - a[1]; })
+            .map(function(e) { return e[0]; });
+    } else {
+        targetEvents = [selectedEvent];
+    }
+
+    targetEvents.forEach(function(event) {
+        var wzqEventData = allData.filter(function(r) { return r.name === '王子期' && r.event === event; });
+        wzqEventData.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+        if (wzqEventData.length >= 2) {
+            datasets.push({
+                label: '王子期 - ' + event,
+                data: wzqEventData.map(function(r) { return { x: dateToTs(r.date), y: timeToSeconds(r.time) }; }),
+                borderColor: baseColors[ci % baseColors.length],
+                backgroundColor: baseColors[ci % baseColors.length] + '30',
+                borderWidth: 3,
+                pointRadius: 5,
+                tension: 0.3,
+                fill: false,
+            });
+            ci++;
+        }
+        compareNames.forEach(function(name) {
+            var cEventData = allData.filter(function(r) { return r.name === name && r.event === event; });
+            if (cEventData.length === 0) return;
+            cEventData.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+            datasets.push({
+                label: name + ' - ' + event,
+                data: cEventData.map(function(r) { return { x: dateToTs(r.date), y: timeToSeconds(r.time) }; }),
+                borderColor: baseColors[ci % baseColors.length],
+                borderWidth: 2,
+                borderDash: [6, 3],
+                pointRadius: 3,
+                tension: 0.3,
+                fill: false,
+            });
+            ci++;
+        });
+    });
+
+    var ctx = document.getElementById('chart2').getContext('2d');
+    if (chart2) chart2.destroy();
+    if (datasets.length === 0) {
+        ctx.canvas.style.display = 'none';
+        var box = ctx.canvas.parentElement;
+        var placeholder = box.querySelector('.chart-placeholder');
+        if (!placeholder) {
+            placeholder = document.createElement('div');
+            placeholder.className = 'chart-placeholder';
+            box.appendChild(placeholder);
+        }
+        placeholder.textContent = '当前项目暂无足够数据生成趋势图';
+        document.getElementById('chart2Summary').style.display = 'none';
+        return;
+    }
+    ctx.canvas.style.display = '';
+    var placeholder = ctx.canvas.parentElement.querySelector('.chart-placeholder');
+    if (placeholder) placeholder.remove();
+
+    // Summary
+    var summaryDiv = document.getElementById('chart2Summary');
+    if (selectedEvent !== 'all') {
+        var wzqEventData = allData.filter(function(r) { return r.name === '王子期' && r.event === selectedEvent; });
+        wzqEventData.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+        if (wzqEventData.length >= 2) {
+            var first = timeToSeconds(wzqEventData[0].time);
+            var last = timeToSeconds(wzqEventData[wzqEventData.length - 1].time);
+            var diff = first - last;
+            var pct = ((diff / first) * 100).toFixed(1);
+            var improved = diff > 0 ? '进步' : '退步';
+            var arrow = diff > 0 ? '↓' : '↑';
+            summaryDiv.style.display = 'block';
+            summaryDiv.innerHTML = arrow + ' ' + improved + '：从 ' + wzqEventData[0].time + ' → ' + wzqEventData[wzqEventData.length - 1].time + '，' + improved + ' ' + Math.abs(diff).toFixed(2) + '秒（' + pct + '%）';
+        }
+    } else {
+        summaryDiv.style.display = 'none';
+    }
+
+    chart2 = new Chart(ctx, {
+        type: 'line',
+        data: { datasets: datasets },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12, font: { size: 11 } } },
+                tooltip: {
+                    callbacks: {
+                        title: function(items) {
+                            if (!items || !items[0]) return '';
+                            return tsToLabel(items[0].raw.x);
+                        },
+                        label: function(ctx) {
+                            return ctx.dataset.label + ': ' + secondsToTime(ctx.raw.y);
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    type: 'linear',
+                    title: { display: true, text: '比赛日期' },
+                    ticks: {
+                        callback: function(val) { return tsToLabel(val); },
+                        maxTicksLimit: 10,
+                    }
+                },
+                y: { title: { display: true, text: '成绩（秒）' } }
+            }
+        }
+    });
+}
+
+// ===== Table =====
+function updateTable() {
+    var data = getFilteredData();
+    var wzqData = data.filter(function(r) { return r.name === '王子期'; });
+    wzqData.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+
+    // 构建对手数据索引：{ event_age: [records_by_date] }
+    var oppIndex = {};
+    compareNames.forEach(function(name) {
+        data.filter(function(r) { return r.name === name; }).forEach(function(r) {
+            var key = r.event + '|' + r.age;
+            if (!oppIndex[key]) oppIndex[key] = [];
+            oppIndex[key].push(r);
+        });
+    });
+
+    var hasCompare = compareNames.length > 0;
+    var html = '';
+    wzqData.forEach(function(r) {
+        var oppInfo = '';
+        var diffStr = '';
+        var diffClass = '';
+
+        if (hasCompare) {
+            // 同项目同年龄匹配
+            var key = r.event + '|' + r.age;
+            var candidates = oppIndex[key] || [];
+            // 如果同年龄没找到，尝试找相邻年龄
+            if (candidates.length === 0) {
+                for (var adj = -1; adj <= 2; adj += 2) {
+                    var altKey = r.event + '|' + (r.age + adj);
+                    if (oppIndex[altKey] && oppIndex[altKey].length > 0) {
+                        candidates = oppIndex[altKey];
+                        break;
+                    }
+                }
+            }
+            if (candidates.length > 0) {
+                candidates.sort(function(a, b) {
+                    return Math.abs(new Date(a.date) - new Date(r.date)) - Math.abs(new Date(b.date) - new Date(r.date));
+                });
+                var opp = candidates[0];
+                var wzqSec = timeToSeconds(r.time);
+                var oppSec = timeToSeconds(opp.time);
+                oppInfo = '<span class="opp-name">' + opp.name + '</span><br>' + opp.time + '<br><small style="color:#94a3b8;">' + opp.age + '岁</small>';
+                if (wzqSec !== null && oppSec !== null) {
+                    var diff = wzqSec - oppSec;
+                    if (diff < 0) {
+                        diffStr = '快' + Math.abs(diff).toFixed(2) + '秒';
+                        diffClass = 'diff-better';
+                    } else if (diff > 0) {
+                        diffStr = '慢' + diff.toFixed(2) + '秒';
+                        diffClass = 'diff-worse';
+                    } else {
+                        diffStr = '持平';
+                        diffClass = '';
+                    }
+                }
+            } else {
+                oppInfo = '<span style="color:#94a3b8;">—</span>';
+                diffStr = '';
+            }
+        }
+
+        html += '<tr class="wzq-row">'
+            + '<td>' + r.date + '</td>'
+            + '<td>' + r.age + '岁</td>'
+            + '<td>' + r.event + '</td>'
+            + '<td><b>' + r.time + '</b></td>'
+            + (hasCompare ? '<td style="font-size:12px;">' + oppInfo + '</td>' : '')
+            + (hasCompare ? '<td class="' + diffClass + '" style="font-weight:700;">' + diffStr + '</td>' : '')
+            + '<td>' + (r.meet || '') + '</td>'
+            + '<td>' + (r.group || '') + '</td>'
+            + '<td>' + (r.rank || '') + '</td>'
+            + '</tr>';
+    });
+    var colspan = hasCompare ? 9 : 7;
+    document.getElementById('tableBody').innerHTML = html || '<tr><td colspan="' + colspan + '" class="no-data">暂无数据</td></tr>';
+}
+
+function updateTableHeaders() {
+    var head = document.getElementById('tableHead');
+    if (compareNames.length > 0) {
+        head.innerHTML = '<tr>'
+            + '<th>日期</th><th>年龄</th><th>项目</th><th>成绩</th>'
+            + '<th>对手成绩</th><th>差距</th>'
+            + '<th>比赛名称</th><th>组别</th><th>名次</th>'
+            + '</tr>';
+    } else {
+        head.innerHTML = '<tr>'
+            + '<th>日期</th><th>年龄</th><th>项目</th><th>成绩</th>'
+            + '<th>比赛名称</th><th>组别</th><th>名次</th>'
+            + '</tr>';
+    }
+}
+
+// 对手切换时刷新表格
+var _origRemoveCompare = removeCompare;
+removeCompare = function(name) {
+    compareNames = compareNames.filter(function(n) { return n !== name; });
+    updateCompareTags();
+    updateQuickCompare();
+    updateTableHeaders();
+    refreshAll();
+};
+
+// ===== Refresh all =====
+function refreshAll() {
+    updateTableHeaders();
+    updateStats();
+    gradeAnalysis();
+    updateChart1();
+    updateChart2();
+    updateTable();
+    updateQuickCompare();
+    updateCompareTags();
+}
+
+// ===== Compare =====
+function updateQuickCompare() {
+    var names = allData.map(function(r) { return r.name; }).filter(function(v, i, a) { return a.indexOf(v) === i && v !== '王子期'; });
+    if (names.length === 0) return;
+    var html = '';
+    names.forEach(function(n) {
+        var active = compareNames.indexOf(n) !== -1;
+        html += '<button class="btn btn-sm ' + (active ? 'btn-pink' : 'btn-gray') + '" onclick="toggleQuickCompare(\'' + n + '\')" title="点击对比/取消">' + n + '</button>';
+    });
+    document.getElementById('quickCompareButtons').innerHTML = html;
+}
+
+function toggleQuickCompare(name) {
+    if (compareNames.indexOf(name) !== -1) {
+        removeCompare(name);
+    } else {
+        compareNames.push(name);
+        updateCompareTags();
+        updateQuickCompare();
+        refreshAll();
+    }
+}
+
+function searchCompare() {
+    var input = document.getElementById('compareInput');
+    var val = input.value.trim();
+    if (val.length < 1) return;
+    var names = allData.map(function(r) { return r.name; }).filter(function(v, i, a) { return a.indexOf(v) === i; });
+    var matches = names.filter(function(n) { return n.indexOf(val) !== -1 && n !== '王子期'; });
+    if (matches.length > 0) {
+        matches.forEach(function(n) {
+            if (compareNames.indexOf(n) === -1) compareNames.push(n);
+        });
+        input.value = '';
+        updateCompareTags();
+        refreshAll();
+    }
+}
+
+function updateCompareTags() {
+    var html = compareNames.map(function(n) {
+        return '<span class="compare-tag">' + n + ' <span class="remove" onclick="removeCompare(\'' + n + '\')">×</span></span>';
+    }).join('');
+    document.getElementById('compareTags').innerHTML = html;
+}
+
+function removeCompare(name) {
+    compareNames = compareNames.filter(function(n) { return n !== name; });
+    updateCompareTags();
+    updateQuickCompare();
+    refreshAll();
+}
+
+// ===== Add Modal =====
+function openAddModal() { document.getElementById('addModal').classList.add('active'); }
+function closeAddModal() { document.getElementById('addModal').classList.remove('active'); }
+
+function batchAdd() {
+    var input = document.getElementById('batchInput').value.trim();
+    if (!input) return;
+    var lines = input.split('\n');
+    var added = 0;
+    lines.forEach(function(line) {
+        var parts = line.split(',').map(function(s) { return s.trim(); });
+        if (parts.length < 5) return;
+        allData.push({
+            name: parts[0],
+            date: parts[1],
+            age: parseInt(parts[2]) || 0,
+            event: parts[3],
+            time: parts[4],
+            meet: parts[5] || '',
+            rank: parts[6] || '',
+            group: parts[7] || '',
+            unit: parts[8] || '',
+        });
+        added++;
+    });
+    allData.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+    saveData();
+    refreshAll();
+    closeAddModal();
+    alert('成功添加 ' + added + ' 条记录！');
+}
+
+// ===== Export/Import（全量备份：成绩 + 训练 + 学习 + 身高）=====
+function exportData() {
+    var payload = {
+        results: allData,
+        training: trainingData,
+        study: studyData,
+        growth: growthData
+    };
+    var json = JSON.stringify(payload, null, 2);
+    var blob = new Blob([json], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'wzq_all_data.json'; a.click();
+    URL.revokeObjectURL(url);
+}
+
+function importData() {
+    var input = document.createElement('input');
+    input.type = 'file'; input.accept = '.json';
+    input.onchange = function(e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(ev) {
+            try {
+                var data = JSON.parse(ev.target.result);
+                if (Array.isArray(data)) {            // 兼容旧版（仅成绩数组）
+                    allData = data; saveData();
+                } else {
+                    if (data.results) { allData = data.results; saveData(); }
+                    if (data.training) { trainingData = data.training; cacheTraining(); }
+                    if (data.study) { studyData = data.study; cacheStudy(); }
+                    if (data.growth) { growthData = data.growth; cacheGrowth(); }
+                }
+                refreshAll();
+                if (typeof renderTraining === 'function') renderTraining();
+                if (typeof renderStudy === 'function') renderStudy();
+                if (typeof renderGrowth === 'function') renderGrowth();
+                var msg = '导入成功！\n成绩 ' + (allData ? allData.length : 0)
+                        + ' 条 / 训练 ' + (trainingData ? trainingData.length : 0)
+                        + ' 条 / 学习 ' + (studyData ? studyData.length : 0)
+                        + ' 条 / 身高 ' + (growthData ? growthData.length : 0) + ' 条';
+                alert(msg);
+            } catch(err) {
+                alert('导入失败：' + err.message);
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+
+function clearData() {
+    if (confirm('确定清空所有数据？此操作不可恢复！')) {
+        allData = [];
+        compareNames = [];
+        saveData();
+        refreshAll();
+    }
+}
+
+// ===== Excel/HTML Upload =====
+var uploadedRecords = [];
+
+function handleExcelUpload(fileInput) {
+    var file = fileInput.files[0];
+    if (!file) return;
+    
+    var fileName = file.name.toLowerCase();
+    var isExcel = fileName.endsWith('.xlsx') || fileName.endsWith('.xls') || fileName.endsWith('.csv');
+    
+    if (isExcel) {
+        // 真Excel/CSV：用SheetJS以ArrayBuffer读取
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            window._xlsxLoadPromise.then(function() {
+                try {
+                    var data = new Uint8Array(e.target.result);
+                    var wb = XLSX.read(data, { type: 'array' });
+                    var sheetsHtml = '';
+                    wb.SheetNames.forEach(function(sheetName) {
+                        var ws = wb.Sheets[sheetName];
+                        sheetsHtml += XLSX.utils.sheet_to_html(ws, { sheet: sheetName });
+                    });
+                    parseUploadHtml(sheetsHtml, file.name);
+                } catch(err) {
+                    alert('Excel解析失败：' + err.message + '\n\n如果是CSV，请确认编码为UTF-8。');
+                }
+            }).catch(function() {
+                alert('SheetJS库加载失败，无法解析Excel文件。\n请检查网络连接或改用HTML格式上传。');
+            });
+        };
+        reader.readAsArrayBuffer(file);
+    } else {
+        // HTML文件：直接以文本读取
+        var reader2 = new FileReader();
+        reader2.onload = function(e) {
+            var html = e.target.result;
+            parseUploadHtml(html, file.name);
+        };
+        reader2.readAsText(file);
+    }
+    
+    // Open preview modal
+    document.getElementById('uploadModal').classList.add('active');
+}
+
+function parsePastedHtml() {
+    var html = document.getElementById('htmlPasteInput').value.trim();
+    if (!html) { alert('请先粘贴HTML表格内容'); return; }
+    parseUploadHtml(html, '粘贴内容');
+}
+
+function switchUploadTab(tab, btn) {
+    document.querySelectorAll('.upload-tab').forEach(function(t) { t.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('uploadTabFile').style.display = tab === 'file' ? 'block' : 'none';
+    document.getElementById('uploadTabPaste').style.display = tab === 'paste' ? 'block' : 'none';
+}
+
+function closeUploadModal() {
+    document.getElementById('uploadModal').classList.remove('active');
+    uploadedRecords = [];
+    document.getElementById('uploadPreview').style.display = 'none';
+    document.getElementById('confirmUploadBtn').disabled = true;
+}
+
+// Date extraction from meet names - 支持多种格式
+function extractDateFromMeet(meet) {
+    // 尝试 YYYY年 MM月 DD日 格式
+    var m = meet.match(/(\d{4})年\s*(\d{1,2})月\s*(\d{1,2})日?/);
+    if (m) return m[1] + '-' + m[2].padStart(2,'0') + '-' + m[3].padStart(2,'0');
+    
+    // 尝试 YYYY年 X月 格式（日默认15）
+    m = meet.match(/(\d{4})年\s*(\d{1,2})月/);
+    if (m) return m[1] + '-' + m[2].padStart(2,'0') + '-15';
+    
+    // 尝试 YYYY年 格式（月日默认7月15日，赛季中段）
+    m = meet.match(/(\d{4})年/);
+    if (!m) {
+        // 尝试纯年份 YYYY
+        m = meet.match(/\b(20\d{2})\b/);
+        if (!m) return '';
+    }
+    var year = m[1];
+    
+    // 尝试月份
+    m = meet.match(/(\d{1,2})月/);
+    if (m) return year + '-' + m[1].padStart(2,'0') + '-15';
+    
+    // 尝试 YYYY.MM 或 YYYY.MM.DD 格式
+    m = meet.match(/(\d{4})[./-](\d{1,2})(?:[./-](\d{1,2}))?/);
+    if (m) return m[1] + '-' + m[2].padStart(2,'0') + '-' + (m[3] ? m[3].padStart(2,'0') : '15');
+    
+    // 季节推断：春季→4月, 夏季→7月, 秋季→10月, 冬季→1月
+    if (meet.indexOf('春季') >= 0) return year + '-04-15';
+    if (meet.indexOf('夏季') >= 0) return year + '-07-15';
+    if (meet.indexOf('秋季') >= 0) return year + '-10-15';
+    if (meet.indexOf('冬季') >= 0) return year + '-01-15';
+    
+    // Season-based: 第X站 → guess month
+    m = meet.match(/第(\d+)站/);
+    if (m) {
+        var months = ['03','05','07','09','11'];
+        var idx = Math.min(parseInt(m[1]) - 1, 4);
+        return year + '-' + months[idx] + '-15';
+    }
+    // 总决赛 → Dec
+    if (meet.indexOf('总决赛') >= 0) return year + '-12-15';
+    // Default
+    return year + '-06-15';
+}
+
+function parseUploadHtml(html, source) {
+    uploadedRecords = [];
+    var skipCount = 0;
+    var skipReasons = [];
+    
+    // Try to find table
+    var tableMatch = html.match(/<table[^>]*>([\s\S]*?)<\/table>/i);
+    if (!tableMatch) {
+        alert('未找到表格数据。\n\n支持格式：\n• Excel文件(.xlsx/.xls) — 自动解析\n• CSV文件(.csv) — UTF-8编码\n• HTML文件(.html) — 含<table>结构\n\n请确认文件格式正确。');
+        return;
+    }
+    
+    var tableHtml = tableMatch[0];
+    var rows = tableHtml.match(/<tr[^>]*>([\s\S]*?)<\/tr>/gi);
+    if (!rows || rows.length < 2) {
+        alert('表格行数不足');
+        return;
+    }
+    
+    // Detect header column positions
+    var headerRow = rows[0];
+    var headers = [];
+    var hMatches = headerRow.match(/<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/gi);
+    if (hMatches) {
+        hMatches.forEach(function(h) {
+            headers.push(h.replace(/<[^>]+>/g, '').trim());
+        });
+    }
+    
+    function findCol(keywords) {
+        for (var i = 0; i < headers.length; i++) {
+            for (var j = 0; j < keywords.length; j++) {
+                if (headers[i].indexOf(keywords[j]) >= 0) return i;
+            }
+        }
+        return -1;
+    }
+    
+    var meetCol = findCol(['比赛名称','比赛']);
+    var eventCol = findCol(['项目名称','项目']);
+    var nameCol = findCol(['姓名','选手']);
+    var timeCol = findCol(['成绩','时间']);
+    var rankCol = findCol(['名次','排名']);
+    var groupCol = findCol(['组别','分组']);
+    var unitCol = findCol(['单位','俱乐部','代表']);
+    
+    // Fallback: guess by order
+    if (meetCol < 0) meetCol = 0;
+    if (eventCol < 0) eventCol = 3;
+    if (nameCol < 0) nameCol = 5;
+    if (timeCol < 0) timeCol = 7;
+    if (rankCol < 0) rankCol = 8;
+    if (groupCol < 0) groupCol = 2;
+    if (unitCol < 0) unitCol = 6;
+    
+    var skipRelay = document.getElementById('uploadSkipRelay').checked;
+    
+    for (var ri = 1; ri < rows.length; ri++) {
+        var cells = rows[ri].match(/<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/gi);
+        if (!cells || cells.length < 5) continue;
+        
+        var vals = cells.map(function(c) { 
+            return c.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, '').replace(/&#215;/g, '×').replace(/&#183;/g, '·').trim();
+        });
+        
+        var meet = (vals[meetCol] || '').trim();
+        var event = (vals[eventCol] || '').trim();
+        var name = (vals[nameCol] || '').trim();
+        var time = (vals[timeCol] || '').trim();
+        var rank = (rankCol >= 0 && vals[rankCol] ? vals[rankCol] : '').trim();
+        var group = (groupCol >= 0 && vals[groupCol] ? vals[groupCol] : '').trim();
+        var unit = (unitCol >= 0 && vals[unitCol] ? vals[unitCol] : '').trim();
+        
+        if (!name || !event || !time) { skipCount++; skipReasons.push('缺字段(name/event/time)'); continue; }
+        
+        // Skip headers
+        if (event.indexOf('项目') >= 0 || name.indexOf('姓名') >= 0) continue;
+        
+        // Skip relay
+        if (skipRelay && event.indexOf('接力') >= 0) { skipCount++; skipReasons.push('接力项目'); continue; }
+        
+        // Skip multi-person (relay team)
+        if (name.indexOf('/') >= 0) { skipCount++; skipReasons.push('接力队名'); continue; }
+        
+        // Validate time format - 放宽到支持1~2位小数
+        if (!/^\d{1,2}:\d{2}\.\d{1,2}$/.test(time) && !/^\d{1,2}\.\d{1,2}$/.test(time)) {
+            skipCount++; skipReasons.push('时间格式不符(' + time + ')'); continue;
+        }
+        
+        var date = extractDateFromMeet(meet);
+        if (!date) { skipCount++; skipReasons.push('无法解析日期：' + meet); continue; }
+        
+        var yr = parseInt(date.substring(0,4));
+        var age = calcAgeAt(date, name); // 按选手出生日期计算年龄
+        
+        uploadedRecords.push({
+            name: name,
+            date: date,
+            age: age,
+            event: event,
+            time: time,
+            meet: meet,
+            rank: rank,
+            group: group,
+            unit: unit
+        });
+    }
+    
+    // 导入结果报告
+    if (skipCount > 0) {
+        var reasons = {};
+        skipReasons.forEach(function(r) {
+            var key = r.replace(/\(.*\)/, '').trim();
+            reasons[key] = (reasons[key] || 0) + 1;
+        });
+        var reasonStr = Object.keys(reasons).map(function(k) { return k + ': ' + reasons[k] + '条'; }).join('，');
+        console.log('导入报告：成功' + uploadedRecords.length + '条，跳过' + skipCount + '条（' + reasonStr + '）');
+    }
+    
+    // Show preview
+    showUploadPreview(source);
+}
+
+function showUploadPreview(source) {
+    var preview = document.getElementById('uploadPreview');
+    var summary = document.getElementById('uploadSummary');
+    var table = document.getElementById('uploadPreviewTable');
+    var btn = document.getElementById('confirmUploadBtn');
+    
+    if (uploadedRecords.length === 0) {
+        summary.innerHTML = '<span style=\"color:#dc2626;\">⚠ 未解析到有效的比赛记录！</span>';
+        preview.style.display = 'block';
+        table.innerHTML = '';
+        btn.disabled = true;
+        return;
+    }
+    
+    // Group by name
+    var nameCount = {};
+    uploadedRecords.forEach(function(r) {
+        nameCount[r.name] = (nameCount[r.name] || 0) + 1;
+    });
+    
+    var nameList = Object.keys(nameCount).map(function(n) {
+        return n + '(' + nameCount[n] + '条)';
+    }).join(', ');
+    
+    // Check duplicates
+    var existingKeys = {};
+    allData.forEach(function(r) {
+        existingKeys[r.name + '|' + r.date + '|' + r.event] = true;
+    });
+    
+    var newCount = 0;
+    uploadedRecords.forEach(function(r) {
+        if (!existingKeys[r.name + '|' + r.date + '|' + r.event]) newCount++;
+    });
+    
+    summary.innerHTML = '📂 <b>' + source + '</b> | 解析到 <b>' + uploadedRecords.length + '</b> 条记录 | 选手: ' + nameList + ' | 新增: <b>' + newCount + '</b> 条';
+    
+    // Build preview table
+    var html = '<table><thead><tr><th>日期</th><th>姓名</th><th>项目</th><th>成绩</th><th>名次</th><th>组别</th><th>比赛</th></tr></thead><tbody>';
+    
+    uploadedRecords.slice(0, 50).forEach(function(r) {
+        var isNew = !existingKeys[r.name + '|' + r.date + '|' + r.event];
+        html += '<tr style=\"' + (isNew ? '' : 'opacity:0.4;') + '\">'
+            + '<td>' + r.date + '</td>'
+            + '<td>' + r.name + '</td>'
+            + '<td>' + r.event + '</td>'
+            + '<td><b>' + r.time + '</b></td>'
+            + '<td>' + r.rank + '</td>'
+            + '<td>' + r.group + '</td>'
+            + '<td style=\"font-size:11px;max-width:200px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;\">' + r.meet + '</td>'
+            + '</tr>';
+    });
+    
+    if (uploadedRecords.length > 50) {
+        html += '<tr><td colspan=\"7\" style=\"text-align:center;color:#94a3b8;\">... 还有 ' + (uploadedRecords.length - 50) + ' 条记录</td></tr>';
+    }
+    
+    html += '</tbody></table>';
+    table.innerHTML = html;
+    preview.style.display = 'block';
+    btn.disabled = false;
+}
+
+function confirmUpload() {
+    if (uploadedRecords.length === 0) return;
+    
+    var skipDup = document.getElementById('uploadSkipDup').checked;
+    
+    var existingKeys = {};
+    allData.forEach(function(r) {
+        existingKeys[r.name + '|' + r.date + '|' + r.event] = true;
+    });
+    
+    var added = 0;
+    uploadedRecords.forEach(function(r) {
+        var key = r.name + '|' + r.date + '|' + r.event;
+        if (skipDup && existingKeys[key]) return;
+        allData.push(r);
+        existingKeys[key] = true;
+        added++;
+    });
+    
+    allData.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+    saveData();
+    refreshAll();
+    closeUploadModal();
+    alert('成功导入 ' + added + ' 条新记录！（共跳过 ' + (uploadedRecords.length - added) + ' 条重复）');
+}
+
+// Drag & drop
+(function() {
+    var dropArea = document.getElementById('uploadDropArea');
+    if (dropArea) {
+        dropArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            dropArea.classList.add('dragover');
+        });
+        dropArea.addEventListener('dragleave', function() {
+            dropArea.classList.remove('dragover');
+        });
+        dropArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            dropArea.classList.remove('dragover');
+            var file = e.dataTransfer.files[0];
+            if (file) {
+                var fileName = file.name.toLowerCase();
+                var isExcel = fileName.endsWith('.xlsx') || fileName.endsWith('.xls') || fileName.endsWith('.csv');
+                if (isExcel) {
+                    var reader = new FileReader();
+                    reader.onload = function(ev) {
+                        window._xlsxLoadPromise.then(function() {
+                            try {
+                                var data = new Uint8Array(ev.target.result);
+                                var wb = XLSX.read(data, { type: 'array' });
+                                var sheetsHtml = '';
+                                wb.SheetNames.forEach(function(sheetName) {
+                                    sheetsHtml += XLSX.utils.sheet_to_html(wb.Sheets[sheetName]);
+                                });
+                                parseUploadHtml(sheetsHtml, file.name);
+                                document.getElementById('uploadModal').classList.add('active');
+                            } catch(err) {
+                                alert('Excel解析失败：' + err.message);
+                            }
+                        });
+                    };
+                    reader.readAsArrayBuffer(file);
+                } else {
+                    var reader2 = new FileReader();
+                    reader2.onload = function(ev) {
+                        parseUploadHtml(ev.target.result, file.name);
+                        document.getElementById('uploadModal').classList.add('active');
+                    };
+                    reader2.readAsText(file);
+                }
+            }
+        });
+    }
+})();
+
+// ===== Init =====
+// 页面数据版本号：每次更新种子数据后递增，用于自动清除旧版 localStorage
+const WZQ_DATA_VERSION = '2026-07-23-v2';
+
+window.onload = function() {
+    // 版本检查：如果种子数据已更新，自动清除旧缓存
+    try {
+        var cachedVer = localStorage.getItem('wzqDataVersion');
+        if (cachedVer !== WZQ_DATA_VERSION) {
+            localStorage.removeItem('wzqTraining');
+            localStorage.removeItem('wzqStudy');
+            localStorage.removeItem('wzqGrowthWZQ');
+            localStorage.setItem('wzqDataVersion', WZQ_DATA_VERSION);
+        }
+    } catch(e) {}
+
+    // 等Chart.js加载完成再初始化
+    window._chartLoadPromise
+        .then(function() {
+            try {
+                loadData();
+                loadGrowth();
+                var gd = document.getElementById('gDate');
+                if (gd && !gd.value) gd.value = new Date().toISOString().slice(0,10);
+                populateProgressEvents();
+                if (allData.length === 0) {
+                    document.getElementById('statsGrid').innerHTML = '<div class="no-data">暂无数据，请导入或添加比赛记录</div>';
+                    document.getElementById('tableBody').innerHTML = '<tr><td colspan="7" class="no-data">暂无数据</td></tr>';
+                    return;
+                }
+                refreshAll();
+            } catch(e) {
+                document.body.innerHTML += '<div style="padding:20px;background:#fee;color:#c00;border:1px solid #c00;border-radius:8px;margin:20px;">错误：' + e.message + '</div>';
+            }
+        })
+        .catch(function() {
+            document.body.innerHTML = '<div style="padding:40px;color:red;font-size:18px;">⚠️ Chart.js 全部CDN加载失败！请检查网络连接后刷新页面。</div>';
+        });
+};
+</script>
+
+<script>
+// ===================== 身高体重模块 =====================
+// 参考曲线：中国《7岁~18岁儿童青少年身高/体重发育等级评价》(WS/T 456/457-2014) 标准近似值
+// 男孩，年龄 7~16 岁，单位：身高 cm / 体重 kg。仅供趋势观察，非医学诊断。
+const GROWTH_REF = {
+    ages: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+    height: {
+        p3:  [118.5, 124.5, 129.7, 134.5, 139.5, 146.0, 153.4, 159.6, 163.4, 165.5],
+        p50: [124.0, 130.0, 135.4, 140.2, 145.3, 151.9, 159.5, 165.9, 169.8, 172.0],
+        p97: [129.5, 135.5, 141.1, 146.0, 151.1, 157.8, 165.6, 172.2, 176.2, 178.5]
+    },
+    weight: {
+        p3:  [18.5, 21.0, 23.8, 26.8, 30.3, 34.5, 39.5, 43.5, 46.5, 49.0],
+        p50: [24.1, 27.1, 30.5, 34.0, 38.3, 43.5, 49.5, 54.2, 57.7, 60.5],
+        p97: [31.0, 34.5, 39.0, 43.5, 48.5, 55.0, 62.5, 68.0, 72.5, 76.5]
+    }
+};
+const WZQ_BIRTH = new Date('2015-10-10');
+let growthData = [];
+let growthCharts = {};
+
+// 王子期身高体重历史（老板 2026-07-09 提供，覆盖 出生~10岁）
+// 作为首次打开的种子数据；之后以 localStorage / 后端为准，可任意增删。
+const GROWTH_SEED = [
+    { date: '2015-10-10', height: 50.0, weight: 3.7 },
+    { date: '2016-05-31', height: 70.0, weight: 7.8 },
+    { date: '2017-01-10', height: 75.0, weight: 9.8 },
+    { date: '2017-04-08', height: 78.0, weight: 10.5 },
+    { date: '2017-12-16', height: 84.0, weight: 11.5 },
+    { date: '2018-08-19', height: 90.0, weight: 12.9 },
+    { date: '2018-09-16', height: 92.0, weight: 13.5 },
+    { date: '2019-05-03', height: 97.0, weight: 15.0 },
+    { date: '2020-01-31', height: 105.0, weight: 16.5 },
+    { date: '2021-06-24', height: 109.1, weight: 21.6 },
+    { date: '2021-08-25', height: 113.0, weight: 22.5 },
+    { date: '2023-01-08', height: 123.0, weight: 27.3 },
+    { date: '2024-06-14', height: 130.0, weight: 35.0 },
+    { date: '2025-04-24', height: 135.0, weight: 37.2 },
+    { date: '2026-01-16', height: 139.0, weight: 42.9 },
+    { date: '2026-07-08', height: 141.9, weight: 39.0 },
+    { date: '2026-07-13', height: 143.0, weight: 39.2 },
+    { date: '2026-07-15', height: 143.0, weight: 38.7 },
+    { date: '2026-07-16', height: 143.0, weight: 38.3 },
+    { date: '2026-07-17', height: 143.0, weight: 38.1 },
+    { date: '2026-07-18', height: 143.0, weight: 38.1 },
+    { date: '2026-07-19', height: 143.0, weight: 38.2 },
+    { date: '2026-07-20', height: 143.0, weight: 38.2 },
+    { date: '2026-07-21', height: 144.0, weight: 38.6 },
+    { date: '2026-07-22', height: 144.0, weight: 38.0 },
+    { date: '2026-07-23', height: 144.0, weight: 37.8 }
+];
+
+
+// 训练记录种子数据（纯前端模式默认加载）
+const TRAINING_SEED = [
+    { date: '2026-07-23', type: 'test', event: '100米蝶泳', pool: '25米池', time: '1:27.00', content: '', duration: 0, intensity: '', notes: '训练后测试' },
+    { date: '2026-07-21', type: 'test', event: '100米自由泳', pool: '25米池', time: '1:16.36', content: '', duration: 0, intensity: '', notes: '训练后测试' },
+    { date: '2026-07-20', type: 'test', event: '50米自由泳', pool: '25米池', time: '34.57', content: '', duration: 0, intensity: '', notes: '训练后测试' },
+    { date: '2026-07-19', type: 'test', event: '50米蛙泳', pool: '25米池', time: '50.20', content: '', duration: 0, intensity: '', notes: '训练后测试' },
+    { date: '2026-07-18', type: 'test', event: '50米蝶泳', pool: '25米池', time: '37.98', content: '', duration: 0, intensity: '', notes: '训练后测试' },
+    { date: '2026-07-18', type: 'test', event: '50米蝶泳', pool: '25米池', time: '38.56', content: '', duration: 0, intensity: '', notes: '训练后测试' },
+    { date: '2026-07-17', type: 'test', event: '50米蛙泳', pool: '25米池', time: '50.79', content: '', duration: 0, intensity: '', notes: '训练后测试' },
+    { date: '2026-07-17', type: 'test', event: '200米混合泳', pool: '25米池', time: '3:07.53', content: '', duration: 0, intensity: '', notes: '训练后测试' },
+    { date: '2026-07-15', type: 'test', event: '100米蝶泳', pool: '25米池', time: '1:26.10', content: '', duration: 0, intensity: '', notes: '训练后测试' },
+    { date: '2026-07-16', type: 'test', event: '100米仰泳', pool: '25米池', time: '1:28.61', content: '', duration: 0, intensity: '', notes: '训练后测试' },
+    { date: '2026-07-14', type: 'test', event: '100米自由泳', pool: '25米池', time: '1:14.28', content: '', duration: 0, intensity: '', notes: '训练后测试' },
+    { date: '2026-07-13', type: 'test', event: '100米仰泳', pool: '25米池', time: '1:29.00', content: '', duration: 0, intensity: '', notes: '训练后测试' },
+    { date: '2026-07-12', type: 'test', event: '100米自由泳', pool: '25米池', time: '1:19.00', content: '', duration: 0, intensity: '', notes: '训练后测试' },
+    { date: '2026-07-11', type: 'test', event: '200米混合泳', pool: '25米池', time: '3:09.00', content: '', duration: 0, intensity: '', notes: '训练后测试' },
+    { date: '2026-07-09', type: 'test', event: '200米混合泳', pool: '25米池', time: '3:09.00', content: '', duration: 0, intensity: '', notes: '训练后测试' },
+    { date: '2026-07-08', type: 'test', event: '50米蝶泳', pool: '25米池', time: '39.00', content: '', duration: 0, intensity: '', notes: '训练后测试' },
+    { date: '2026-07-07', type: 'test', event: '100米自由泳', pool: '25米池', time: '1:15.00', content: '', duration: 0, intensity: '', notes: '训练后测试' }
+];
+
+
+// 学习记录种子数据（纯前端模式默认加载）
+const STUDY_SEED = [
+    { date: '2022-11-15', semester: '一年级上', examType: '期中', subject: '语文', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2022-11-15', semester: '一年级上', examType: '期中', subject: '数学', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2022-11-15', semester: '一年级上', examType: '期中', subject: '英语', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2023-01-10', semester: '一年级上', examType: '期末', subject: '语文', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2023-01-10', semester: '一年级上', examType: '期末', subject: '数学', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2023-01-10', semester: '一年级上', examType: '期末', subject: '英语', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2023-04-15', semester: '一年级下', examType: '期中', subject: '语文', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2023-04-15', semester: '一年级下', examType: '期中', subject: '数学', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2023-04-15', semester: '一年级下', examType: '期中', subject: '英语', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2023-06-20', semester: '一年级下', examType: '期末', subject: '语文', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2023-06-20', semester: '一年级下', examType: '期末', subject: '数学', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2023-06-20', semester: '一年级下', examType: '期末', subject: '英语', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2023-11-15', semester: '二年级上', examType: '期中', subject: '语文', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2023-11-15', semester: '二年级上', examType: '期中', subject: '数学', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2023-11-15', semester: '二年级上', examType: '期中', subject: '英语', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2024-01-10', semester: '二年级上', examType: '期末', subject: '语文', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2024-01-10', semester: '二年级上', examType: '期末', subject: '数学', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2024-01-10', semester: '二年级上', examType: '期末', subject: '英语', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2024-04-15', semester: '二年级下', examType: '期中', subject: '语文', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2024-04-15', semester: '二年级下', examType: '期中', subject: '数学', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2024-04-15', semester: '二年级下', examType: '期中', subject: '英语', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2024-06-20', semester: '二年级下', examType: '期末', subject: '语文', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2024-06-20', semester: '二年级下', examType: '期末', subject: '数学', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2024-06-20', semester: '二年级下', examType: '期末', subject: '英语', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2024-11-15', semester: '三年级上', examType: '期中', subject: '语文', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2024-11-15', semester: '三年级上', examType: '期中', subject: '数学', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2024-11-15', semester: '三年级上', examType: '期中', subject: '英语', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2025-01-10', semester: '三年级上', examType: '期末', subject: '语文', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2025-01-10', semester: '三年级上', examType: '期末', subject: '数学', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2025-01-10', semester: '三年级上', examType: '期末', subject: '英语', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2025-04-15', semester: '三年级下', examType: '期中', subject: '语文', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2025-04-15', semester: '三年级下', examType: '期中', subject: '数学', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2025-04-15', semester: '三年级下', examType: '期中', subject: '英语', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2025-06-20', semester: '三年级下', examType: '期末', subject: '语文', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2025-06-20', semester: '三年级下', examType: '期末', subject: '数学', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2025-06-20', semester: '三年级下', examType: '期末', subject: '英语', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2025-11-15', semester: '四年级上', examType: '期中', subject: '语文', score: 80, fullScore: 100, rank: 'B', notes: '' },
+    { date: '2025-11-15', semester: '四年级上', examType: '期中', subject: '数学', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2025-11-15', semester: '四年级上', examType: '期中', subject: '英语', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2026-01-10', semester: '四年级上', examType: '期末', subject: '语文', score: 80, fullScore: 100, rank: 'B', notes: '' },
+    { date: '2026-01-10', semester: '四年级上', examType: '期末', subject: '数学', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2026-01-10', semester: '四年级上', examType: '期末', subject: '英语', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2026-06-20', semester: '四年级下', examType: '期末', subject: '语文', score: 70, fullScore: 100, rank: 'C', notes: '' },
+    { date: '2026-06-20', semester: '四年级下', examType: '期末', subject: '数学', score: 80, fullScore: 100, rank: 'B', notes: '' },
+    { date: '2026-06-20', semester: '四年级下', examType: '期末', subject: '英语', score: 70, fullScore: 100, rank: 'C', notes: '' },
+    { date: '2026-06-20', semester: '四年级下', examType: '期末', subject: '科学', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2026-06-20', semester: '四年级下', examType: '期末', subject: '体育', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2026-06-20', semester: '四年级下', examType: '期末', subject: '音乐', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2026-06-20', semester: '四年级下', examType: '期末', subject: '美术', score: 80, fullScore: 100, rank: 'B', notes: '' },
+    { date: '2026-06-20', semester: '四年级下', examType: '期末', subject: '道德与法治', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2026-06-20', semester: '四年级下', examType: '期末', subject: '信息科技', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2026-06-20', semester: '四年级下', examType: '期末', subject: '综合实践活动', score: 90, fullScore: 100, rank: 'A', notes: '' },
+    { date: '2026-06-20', semester: '四年级下', examType: '期末', subject: '劳动', score: 90, fullScore: 100, rank: 'A', notes: '' }
+];// 优先从后端加载；后端不可用时退回本地缓存；两者皆空则用内置历史种子
+async function loadGrowth() {
+    var loaded = false;
+    try {
+        var r = await fetch('/api/growth');
+        if (r.ok) {
+            var arr = await r.json();
+            if (Array.isArray(arr) && arr.length) {
+                growthData = arr;
+                growthData.forEach(function (x) { if (!x.id) x.id = 'local_' + Math.random().toString(36).slice(2, 8); });
+                growthData.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+                cacheGrowth();
+                loaded = true;
+            }
+        }
+    } catch (e) { /* 后端不可用，走本地缓存 */ }
+
+    if (!loaded) {
+        try { growthData = JSON.parse(localStorage.getItem('wzqGrowthWZQ') || '[]'); }
+        catch (e) { growthData = []; }
+        if (!Array.isArray(growthData)) growthData = [];
+        if (growthData.length === 0) {
+            // 首次使用：用老板提供的历史数据作为初始种子
+            growthData = GROWTH_SEED.map(function (s) {
+                return { date: s.date, height: s.height, weight: s.weight, id: 'seed_' + s.date };
+            });
+        }
+        growthData.forEach(function (x) { if (!x.id) x.id = 'local_' + Math.random().toString(36).slice(2, 8); });
+        growthData.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+        cacheGrowth();
+    }
+}
+function cacheGrowth() { try { localStorage.setItem('wzqGrowthWZQ', JSON.stringify(growthData)); } catch (e) {} }
+
+function ageAt(dateStr) {
+    var d = new Date(dateStr);
+    if (isNaN(d.getTime())) return null;
+    var months = (d.getFullYear() - WZQ_BIRTH.getFullYear()) * 12 + (d.getMonth() - WZQ_BIRTH.getMonth());
+    return months / 12;
+}
+function bmiOf(h, w) { if (!h || !w) return null; return w / Math.pow(h / 100, 2); }
+
+async function addGrowth() {
+    var date = document.getElementById('gDate').value || new Date().toISOString().slice(0, 10);
+    var h = parseFloat(document.getElementById('gHeight').value);
+    var w = parseFloat(document.getElementById('gWeight').value);
+    if (!h || h < 50 || h > 220) { alert('请输入合理身高(cm)'); return; }
+    if (!w || w < 5 || w > 150) { alert('请输入合理体重(kg)'); return; }
+    var rec = { date: date, height: h, weight: w, id: 'local_' + Date.now().toString(36) };
+    try {
+        var r = await fetch('/api/growth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ date: date, height: h, weight: w })
+        });
+        if (r.ok) { growthData = await r.json(); }
+        else { growthData.push(rec); }
+    } catch (e) { growthData.push(rec); }
+    growthData.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+    cacheGrowth();
+    document.getElementById('gHeight').value = '';
+    document.getElementById('gWeight').value = '';
+    renderGrowth();
+}
+async function deleteGrowth(id) {
+    try { await fetch('/api/growth?id=' + encodeURIComponent(id), { method: 'DELETE' }); } catch (e) {}
+    growthData = growthData.filter(function (r) { return r.id !== id; });
+    cacheGrowth();
+    renderGrowth();
+}
+
+function interp(arr, age) {
+    var ages = GROWTH_REF.ages;
+    if (age <= ages[0]) return arr[0];
+    if (age >= ages[ages.length - 1]) return arr[arr.length - 1];
+    for (var i = 0; i < ages.length - 1; i++) {
+        if (age >= ages[i] && age <= ages[i + 1]) {
+            var t = (age - ages[i]) / (ages[i + 1] - ages[i]);
+            return arr[i] + (arr[i + 1] - arr[i]) * t;
+        }
+    }
+    return null;
+}
+function classify(value, p3, p50, p97) {
+    if (value < p3) return '低于 P3（偏矮/偏轻，建议关注）';
+    if (value > p97) return '高于 P97（超高/超重，建议关注）';
+    if (value < p50) return '位于 P3–P50 之间（正常偏低）';
+    return '位于 P50–P97 之间（正常偏高）';
+}
+
+function renderGrowth() {
+    var tb = document.getElementById('growthBody');
+    if (!growthData.length) {
+        tb.innerHTML = '<tr><td colspan="6" class="no-data">暂无记录，上方添加即可</td></tr>';
+    } else {
+        tb.innerHTML = growthData.map(function (r) {
+            var age = ageAt(r.date), b = bmiOf(r.height, r.weight);
+            return '<tr><td>' + r.date + '</td><td>' + (age != null ? age.toFixed(1) + '岁' : '-') +
+                '</td><td>' + r.height + '</td><td>' + r.weight + '</td><td>' + (b ? b.toFixed(1) : '-') +
+                '</td><td><button class="btn btn-small" onclick="deleteGrowth(\'' + r.id + '\')">删除</button></td></tr>';
+        }).join('');
+    }
+    renderGrowthStatus();
+    drawGrowthCharts();
+    renderGrowthRate();
+}
+function renderGrowthStatus() {
+    var el = document.getElementById('growthStatus');
+    if (!growthData.length) { el.innerHTML = '添加测量记录后，这里会显示与标准曲线的对比结论。'; return; }
+    var latest = growthData[growthData.length - 1];
+    var age = ageAt(latest.date);
+    if (age == null) { el.innerHTML = '日期解析失败'; return; }
+    var hp3 = interp(GROWTH_REF.height.p3, age), hp50 = interp(GROWTH_REF.height.p50, age), hp97 = interp(GROWTH_REF.height.p97, age);
+    var wp3 = interp(GROWTH_REF.weight.p3, age), wp50 = interp(GROWTH_REF.weight.p50, age), wp97 = interp(GROWTH_REF.weight.p97, age);
+    el.innerHTML = '最新测量（' + latest.date + '，约 ' + age.toFixed(1) + ' 岁）：<br>' +
+        '📏 身高 <b>' + latest.height + ' cm</b>：标准 P50≈' + hp50.toFixed(1) + ' cm，当前' + classify(latest.height, hp3, hp50, hp97) + '。<br>' +
+        '⚖️ 体重 <b>' + latest.weight + ' kg</b>：标准 P50≈' + wp50.toFixed(1) + ' kg，当前' + classify(latest.weight, wp3, wp50, wp97) + '。';
+}
+
+function buildGrowthChart(canvasId, ref, pts) {
+    if (typeof Chart === 'undefined') return;
+    var ctx = document.getElementById(canvasId);
+    if (!ctx) return;
+    var ages = GROWTH_REF.ages;
+    var ds = [
+        { label: '标准 P97', data: ages.map(function (a, i) { return { x: a, y: ref.p97[i] }; }),
+          borderColor: '#cbd5e1', borderDash: [5, 4], pointRadius: 0, fill: false },
+        { label: '标准 P50', data: ages.map(function (a, i) { return { x: a, y: ref.p50[i] }; }),
+          borderColor: '#0070f3', borderWidth: 2, pointRadius: 0, fill: false },
+        { label: '标准 P3', data: ages.map(function (a, i) { return { x: a, y: ref.p3[i] }; }),
+          borderColor: '#cbd5e1', borderDash: [5, 4], pointRadius: 0, fill: false },
+        { label: '王子期', data: pts, backgroundColor: '#d946ef', borderColor: '#d946ef',
+          showLine: true, fill: false, pointRadius: 5, borderWidth: 2, tension: 0.2 }
+    ];
+    if (growthCharts[canvasId]) growthCharts[canvasId].destroy();
+    growthCharts[canvasId] = new Chart(ctx, {
+        type: 'line',
+        data: { datasets: ds },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            scales: {
+                x: { type: 'linear', min: 0, max: 16, title: { display: true, text: '年龄(岁)' }, ticks: { stepSize: 1 } },
+                y: { title: { display: true, text: ref.unit } }
+            },
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } }
+        }
+    });
+}
+function drawGrowthCharts() {
+    if (typeof Chart === 'undefined') return;
+    var hp = GROWTH_REF.height, wp = GROWTH_REF.weight;
+    var hPts = growthData.map(function (r) { return { x: ageAt(r.date), y: r.height }; });
+    var wPts = growthData.map(function (r) { return { x: ageAt(r.date), y: r.weight }; });
+    buildGrowthChart('growthHeightChart', { p3: hp.p3, p50: hp.p50, p97: hp.p97, unit: 'cm' }, hPts);
+    buildGrowthChart('growthWeightChart', { p3: wp.p3, p50: wp.p50, p97: wp.p97, unit: 'kg' }, wPts);
+    drawWeightTargetChart();
+}
+
+// 体重减重目标曲线
+function drawWeightTargetChart() {
+    var canvas = document.getElementById('weightTargetChart');
+    if (!canvas || typeof Chart === 'undefined') return;
+
+    // 销毁旧图表
+    if (growthCharts['weightTarget']) { growthCharts['weightTarget'].destroy(); }
+
+    // 生成目标减重曲线数据（2026-07-14 到 2026-08-31，39.2kg → 34.2kg）
+    var startDate = '2026-07-14';
+    var endDate = '2026-08-31';
+    var startWeight = 39.2;
+    var targetWeight = 34.2;
+    var totalLoss = startWeight - targetWeight; // 5 kg = 10斤
+
+    // 计算总天数
+    var s = new Date(startDate + 'T00:00:00');
+    var e = new Date(endDate + 'T00:00:00');
+    var totalDays = Math.round((e - s) / (1000 * 60 * 60 * 24)); // 48天
+
+    var targetLabels = [];
+    var targetData = [];
+    for (var i = 0; i <= totalDays; i++) {
+        var d = new Date(s.getTime() + i * 24 * 60 * 60 * 1000);
+        var label = (d.getMonth() + 1) + '/' + d.getDate();
+        targetLabels.push(label);
+        // 线性递减
+        targetData.push(startWeight - (totalLoss * i / totalDays));
+    }
+
+    // 实际体重数据（从 growthData 中提取）
+    var actualData = [];
+    growthData.forEach(function(r) {
+        if (r.date >= startDate && r.date <= endDate && r.weight != null) {
+            var rd = new Date(r.date + 'T00:00:00');
+            var label = (rd.getMonth() + 1) + '/' + rd.getDate();
+            var idx = targetLabels.indexOf(label);
+            if (idx >= 0) {
+                actualData[idx] = r.weight;
+            }
+        }
+    });
+
+    growthCharts['weightTarget'] = new Chart(canvas.getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: targetLabels,
+            datasets: [
+                {
+                    label: '目标减重曲线',
+                    data: targetData,
+                    borderColor: '#1DC981',
+                    backgroundColor: 'rgba(29,201,129,0.08)',
+                    borderWidth: 2.5,
+                    pointRadius: 0,
+                    pointHoverRadius: 0,
+                    tension: 0,
+                    fill: true
+                },
+                {
+                    label: '实际体重',
+                    data: actualData,
+                    borderColor: '#3b82f6',
+                    backgroundColor: '#3b82f6',
+                    borderWidth: 0,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    tension: 0,
+                    fill: false,
+                    spanGaps: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 400 },
+            interaction: { intersect: false, mode: 'index' },
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { font: { size: 12 }, usePointStyle: true, padding: 14 }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(items) {
+                            var idx = items[0].dataIndex;
+                            var d = new Date(s.getTime() + idx * 24 * 60 * 60 * 1000);
+                            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+                        },
+                        label: function(ctx) {
+                            if (ctx.raw === null || ctx.raw === undefined) return null;
+                            return ctx.dataset.label + ': ' + ctx.raw.toFixed(2) + ' kg';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    title: { display: true, text: '体重 (kg)', font: { size: 12 }, color: '#94a3b8' },
+                    ticks: { font: { size: 11 }, color: '#94a3b8' },
+                    grid: { color: '#e2e8f0' }
+                },
+                x: {
+                    ticks: {
+                        font: { size: 10 }, color: '#94a3b8',
+                        maxTicksLimit: 12,
+                        callback: function(v, i) {
+                            // 只显示关键日期：起始、每月1日、目标日
+                            var d = new Date(s.getTime() + i * 24 * 60 * 60 * 1000);
+                            if (i === 0 || i === totalDays) return (d.getMonth() + 1) + '/' + d.getDate();
+                            if (d.getDate() === 1) return (d.getMonth() + 1) + '/1';
+                            if (i % 7 === 0) return (d.getMonth() + 1) + '/' + d.getDate();
+                            return '';
+                        }
+                    },
+                    grid: { color: '#e2e8f0' }
+                }
+            }
+        }
+    });
+}
+
+// 正常儿童（男孩）年增长参考值，依据中国儿童发育标准近似值
+var GROWTH_RATE_REF = [
+    { min: 0, max: 1, hRate: 25, wRate: 7, label: '0-1岁（婴儿期）' },
+    { min: 1, max: 2, hRate: 12, wRate: 2.5, label: '1-2岁（幼儿期）' },
+    { min: 2, max: 3, hRate: 8, wRate: 2, label: '2-3岁' },
+    { min: 3, max: 4, hRate: 7, wRate: 1.8, label: '3-4岁' },
+    { min: 4, max: 6, hRate: 6.5, wRate: 2, label: '4-6岁' },
+    { min: 6, max: 8, hRate: 6, wRate: 2.2, label: '6-8岁' },
+    { min: 8, max: 10, hRate: 5.5, wRate: 2.5, label: '8-10岁' },
+    { min: 10, max: 12, hRate: 6, wRate: 3.5, label: '10-12岁' },
+    { min: 12, max: 14, hRate: 8, wRate: 4.5, label: '12-14岁（青春期）' },
+    { min: 14, max: 16, hRate: 4, wRate: 3, label: '14-16岁' }
+];
+function getRefRate(age) {
+    for (var i = 0; i < GROWTH_RATE_REF.length; i++) {
+        if (age >= GROWTH_RATE_REF[i].min && age < GROWTH_RATE_REF[i].max) return GROWTH_RATE_REF[i];
+    }
+    return GROWTH_RATE_REF[GROWTH_RATE_REF.length - 1];
+}
+
+function renderGrowthRate() {
+    var el = document.getElementById('growthRateContent');
+    if (!el) return;
+    if (growthData.length < 2) { el.innerHTML = '<div class="no-data">至少需要2条记录才能计算增长幅度</div>'; return; }
+
+    var sorted = growthData.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+    var rows = '';
+    var summaryH = [], summaryW = [];
+
+    for (var i = 1; i < sorted.length; i++) {
+        var prev = sorted[i - 1], curr = sorted[i];
+        var pAge = ageAt(prev.date), cAge = ageAt(curr.date);
+        var daysDiff = (new Date(curr.date).getTime() - new Date(prev.date).getTime()) / (1000 * 60 * 60 * 24);
+        var yearsDiff = daysDiff / 365.25;
+        if (yearsDiff <= 0) continue;
+
+        var hDiff = curr.height - prev.height;
+        var wDiff = curr.weight - prev.weight;
+        var hRate = hDiff / yearsDiff;
+        var wRate = wDiff / yearsDiff;
+        var midAge = (pAge + cAge) / 2;
+        var ref = getRefRate(midAge);
+        var showAnnualRate = daysDiff >= 30; // 间隔不足30天不显示年化增长率
+
+        // 评估身高
+        var hClass, hBadge, hBadgeClass;
+        if (hDiff < 0) { hClass = 'gr-rate-bad'; hBadge = '数据异常'; hBadgeClass = 'bad'; }
+        else if (!showAnnualRate) { hClass = 'gr-rate-normal'; hBadge = '间隔太短'; hBadgeClass = 'normal'; }
+        else if (hRate >= ref.hRate * 1.2) { hClass = 'gr-rate-good'; hBadge = '高于正常'; hBadgeClass = 'good'; }
+        else if (hRate >= ref.hRate * 0.8) { hClass = 'gr-rate-normal'; hBadge = '正常'; hBadgeClass = 'normal'; }
+        else { hClass = 'gr-rate-low'; hBadge = '低于正常'; hBadgeClass = 'low'; }
+
+        // 评估体重
+        var wClass, wBadge, wBadgeClass;
+        if (wDiff < 0) { wClass = 'gr-rate-bad'; wBadge = '体重下降'; wBadgeClass = 'bad'; }
+        else if (!showAnnualRate) { wClass = 'gr-rate-normal'; wBadge = '间隔太短'; wBadgeClass = 'normal'; }
+        else if (wRate >= ref.wRate * 1.3) { wClass = 'gr-rate-good'; wBadge = '高于正常'; wBadgeClass = 'good'; }
+        else if (wRate >= ref.wRate * 0.7) { wClass = 'gr-rate-normal'; wBadge = '正常'; wBadgeClass = 'normal'; }
+        else { wClass = 'gr-rate-low'; wBadge = '低于正常'; wBadgeClass = 'low'; }
+
+        if (hDiff >= 0 && showAnnualRate) summaryH.push(hRate);
+        if (wDiff >= 0 && showAnnualRate) summaryW.push(wRate);
+
+        var period = prev.date + ' → ' + curr.date;
+        var ageStr = pAge.toFixed(1) + '→' + cAge.toFixed(1) + '岁';
+        var hDiffStr = (hDiff >= 0 ? '+' : '') + hDiff.toFixed(1) + 'cm';
+        var hRateStr = showAnnualRate ? ('<span class="gr-ref">' + hRate.toFixed(1) + 'cm/年</span>') : '';
+        var wDiffStr = (wDiff >= 0 ? '+' : '') + wDiff.toFixed(1) + 'kg';
+        var wRateStr = showAnnualRate ? ('<span class="gr-ref">' + wRate.toFixed(1) + 'kg/年</span>') : '';
+
+        rows += '<tr>'
+            + '<td>' + period + '<br><span class="gr-ref">' + ageStr + '（间隔' + (daysDiff < 365 ? daysDiff.toFixed(0) + '天' : yearsDiff.toFixed(1) + '年') + '）</span></td>'
+            + '<td class="' + hClass + '">' + hDiffStr + (hRateStr ? '<br>' + hRateStr : '') + '</td>'
+            + '<td class="gr-ref">' + (showAnnualRate ? (ref.hRate + 'cm/年<br>' + ref.label) : '-') + '</td>'
+            + '<td><span class="gr-badge ' + hBadgeClass + '">' + hBadge + '</span></td>'
+            + '<td class="' + wClass + '">' + wDiffStr + (wRateStr ? '<br>' + wRateStr : '') + '</td>'
+            + '<td class="gr-ref">' + (showAnnualRate ? (ref.wRate + 'kg/年<br>' + ref.label) : '-') + '</td>'
+            + '<td><span class="gr-badge ' + wBadgeClass + '">' + wBadge + '</span></td>'
+            + '</tr>';
+    }
+
+    var html = '<table class="gr-table"><thead><tr>'
+        + '<th>测量间隔</th>'
+        + '<th>身高增长</th><th>正常参考</th><th>评估</th>'
+        + '<th>体重增长</th><th>正常参考</th><th>评估</th>'
+        + '</tr></thead><tbody>' + rows + '</tbody></table>';
+
+    // 汇总
+    if (summaryH.length > 0) {
+        var avgH = summaryH.reduce(function (a, b) { return a + b; }, 0) / summaryH.length;
+        var avgW = summaryW.length > 0 ? summaryW.reduce(function (a, b) { return a + b; }, 0) / summaryW.length : 0;
+        var latestRef = getRefRate(ageAt(sorted[sorted.length - 1].date));
+        html += '<div style="margin-top:12px; padding:10px 14px; background:#f8fafc; border-radius:8px; font-size:13px; color:#475569; line-height:1.8;">'
+            + '📈 <b>平均增速</b>（排除异常数据后）：身高 <b>' + avgH.toFixed(1) + ' cm/年</b>，体重 <b>' + avgW.toFixed(1) + ' kg/年</b>。<br>'
+            + '当前年龄段（' + latestRef.label + '）正常参考：身高 ' + latestRef.hRate + ' cm/年，体重 ' + latestRef.wRate + ' kg/年。'
+            + '</div>';
+    }
+
+    el.innerHTML = html;
+}
+
+function switchTab(tab) {
+    document.getElementById('view-scores').style.display = (tab === 'scores') ? 'block' : 'none';
+    document.getElementById('view-training').style.display = (tab === 'training') ? 'block' : 'none';
+    document.getElementById('view-study').style.display = (tab === 'study') ? 'block' : 'none';
+    document.getElementById('view-growth').style.display = (tab === 'growth') ? 'block' : 'none';
+    document.querySelectorAll('.topnav-btn').forEach(function (b) {
+        b.classList.toggle('active', b.getAttribute('data-tab') === tab);
+    });
+    if (tab === 'growth') { loadGrowth().then(renderGrowth); }
+    if (tab === 'training') { loadTraining().then(renderTraining); }
+    if (tab === 'study') { loadStudy().then(renderStudy); }
+}
+
+// ===================== 训练记录模块 =====================
+var trainingData = [];
+
+async function loadTraining() {
+    try {
+        var r = await fetch('/api/training');
+        if (r.ok) {
+            var arr = await r.json();
+            if (Array.isArray(arr) && arr.length) {
+                trainingData = arr;
+                trainingData.sort(function(a, b) { return a.date < b.date ? 1 : -1; });
+                cacheTraining();
+                return;
+            }
+        }
+    } catch (e) {}
+    trainingData = JSON.parse(localStorage.getItem('wzqTraining') || '[]');
+    if (!Array.isArray(trainingData)) trainingData = [];
+    if (trainingData.length === 0 && typeof TRAINING_SEED !== 'undefined') {
+        trainingData = TRAINING_SEED.map(function(s) {
+            return { id: 'seed_' + s.date + '_' + (s.event || s.type), date: s.date, type: s.type, event: s.event || '', pool: s.pool || '', time: s.time || '', content: s.content || '', duration: s.duration || 0, intensity: s.intensity || '', notes: s.notes || '' };
+        });
+    }
+    trainingData.sort(function(a, b) { return a.date < b.date ? 1 : -1; });
+    cacheTraining();
+}
+
+function cacheTraining() { try { localStorage.setItem('wzqTraining', JSON.stringify(trainingData)); } catch(e) {} }
+
+function switchTrTab(which) {
+    document.getElementById('trFormDaily').style.display = (which === 'daily') ? 'block' : 'none';
+    document.getElementById('trFormTest').style.display = (which === 'test') ? 'block' : 'none';
+    document.getElementById('trTabDaily').classList.toggle('active', which === 'daily');
+    document.getElementById('trTabTest').classList.toggle('active', which === 'test');
+}
+
+async function addTrainingDaily() {
+    var date = document.getElementById('trDailyDate').value || new Date().toISOString().slice(0,10);
+    var duration = parseInt(document.getElementById('trDailyDuration').value) || 0;
+    var intensity = document.getElementById('trDailyIntensity').value;
+    var content = document.getElementById('trDailyContent').value.trim();
+    var notes = document.getElementById('trDailyNotes').value.trim();
+    if (!content) { alert('请输入训练内容'); return; }
+    var rec = { date:date, type:'daily', content:content, duration:duration, intensity:intensity, notes:notes };
+    try {
+        var r = await fetch('/api/training', {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(rec)
+        });
+        if (r.ok) { trainingData = await r.json(); }
+        else { rec.id = 'local_' + Date.now().toString(36); trainingData.unshift(rec); }
+    } catch(e) { rec.id = 'local_' + Date.now().toString(36); trainingData.unshift(rec); }
+    cacheTraining();
+    document.getElementById('trDailyContent').value = '';
+    document.getElementById('trDailyDuration').value = '';
+    document.getElementById('trDailyNotes').value = '';
+    renderTraining();
+}
+
+async function addTrainingTest() {
+    var date = document.getElementById('trTestDate').value || new Date().toISOString().slice(0,10);
+    var event = document.getElementById('trTestEvent').value;
+    var pool = document.getElementById('trTestPool').value;
+    var time = document.getElementById('trTestTime').value.trim();
+    var notes = document.getElementById('trTestNotes').value.trim();
+    if (!time) { alert('请输入测试成绩'); return; }
+    var rec = { date:date, type:'test', event:event, pool:pool, time:time, notes:notes };
+    try {
+        var r = await fetch('/api/training', {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(rec)
+        });
+        if (r.ok) { trainingData = await r.json(); }
+        else { rec.id = 'local_' + Date.now().toString(36); trainingData.unshift(rec); }
+    } catch(e) { rec.id = 'local_' + Date.now().toString(36); trainingData.unshift(rec); }
+    cacheTraining();
+    document.getElementById('trTestTime').value = '';
+    document.getElementById('trTestNotes').value = '';
+    renderTraining();
+}
+
+async function deleteTraining(id) {
+    try { await fetch('/api/training?id=' + encodeURIComponent(id), { method:'DELETE' }); } catch(e) {}
+    trainingData = trainingData.filter(function(r) { return r.id !== id; });
+    cacheTraining();
+    renderTraining();
+}
+
+function renderTraining() {
+    renderTrainingWeekly();
+    renderTrainingTestSummary();
+    renderTrainingTrend();
+    renderTrainingTable();
+}
+
+function renderTrainingWeekly() {
+    var el = document.getElementById('trainingWeeklySummary');
+    if (!el) return;
+    // 统计最近4周的训练频率
+    var now = new Date();
+    var weeks = [];
+    for (var w = 3; w >= 0; w--) {
+        var weekStart = new Date(now);
+        weekStart.setDate(now.getDate() - now.getDay() - w * 7);
+        var weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        var weekData = trainingData.filter(function(r) {
+            var d = new Date(r.date);
+            return d >= weekStart && d <= weekEnd;
+        });
+        var dailyCount = weekData.filter(function(r) { return r.type === 'daily'; }).length;
+        var testCount = weekData.filter(function(r) { return r.type === 'test'; }).length;
+        var totalMin = weekData.filter(function(r) { return r.type === 'daily'; }).reduce(function(s, r) { return s + (r.duration || 0); }, 0);
+        weeks.push({ start: weekStart, end: weekEnd, dailyCount: dailyCount, testCount: testCount, totalMin: totalMin, data: weekData });
+    }
+
+    var html = '<div class="tr-summary-card"><div class="ts-title">📅 最近4周训练节奏</div>';
+    html += '<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:12px;">';
+    weeks.forEach(function(wk, i) {
+        var label = '本周';
+        if (i === 2) label = '上周';
+        else if (i < 2) label = (i === 0 ? '3周前' : '2周前');
+        else label = '本周';
+        var bg = wk.dailyCount > 0 ? '#eef2ff' : '#f8fafc';
+        html += '<div style="background:' + bg + '; border-radius:8px; padding:10px; text-align:center;">';
+        html += '<div style="font-size:11px; color:#94a3b8; margin-bottom:4px;">' + label + '</div>';
+        html += '<div style="font-size:20px; font-weight:800; color:#0f172a;">' + wk.dailyCount + '<span style="font-size:12px; font-weight:400; color:#94a3b8;">天</span></div>';
+        html += '<div style="font-size:11px; color:#64748b; margin-top:2px;">训练' + wk.dailyCount + ' | 测试' + wk.testCount + '</div>';
+        if (wk.totalMin > 0) html += '<div style="font-size:11px; color:#6366f1; margin-top:2px;">' + wk.totalMin + '分钟</div>';
+        html += '</div>';
+    });
+    html += '</div>';
+
+    // 本周日历视图
+    var thisWeek = weeks[3];
+    var dayNames = ['日','一','二','三','四','五','六'];
+    html += '<div class="tr-week-grid">';
+    for (var d = 0; d < 7; d++) {
+        var dayDate = new Date(thisWeek.start);
+        dayDate.setDate(thisWeek.start.getDate() + d);
+        var dayStr = dayDate.toISOString().slice(0,10);
+        var dayData = trainingData.filter(function(r) { return r.date === dayStr; });
+        var hasDaily = dayData.some(function(r) { return r.type === 'daily'; });
+        var hasTest = dayData.some(function(r) { return r.type === 'test'; });
+        var cls = 'tr-week-day';
+        if (hasDaily) cls += ' has-training';
+        if (hasTest) cls += ' has-test';
+        var info = '';
+        if (hasDaily) info += '<div class="wd-info">训练</div>';
+        if (hasTest) info += '<div class="wd-info" style="color:#f59e0b;">测试</div>';
+        html += '<div class="' + cls + '"><div class="wd-name">周' + dayNames[d] + '</div><div style="color:#94a3b8;">' + (dayDate.getMonth()+1) + '/' + dayDate.getDate() + '</div>' + info + '</div>';
+    }
+    html += '</div></div>';
+    el.innerHTML = html;
+}
+
+function renderTrainingTestSummary() {
+    var el = document.getElementById('trainingTestSummary');
+    if (!el) return;
+
+    // 按项目+池型分组
+    var tests = trainingData.filter(function(r) { return r.type === 'test'; });
+    if (tests.length === 0) {
+        el.innerHTML = '<div style="color:#94a3b8; font-size:13px; padding:12px;">暂无测试成绩，请在上方录入</div>';
+        return;
+    }
+
+    var byEvent = {};
+    tests.forEach(function(r) {
+        var key = r.event;
+        if (!byEvent[key]) byEvent[key] = { '25米池': [], '50米池': [] };
+        if (r.pool) byEvent[key][r.pool].push(r);
+        else byEvent[key]['25米池'].push(r); // 默认归25米池
+    });
+
+    var html = '';
+    Object.keys(byEvent).sort().forEach(function(event) {
+        var pools = byEvent[event];
+        var std = GRADE_STANDARDS_25M[event];
+
+        html += '<div class="tr-event-card">';
+        html += '<div class="tec-header"><span>' + event + '</span>';
+        if (std) {
+            html += '<span style="font-size:11px; font-weight:400; color:#94a3b8;">达级参考(25米池)：三级 ' + secondsToTime(std['三级']) + ' / 二级 ' + secondsToTime(std['二级']) + ' / 一级 ' + secondsToTime(std['一级']) + ' / 健将 ' + secondsToTime(std['健将']) + '</span>';
+        }
+        html += '</div><div class="tec-body">';
+
+        ['25米池','50米池'].forEach(function(pool) {
+            var recs = pools[pool];
+            if (recs.length === 0) return;
+            recs.sort(function(a,b) { return a.date < b.date ? 1 : -1; });
+            var bestRec = recs.reduce(function(a,b) {
+                var ta = timeToSeconds(a.time), tb = timeToSeconds(b.time);
+                if (ta !== null && tb !== null && ta < tb) return a;
+                return b;
+            }, recs[0]);
+            var bestSec = timeToSeconds(bestRec.time);
+
+            html += '<table><thead><tr><th style="text-align:left;">' + pool + '</th><th>日期</th><th>成绩</th>';
+            if (std && bestSec !== null) {
+                html += '<th>距三级</th><th>距二级</th><th>距一级</th><th>距健将</th>';
+            }
+            html += '<th>备注</th></tr></thead><tbody>';
+
+            // 最佳成绩行
+            html += '<tr>';
+            html += '<td style="text-align:left; font-weight:600;">最佳</td>';
+            html += '<td>' + bestRec.date + '</td>';
+            html += '<td class="best-time">' + bestRec.time + '</td>';
+            if (std && bestSec !== null) {
+                GRADE_META.forEach(function(gm) {
+                    var gap = bestSec - std[gm.key];
+                    if (gap <= 0) html += '<td class="tr-gap-neg">已达标</td>';
+                    else html += '<td class="tr-gap-pos">+' + gap.toFixed(1) + 's</td>';
+                });
+            }
+            html += '<td>' + (bestRec.notes || '') + '</td></tr>';
+
+            // 历史记录
+            recs.forEach(function(r) {
+                if (r.id === bestRec.id) return;
+                html += '<tr style="color:#64748b;">';
+                html += '<td style="text-align:left;">-</td>';
+                html += '<td>' + r.date + '</td>';
+                html += '<td>' + r.time + '</td>';
+                if (std && bestSec !== null) html += '<td>-</td><td>-</td><td>-</td><td>-</td>';
+                html += '<td>' + (r.notes || '') + '</td></tr>';
+            });
+
+            html += '</tbody></table>';
+        });
+
+        html += '</div></div>';
+    });
+
+    el.innerHTML = html;
+}
+
+function renderTrainingTable() {
+    var body = document.getElementById('trainingBody');
+    if (!body) return;
+    if (trainingData.length === 0) {
+        body.innerHTML = '<tr><td colspan="10" style="text-align:center; color:#94a3b8; padding:20px;">暂无训练记录</td></tr>';
+        return;
+    }
+    var html = '';
+    trainingData.forEach(function(r) {
+        var typeLabel = r.type === 'test' ? '<span style="background:#fef3c7; color:#92400e; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600;">测试</span>' : '<span style="background:#eef2ff; color:#3730a3; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600;">训练</span>';
+        html += '<tr>'
+            + '<td>' + r.date + '</td>'
+            + '<td>' + typeLabel + '</td>'
+            + '<td>' + (r.event || '-') + '</td>'
+            + '<td>' + (r.pool || '-') + '</td>'
+            + '<td>' + (r.time || '-') + '</td>'
+            + '<td style="text-align:left;">' + (r.content || '-') + '</td>'
+            + '<td>' + (r.duration ? r.duration + '分钟' : '-') + '</td>'
+            + '<td>' + (r.intensity || '-') + '</td>'
+            + '<td style="text-align:left;">' + (r.notes || '-') + '</td>'
+            + '<td><button class="btn btn-sm btn-gray" onclick="deleteTraining(\'' + r.id + '\')" style="padding:4px 10px; font-size:12px;">删除</button></td>'
+            + '</tr>';
+    });
+    body.innerHTML = html;
+}
+
+// 训练成绩趋势图（每种泳姿单独一张卡片）
+var trainingTrendCharts = {};
+function renderTrainingTrend() {
+    var container = document.getElementById('trainingTrendCards');
+    var emptyMsg = document.getElementById('trainingTrendEmpty');
+    if (!container) return;
+
+    // 销毁旧图表
+    Object.keys(trainingTrendCharts).forEach(function(k) {
+        if (trainingTrendCharts[k]) { trainingTrendCharts[k].destroy(); delete trainingTrendCharts[k]; }
+    });
+
+    // 收集所有测试记录
+    var tests = trainingData.filter(function(r) { return r.type === 'test' && r.time; });
+    if (tests.length < 1) {
+        container.innerHTML = '';
+        if (emptyMsg) emptyMsg.style.display = 'block';
+        return;
+    }
+    if (emptyMsg) emptyMsg.style.display = 'none';
+
+    // 训练成绩统一使用25米池标准
+    var gradeMap = GRADE_STANDARDS_25M;
+
+    // 按项目分组
+    var groups = {};
+    tests.forEach(function(r) {
+        var key = r.event;
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(r);
+    });
+    Object.keys(groups).forEach(function(k) {
+        groups[k].sort(function(a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+    });
+
+    var lineColors = ['#4B3FE3', '#22A5F7', '#E8463A', '#1DC981', '#EFAA17', '#A9AEFF', '#6F6FFF', '#27D2BF', '#FF6B6B', '#36D7B7'];
+
+    var html = '';
+    var eventIdx = 0;
+
+    Object.keys(groups).forEach(function(eventName) {
+        var items = groups[eventName];
+        var canvasId = 'trainingTrend_' + eventName.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '_');
+        var labels = items.map(function(r) { return r.date; });
+        var data = items.map(function(r) { return timeToSeconds(r.time); });
+        var color = lineColors[eventIdx % lineColors.length];
+
+        // 最佳成绩
+        var best = Math.min.apply(null, data);
+        var bestDate = items[data.indexOf(best)].date;
+
+        // 达级参考
+        var std = gradeMap[eventName];
+        var gradeInfo = '';
+        if (std) {
+            var diff3 = best - std['三级'];
+            var diff2 = best - std['二级'];
+            var diff1 = best - std['一级'];
+            gradeInfo = '<span style="font-size:11px; color:#94a3b8;">'
+                + '三级 ' + secondsToTime(std['三级']) + ' (距' + (diff3 <= 0 ? '<span style="color:#1DC981">已达标</span>' : '+' + diff3.toFixed(1) + 's') + ') / '
+                + '二级 ' + secondsToTime(std['二级']) + ' (距' + (diff2 <= 0 ? '<span style="color:#1DC981">已达标</span>' : '+' + diff2.toFixed(1) + 's') + ') / '
+                + '一级 ' + secondsToTime(std['一级']) + ' (距' + (diff1 <= 0 ? '<span style="color:#1DC981">已达标</span>' : '+' + diff1.toFixed(1) + 's') + ')'
+                + '</span>';
+        }
+
+        html += '<div style="background:#fff; border-radius:12px; padding:18px 20px; box-shadow:0 1px 4px rgba(0,0,0,.06); margin-bottom:16px;">'
+            + '<div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:4px;">'
+            + '<div style="font-weight:700; color:#0f172a; font-size:15px;">' + eventName + ' (25米池)</div>'
+            + '<div style="font-size:13px; color:#0f172a;"><span style="font-weight:600; color:' + color + ';">最佳 ' + secondsToTime(best) + '</span>'
+            + '<span style="color:#94a3b8; font-size:11px; margin-left:6px;">' + bestDate + '</span></div>'
+            + '</div>'
+            + (gradeInfo ? '<div style="margin-bottom:10px;">' + gradeInfo + '</div>' : '')
+            + '<div style="position:relative; height:clamp(200px, 28vw, 300px);">'
+            + '<canvas id="' + canvasId + '"></canvas>'
+            + '</div></div>';
+
+        eventIdx++;
+    });
+
+    container.innerHTML = html;
+
+    // 延迟渲染图表（等 DOM 更新）
+    setTimeout(function() {
+        var gradeStyles = {
+            '三级': { borderDash: [6, 4], borderColor: 'rgba(148,163,184,0.6)', borderWidth: 1.2 },
+            '二级': { borderDash: [4, 3], borderColor: 'rgba(59,130,246,0.5)', borderWidth: 1.2 },
+            '一级': { borderDash: [8, 4], borderColor: 'rgba(139,92,246,0.5)', borderWidth: 1.2 }
+        };
+
+        eventIdx = 0;
+        Object.keys(groups).forEach(function(eventName) {
+            var items = groups[eventName];
+            var canvasId = 'trainingTrend_' + eventName.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '_');
+            var canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+
+            var labels = items.map(function(r) { return r.date; });
+            var data = items.map(function(r) { return timeToSeconds(r.time); });
+            var color = lineColors[eventIdx % lineColors.length];
+
+            var datasets = [{
+                label: eventName,
+                data: data,
+                borderColor: color,
+                backgroundColor: color + '20',
+                borderWidth: 2.5,
+                pointRadius: 6,
+                pointBackgroundColor: color,
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2.5,
+                pointHoverRadius: 8,
+                tension: 0.3,
+                fill: true,
+                spanGaps: true
+            }];
+
+            // 等级基线
+            var std = gradeMap[eventName];
+            if (std) {
+                ['三级', '二级', '一级'].forEach(function(g) {
+                    if (std[g] !== undefined) {
+                        var s = gradeStyles[g];
+                        datasets.push({
+                            label: g,
+                            data: labels.map(function() { return std[g]; }),
+                            borderColor: s.borderColor,
+                            borderWidth: s.borderWidth,
+                            borderDash: s.borderDash,
+                            pointRadius: 0,
+                            pointHoverRadius: 0,
+                            fill: false,
+                            tension: 0
+                        });
+                    }
+                });
+            }
+
+            // Y 轴范围：包含成绩和基线
+            var allVals = data.slice();
+            if (std) { ['三级', '二级', '一级'].forEach(function(g) { if (std[g]) allVals.push(std[g]); }); }
+            var minVal = Math.min.apply(null, allVals);
+            var maxVal = Math.max.apply(null, allVals);
+            var pad = Math.max((maxVal - minVal) * 0.3, 3);
+
+            trainingTrendCharts[canvasId] = new Chart(canvas.getContext('2d'), {
+                type: 'line',
+                data: { labels: labels, datasets: datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 400 },
+                    interaction: { intersect: false, mode: 'index' },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                font: { size: 11 },
+                                usePointStyle: true,
+                                padding: 12,
+                                generateLabels: function(chart) {
+                                    return Chart.defaults.plugins.legend.labels.generateLabels(chart).map(function(item) {
+                                        if (item.borderDash) { item.lineWidth = 2; item.lineDash = item.borderDash; }
+                                        return item;
+                                    });
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(items) { return '日期: ' + items[0].label; },
+                                label: function(ctx) {
+                                    if (ctx.raw === null) return null;
+                                    var dsLabel = ctx.dataset.label;
+                                    if (dsLabel === '三级' || dsLabel === '二级' || dsLabel === '一级') {
+                                        return dsLabel + '基线: ' + secondsToTime(ctx.raw);
+                                    }
+                                    return dsLabel + ': ' + secondsToTime(ctx.raw);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            reverse: true,
+                            min: Math.floor(minVal - pad),
+                            max: Math.ceil(maxVal + pad),
+                            ticks: {
+                                font: { size: 11 },
+                                color: '#94a3b8',
+                                callback: function(v) { return secondsToTime(v); }
+                            },
+                            grid: { color: '#e2e8f0' }
+                        },
+                        x: {
+                            ticks: { font: { size: 11 }, color: '#94a3b8' },
+                            grid: { color: '#e2e8f0' }
+                        }
+                    }
+                }
+            });
+            eventIdx++;
+        });
+    }, 50);
+}
+
+// ===================== 学习记录模块 =====================
+var studyData = [];
+var studyCharts = {}; // Chart.js 实例缓存
+
+var SUBJECT_COLORS = {
+    '语文': '#ef4444', '数学': '#3b82f6', '英语': '#10b981',
+    '科学': '#8b5cf6', '体育': '#f59e0b', '音乐': '#ec4899', '美术': '#06b6d4',
+    '道德与法治': '#f97316', '信息科技': '#0ea5e9', '综合实践活动': '#84cc16', '劳动': '#a855f7'
+};
+
+async function loadStudy() {
+    try {
+        var r = await fetch('/api/study');
+        if (r.ok) {
+            var arr = await r.json();
+            if (Array.isArray(arr) && arr.length) {
+                studyData = arr;
+                studyData.sort(function(a, b) { return a.date < b.date ? -1 : 1; });
+                cacheStudy();
+                return;
+            }
+        }
+    } catch (e) {}
+    studyData = JSON.parse(localStorage.getItem('wzqStudy') || '[]');
+    if (!Array.isArray(studyData)) studyData = [];
+    if (studyData.length === 0 && typeof STUDY_SEED !== 'undefined') {
+        studyData = STUDY_SEED.map(function(s) {
+            return { id: 'seed_' + s.date + '_' + s.subject + '_' + s.examType, date: s.date, semester: s.semester || '', examType: s.examType || '', subject: s.subject || '', score: s.score || 0, fullScore: s.fullScore || 100, rank: s.rank || '', notes: s.notes || '' };
+        });
+    }
+    studyData.sort(function(a, b) { return a.date < b.date ? -1 : 1; });
+    cacheStudy();
+}
+function cacheStudy() { try { localStorage.setItem('wzqStudy', JSON.stringify(studyData)); } catch(e) {} }
+
+async function addStudyRecord() {
+    var date = document.getElementById('studyDate').value || new Date().toISOString().slice(0,10);
+    var semester = document.getElementById('studySemester').value;
+    var examType = document.getElementById('studyExamType').value;
+    var subject = document.getElementById('studySubject').value;
+    var score = parseFloat(document.getElementById('studyScore').value);
+    var fullScore = parseFloat(document.getElementById('studyFullScore').value) || 100;
+    var rank = document.getElementById('studyRank').value.trim();
+    var notes = document.getElementById('studyNotes').value.trim();
+    if (isNaN(score)) { alert('请输入分数'); return; }
+    var rec = { date:date, semester:semester, examType:examType, subject:subject, score:score, fullScore:fullScore, rank:rank, notes:notes };
+    try {
+        var r = await fetch('/api/study', {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(rec)
+        });
+        if (r.ok) { studyData = await r.json(); }
+        else { rec.id = 'local_' + Date.now().toString(36); studyData.push(rec); }
+    } catch(e) { rec.id = 'local_' + Date.now().toString(36); studyData.push(rec); }
+    cacheStudy();
+    document.getElementById('studyScore').value = '';
+    document.getElementById('studyRank').value = '';
+    document.getElementById('studyNotes').value = '';
+    renderStudy();
+}
+
+async function deleteStudy(id) {
+    try { await fetch('/api/study?id=' + encodeURIComponent(id), { method:'DELETE' }); } catch(e) {}
+    studyData = studyData.filter(function(r) { return r.id !== id; });
+    cacheStudy();
+    renderStudy();
+}
+
+function renderStudy() {
+    renderStudyOverview();
+    renderStudyCharts();
+    renderStudySemesterSummary();
+    renderStudyTable();
+}
+
+function renderStudyOverview() {
+    var el = document.getElementById('studyOverview');
+    if (!el) return;
+    if (studyData.length === 0) {
+        el.innerHTML = '';
+        return;
+    }
+    // 按科目统计
+    var bySubject = {};
+    studyData.forEach(function(r) {
+        if (!bySubject[r.subject]) bySubject[r.subject] = [];
+        bySubject[r.subject].push(r);
+    });
+
+    var cards = '';
+    var subjectPriority = function(s) { var o = {'语文':1,'数学':2,'英语':3}; return o[s] || 10; };
+    Object.keys(bySubject).sort(function(a,b) { return subjectPriority(a) - subjectPriority(b) || a.localeCompare(b); }).forEach(function(subj) {
+        var recs = bySubject[subj];
+        var latest = recs[recs.length - 1];
+        var rates = recs.map(function(r) { return r.fullScore > 0 ? (r.score / r.fullScore * 100) : 0; });
+        var avgRate = rates.reduce(function(a,b) { return a+b; }, 0) / rates.length;
+        var trend = rates.length >= 2 ? (rates[rates.length-1] - rates[0]) : 0;
+        var color = SUBJECT_COLORS[subj] || '#64748b';
+        var trendStr = trend > 0 ? '<span style="color:#059669;">↑' + trend.toFixed(1) + '%</span>' : (trend < 0 ? '<span style="color:#dc2626;">↓' + Math.abs(trend).toFixed(1) + '%</span>' : '<span style="color:#94a3b8;">-</span>');
+
+        cards += '<div style="background:#fff; border-radius:12px; padding:16px 18px; box-shadow:0 1px 4px rgba(0,0,0,.06); border-top:4px solid ' + color + '; min-width:160px; flex:1;">'
+            + '<div style="font-size:13px; font-weight:700; color:#0f172a; margin-bottom:6px;">' + subj + '</div>'
+            + '<div style="font-size:24px; font-weight:800; color:' + color + ';">' + latest.score + '<span style="font-size:13px; color:#94a3b8; font-weight:400;">/' + latest.fullScore + '</span></div>'
+            + '<div style="font-size:12px; color:#64748b; margin-top:4px;">平均得分率 <b>' + avgRate.toFixed(1) + '%</b> ' + trendStr + '</div>'
+            + '<div style="font-size:11px; color:#94a3b8; margin-top:2px;">共' + recs.length + '次记录</div>'
+            + '</div>';
+    });
+    el.innerHTML = '<div style="display:flex; gap:12px; flex-wrap:wrap;">' + cards + '</div>';
+}
+
+function renderStudyCharts() {
+    var el = document.getElementById('studyCharts');
+    if (!el) return;
+    // 销毁旧图表
+    Object.keys(studyCharts).forEach(function(k) { if (studyCharts[k]) { studyCharts[k].destroy(); delete studyCharts[k]; } });
+
+    if (studyData.length === 0) {
+        el.innerHTML = '<div style="color:#94a3b8; font-size:13px; padding:20px; text-align:center;">暂无成绩数据，请先添加记录</div>';
+        return;
+    }
+
+    // 按科目分组
+    var bySubject = {};
+    studyData.forEach(function(r) {
+        if (!bySubject[r.subject]) bySubject[r.subject] = [];
+        bySubject[r.subject].push(r);
+    });
+
+    var subjectPriority = function(s) { var o = {'语文':1,'数学':2,'英语':3}; return o[s] || 10; };
+    var subjects = Object.keys(bySubject).sort(function(a,b) { return subjectPriority(a) - subjectPriority(b) || a.localeCompare(b); });
+    var html = '<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(380px,1fr)); gap:16px;">';
+    subjects.forEach(function(subj) {
+        var recs = bySubject[subj].sort(function(a,b) { return a.date < b.date ? -1 : 1; });
+        var color = SUBJECT_COLORS[subj] || '#64748b';
+        var canvasId = 'studyChart_' + subj;
+        html += '<div style="background:#fff; border-radius:12px; padding:16px; box-shadow:0 1px 4px rgba(0,0,0,.06);">'
+            + '<div style="font-weight:700; color:#0f172a; margin-bottom:10px; font-size:14px;">📈 ' + subj + '成绩趋势</div>'
+            + '<div style="position:relative; height:240px;"><canvas id="' + canvasId + '"></canvas></div>'
+            + '</div>';
+    });
+    html += '</div>';
+    el.innerHTML = html;
+
+    // 创建图表
+    subjects.forEach(function(subj) {
+        var recs = bySubject[subj].sort(function(a,b) { return a.date < b.date ? -1 : 1; });
+        var color = SUBJECT_COLORS[subj] || '#64748b';
+        var canvasId = 'studyChart_' + subj;
+        var canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+
+        var labels = recs.map(function(r) { return r.date.slice(5) + '\n' + r.examType; });
+        var dataPct = recs.map(function(r) { return r.fullScore > 0 ? +(r.score / r.fullScore * 100).toFixed(1) : 0; });
+        var dataScore = recs.map(function(r) { return r.score; });
+
+        // 考试类型颜色
+        var pointColors = recs.map(function(r) {
+            if (r.examType === '期末') return '#dc2626';
+            if (r.examType === '期中') return '#f59e0b';
+            return color;
+        });
+
+        studyCharts[subj] = new Chart(canvas, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: subj + '得分率(%)',
+                    data: dataPct,
+                    borderColor: color,
+                    backgroundColor: color + '20',
+                    fill: true,
+                    tension: 0.3,
+                    pointBackgroundColor: pointColors,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                var idx = ctx.dataIndex;
+                                var r = recs[idx];
+                                return subj + ': ' + r.score + '/' + r.fullScore + ' (' + ctx.parsed.y + '%) ' + r.examType + (r.rank ? ' 排名:' + r.rank : '');
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: { min: 0, max: 105, title: { display: true, text: '得分率(%)', font: { size: 11 } }, ticks: { stepSize: 10 } },
+                    x: { ticks: { font: { size: 10 }, maxRotation: 45 } }
+                }
+            }
+        });
+    });
+}
+
+function renderStudySemesterSummary() {
+    var el = document.getElementById('studySemesterSummary');
+    if (!el) return;
+    if (studyData.length === 0) {
+        el.innerHTML = '<div style="color:#94a3b8; font-size:13px; padding:12px;">暂无数据</div>';
+        return;
+    }
+
+    // 筛选期中/期末，按学期+科目分组
+    var exams = studyData.filter(function(r) { return r.examType === '期中' || r.examType === '期末'; });
+    if (exams.length === 0) {
+        el.innerHTML = '<div style="color:#94a3b8; font-size:13px; padding:12px;">暂无期中/期末成绩</div>';
+        return;
+    }
+
+    var semOrder = ['一年级上','一年级下','二年级上','二年级下','三年级上','三年级下','四年级上','四年级下','五年级上','五年级下'];
+    var bySemester = {};
+    exams.forEach(function(r) {
+        if (!bySemester[r.semester]) bySemester[r.semester] = {};
+        var key = r.subject + '_' + r.examType;
+        bySemester[r.semester][key] = r;
+    });
+
+    // 收集所有科目，主科排前面
+    var allSubjects = {};
+    exams.forEach(function(r) { allSubjects[r.subject] = true; });
+    var subjectPriority = function(s) { var o = {'语文':1,'数学':2,'英语':3}; return o[s] || 10; };
+    var subjects = Object.keys(allSubjects).sort(function(a,b) { return subjectPriority(a) - subjectPriority(b) || a.localeCompare(b); });
+
+    var html = '<div style="overflow-x:auto;"><table class="grade-table" style="min-width:max-content;"><thead><tr><th style="text-align:left; white-space:nowrap;">学期</th>';
+    subjects.forEach(function(subj) {
+        html += '<th>' + subj + ' 期中</th><th>' + subj + ' 期末</th>';
+    });
+    html += '</tr></thead><tbody>';
+
+    semOrder.forEach(function(sem) {
+        if (!bySemester[sem]) return;
+        html += '<tr><td style="font-weight:700; color:#0f172a;">' + sem + '</td>';
+        subjects.forEach(function(subj) {
+            var mid = bySemester[sem][subj + '_期中'];
+            var fin = bySemester[sem][subj + '_期末'];
+            html += '<td>' + (mid ? '<b>' + mid.score + '</b><br><span style="font-size:11px;color:#94a3b8;">/' + mid.fullScore + '</span>' : '-') + '</td>';
+            html += '<td>' + (fin ? '<b style="color:#dc2626;">' + fin.score + '</b><br><span style="font-size:11px;color:#94a3b8;">/' + fin.fullScore + '</span>' : '-') + '</td>';
+        });
+        html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+    el.innerHTML = html;
+}
+
+function renderStudyTable() {
+    var body = document.getElementById('studyBody');
+    if (!body) return;
+    if (studyData.length === 0) {
+        body.innerHTML = '<tr><td colspan="10" style="text-align:center; color:#94a3b8; padding:20px;">暂无成绩记录</td></tr>';
+        return;
+    }
+    var html = '';
+    var subjectPriority = function(s) { var o = {'语文':1,'数学':2,'英语':3}; return o[s] || 10; };
+    studyData.slice().sort(function(a,b) {
+        if (a.date !== b.date) return a.date < b.date ? 1 : -1;
+        return subjectPriority(a.subject) - subjectPriority(b.subject);
+    }).forEach(function(r) {
+        var rate = r.fullScore > 0 ? (r.score / r.fullScore * 100).toFixed(1) : '-';
+        var rateColor = rate >= 90 ? '#059669' : (rate >= 60 ? '#0f172a' : '#dc2626');
+        var typeColor = r.examType === '期末' ? '#dc2626' : (r.examType === '期中' ? '#f59e0b' : '#64748b');
+        html += '<tr>'
+            + '<td>' + r.date + '</td>'
+            + '<td>' + r.semester + '</td>'
+            + '<td><span style="color:' + typeColor + '; font-weight:600;">' + r.examType + '</span></td>'
+            + '<td style="font-weight:600; color:' + (SUBJECT_COLORS[r.subject] || '#0f172a') + ';">' + r.subject + '</td>'
+            + '<td style="font-weight:700;">' + r.score + '</td>'
+            + '<td>' + r.fullScore + '</td>'
+            + '<td style="color:' + rateColor + '; font-weight:600;">' + rate + '%</td>'
+            + '<td>' + (r.rank || '-') + '</td>'
+            + '<td style="text-align:left;">' + (r.notes || '-') + '</td>'
+            + '<td><button class="btn btn-sm btn-gray" onclick="deleteStudy(\'' + r.id + '\')" style="padding:4px 10px; font-size:12px;">删除</button></td>'
+            + '</tr>';
+    });
+    body.innerHTML = html;
+}
+
+// ===================== 等级达标分析模块 =====================
+// 依据：国家体育总局 2025年1月1日起施行的《游泳运动员技术等级标准》（男子50米池）
+// 等级标准按25米池换算（约加0.5~2秒），此处采用50米池标准作为参考基准
+
+// 男子50米池等级标准（秒）—— 2025版官方正式标准
+// 数据来源：国家体育总局 2025年1月1日起施行《游泳运动员技术等级标准》（男子50米池）
+var GRADE_STANDARDS = {
+    '50米自由泳':   { '三级': 32.00, '二级': 27.50, '一级': 24.50, '健将': 23.28 },
+    '100米自由泳':  { '三级': 70.00, '二级': 65.00, '一级': 55.50, '健将': 51.50 },
+    '200米自由泳':  { '三级': 152.00, '二级': 143.00, '一级': 123.00, '健将': 111.55 },
+    '400米自由泳':  { '三级': 328.00, '二级': 306.00, '一级': 261.00, '健将': 238.60 },
+    '800米自由泳':  { '三级': 675.00, '二级': 632.00, '一级': 542.00, '健将': 504.00 },
+    '1500米自由泳': { '三级': 1300.00, '二级': 1215.00, '一级': 1040.00, '健将': 960.30 },
+    '50米仰泳':     { '三级': 37.00, '二级': 35.00, '一级': 30.50, '健将': 27.43 },
+    '100米仰泳':    { '三级': 82.00, '二级': 74.00, '一级': 64.00, '健将': 58.45 },
+    '200米仰泳':    { '三级': 180.00, '二级': 161.00, '一级': 138.00, '健将': 126.45 },
+    '50米蛙泳':     { '三级': 42.00, '二级': 37.00, '一级': 32.50, '健将': 28.75 },
+    '100米蛙泳':    { '三级': 85.00, '二级': 77.00, '一级': 71.00, '健将': 63.80 },
+    '200米蛙泳':    { '三级': 187.00, '二级': 170.00, '一级': 155.00, '健将': 141.90 },
+    '50米蝶泳':     { '三级': 33.00, '二级': 31.00, '一级': 27.00, '健将': 24.89 },
+    '100米蝶泳':    { '三级': 73.00, '二级': 70.00, '一级': 60.00, '健将': 55.45 },
+    '200米蝶泳':    { '三级': 164.00, '二级': 158.00, '一级': 134.00, '健将': 122.70 },
+    '200米混合泳': { '三级': 170.00, '二级': 160.00, '一级': 139.00, '健将': 128.20 },
+    '400米个人混合泳': { '三级': 360.00, '二级': 331.00, '一级': 298.30, '健将': 271.20 }
+};
+// 男子25米池等级标准（秒）—— 2025版官方正式标准（短池）
+var GRADE_STANDARDS_25M = {
+    '50米自由泳':   { '三级': 31.00, '二级': 26.50, '一级': 23.50, '健将': 22.28 },
+    '100米自由泳':  { '三级': 68.00, '二级': 63.50, '一级': 54.00, '健将': 50.31 },
+    '200米自由泳':  { '三级': 148.00, '二级': 139.50, '一级': 119.50, '健将': 109.41 },
+    '400米自由泳':  { '三级': 320.00, '二级': 299.00, '一级': 254.00, '健将': 232.60 },
+    '800米自由泳':  { '三级': 660.00, '二级': 618.00, '一级': 528.00, '健将': 496.00 },
+    '1500米自由泳': { '三级': 1275.00, '二级': 1190.00, '一级': 1015.00, '健将': 935.30 },
+    '50米仰泳':     { '三级': 36.00, '二级': 34.00, '一级': 29.50, '健将': 26.43 },
+    '100米仰泳':    { '三级': 80.00, '二级': 73.00, '一级': 63.00, '健将': 57.45 },
+    '200米仰泳':    { '三级': 176.00, '二级': 159.00, '一级': 136.00, '健将': 124.45 },
+    '50米蛙泳':     { '三级': 41.00, '二级': 36.00, '一级': 31.50, '健将': 27.75 },
+    '100米蛙泳':    { '三级': 83.00, '二级': 75.00, '一级': 69.00, '健将': 62.80 },
+    '200米蛙泳':    { '三级': 183.00, '二级': 166.00, '一级': 151.00, '健将': 138.90 },
+    '50米蝶泳':     { '三级': 32.00, '二级': 30.00, '一级': 26.00, '健将': 23.89 },
+    '100米蝶泳':    { '三级': 71.00, '二级': 68.50, '一级': 58.50, '健将': 54.45 },
+    '200米蝶泳':    { '三级': 161.00, '二级': 155.00, '一级': 131.00, '健将': 119.70 },
+    '200米混合泳': { '三级': 167.00, '二级': 157.00, '一级': 136.00, '健将': 125.20 },
+    '400米个人混合泳': { '三级': 355.00, '二级': 326.00, '一级': 292.30, '健将': 266.20 }
+};
+// 等级标准数据来源信息
+var GRADE_SOURCE = '2025年新版《游泳运动员技术等级标准》（国家体育总局，2025年1月1日起施行）';
+
+// 根据当前池型选择获取对应标准
+function getCurrentGradeStandards() {
+    var poolSelect = document.getElementById('poolTypeFilter');
+    var poolType = poolSelect ? poolSelect.value : '50米池';
+    return poolType === '25米池' ? GRADE_STANDARDS_25M : GRADE_STANDARDS;
+}
+
+// 等级名称和对应颜色
+var GRADE_META = [
+    { key: '三级', label: '三级运动员', color: '#94a3b8', bg: '#f1f5f9' },
+    { key: '二级', label: '二级运动员', color: '#3b82f6', bg: '#dbeafe' },
+    { key: '一级', label: '一级运动员', color: '#8b5cf6', bg: '#ede9fe' },
+    { key: '健将', label: '运动健将', color: '#d946ef', bg: '#fae8ff' }
+];
+
+function gradeAnalysis() {
+    var stroke = document.getElementById('strokeFilter').value;
+    var poolSelect = document.getElementById('poolTypeFilter');
+    var poolType = poolSelect ? poolSelect.value : '50米池';
+    var poolLabel = document.getElementById('gradePoolLabel');
+    if (poolLabel) poolLabel.textContent = poolType;
+    var wzqData = allData.filter(function(r) { return r.name === '王子期'; });
+    if (stroke !== 'all') {
+        wzqData = wzqData.filter(function(r) { return r.event && r.event.indexOf(stroke) !== -1; });
+    }
+
+    // 按项目分组，找最佳成绩
+    var byEvent = {};
+    wzqData.forEach(function(r) {
+        if (!byEvent[r.event]) byEvent[r.event] = [];
+        byEvent[r.event].push(r);
+    });
+
+    // 只分析有等级标准的项目
+    var eventsToAnalyze = Object.keys(byEvent).filter(function(e) { return getCurrentGradeStandards()[e]; });
+    eventsToAnalyze.sort();
+
+    // 渲染每个项目的等级卡片
+    var gridHtml = '';
+    var summaryLines = [];
+    var nearestAchievements = []; // {event, grade, gap}
+
+    eventsToAnalyze.forEach(function(event) {
+        var recs = byEvent[event];
+        var bestRec = recs.reduce(function(a, b) {
+            var ta = timeToSeconds(a.time), tb = timeToSeconds(b.time);
+            if (ta !== null && tb !== null && ta < tb) return a;
+            return b;
+        }, recs[0]);
+        var bestSec = timeToSeconds(bestRec.time);
+        var standards = getCurrentGradeStandards()[event];
+
+        // 卡片头部
+        var cardHtml = '<div class="grade-card">'
+            + '<div class="gc-header">'
+            + '<div class="gc-event">' + event + '</div>'
+            + '<div class="gc-best">' + bestRec.time + '<small>（' + bestRec.date + '）</small></div>'
+            + '</div>';
+
+        // 等级表格
+        cardHtml += '<table class="grade-table"><thead><tr>'
+            + '<th style="text-align:left;">等级</th>'
+            + '<th>标准</th>'
+            + '<th>差距</th>'
+            + '<th>预测</th>'
+            + '</tr></thead><tbody>';
+
+        // 计算进步速率（秒/月）— 最小二乘线性回归，最少4条记录才出预测
+        var useRate = null;
+        var confidence = null; // R²置信度
+        if (recs.length >= 4) {
+            var sorted = recs.slice().sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+            var points = [];
+            sorted.forEach(function(r) {
+                var sec = timeToSeconds(r.time);
+                var ts = new Date(r.date).getTime();
+                if (sec !== null) points.push({ x: ts, y: sec });
+            });
+            if (points.length >= 4) {
+                // 最小二乘法线性回归
+                var n = points.length;
+                var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+                for (var i = 0; i < n; i++) {
+                    sumX += points[i].x; sumY += points[i].y;
+                    sumXY += points[i].x * points[i].y;
+                    sumX2 += points[i].x * points[i].x; sumY2 += points[i].y * points[i].y;
+                }
+                var denom = n * sumX2 - sumX * sumX;
+                if (denom !== 0) {
+                    var slope = (n * sumXY - sumX * sumY) / denom; // 秒/毫秒
+                    var intercept = (sumY - slope * sumX) / n;
+                    // 计算R²
+                    var ssRes = 0, ssTot = 0;
+                    var yMean = sumY / n;
+                    for (var j = 0; j < n; j++) {
+                        var yPred = slope * points[j].x + intercept;
+                        ssRes += Math.pow(points[j].y - yPred, 2);
+                        ssTot += Math.pow(points[j].y - yMean, 2);
+                    }
+                    confidence = ssTot > 0 ? Math.max(0, 1 - ssRes / ssTot) : 0;
+                    // 转换为秒/月
+                    var ratePerMonth = slope * 30.44 * 24 * 3600 * 1000;
+                    if (ratePerMonth < 0) { // 只在确实进步时才用
+                        useRate = ratePerMonth;
+                    }
+                }
+            }
+        }
+
+        var currentEventNearest = null;
+
+        GRADE_META.forEach(function(gm) {
+            var stdSec = standards[gm.key];
+            var gap = bestSec - stdSec; // 正数=比标准慢，负数=比标准快（已达标）
+            var gapStr, gapClass, predictStr, predictClass;
+
+            if (gap <= 0) {
+                gapStr = '已达标';
+                gapClass = 'grade-gap-negative';
+                predictStr = '<span class="grade-predict-tag achieved">✓ 已达标</span>';
+                predictClass = 'achieved';
+            } else {
+                gapStr = '+' + gap.toFixed(2) + '秒';
+                gapClass = gap < 5 ? 'grade-gap-zero' : 'grade-gap-positive';
+
+                // 预测时间 — 最少4条记录才出预测，标注置信度
+                if (useRate !== null && useRate < 0 && recs.length >= 4) {
+                    var monthsNeeded = gap / Math.abs(useRate);
+                    var confLabel = confidence !== null ? (confidence >= 0.7 ? '高' : (confidence >= 0.4 ? '中' : '低')) : '';
+                    var confColor = confidence !== null ? (confidence >= 0.7 ? '#059669' : (confidence >= 0.4 ? '#f59e0b' : '#dc2626')) : '#94a3b8';
+                    if (monthsNeeded <= 0) {
+                        predictStr = '<span class="grade-predict-tag achieved">✓ 即将达标</span>';
+                    } else if (monthsNeeded <= 6) {
+                        var estDate = new Date();
+                        estDate.setMonth(estDate.getMonth() + Math.ceil(monthsNeeded));
+                        predictStr = '<span class="grade-predict-tag predicted">~' + Math.ceil(monthsNeeded) + '个月（' + estDate.getFullYear() + '.' + (estDate.getMonth() + 1) + '）</span><br><span style="font-size:10px;color:' + confColor + ';">置信度' + confLabel + '</span>';
+                    } else if (monthsNeeded <= 36) {
+                        var estDate = new Date();
+                        estDate.setMonth(estDate.getMonth() + Math.ceil(monthsNeeded));
+                        predictStr = '<span class="grade-predict-tag far">~' + (monthsNeeded / 12).toFixed(1) + '年（约' + estDate.getFullYear() + '年）</span><br><span style="font-size:10px;color:' + confColor + ';">置信度' + confLabel + '</span>';
+                    } else if (monthsNeeded <= 120) {
+                        var years = Math.ceil(monthsNeeded / 12);
+                        predictStr = '<span class="grade-predict-tag very-far">~' + years + '年（需持续训练）</span><br><span style="font-size:10px;color:' + confColor + ';">置信度' + confLabel + '</span>';
+                    } else {
+                        predictStr = '<span class="grade-predict-tag very-far">长期目标（差距较大）</span>';
+                    }
+                } else {
+                    if (recs.length < 4) {
+                        predictStr = '<span class="grade-predict-tag very-far">数据不足（需≥4场）</span>';
+                    } else if (gap < 10) {
+                        predictStr = '<span class="grade-predict-tag predicted">持续训练有望</span>';
+                    } else {
+                        predictStr = '<span class="grade-predict-tag very-far">趋势不明</span>';
+                    }
+                }
+
+                // 记录最近的达标目标
+                if (currentEventNearest === null) {
+                    currentEventNearest = { event: event, grade: gm.label, gap: gap, monthsNeeded: useRate !== null && useRate < 0 ? gap / Math.abs(useRate) : null };
+                }
+            }
+
+            cardHtml += '<tr>'
+                + '<td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + gm.color + ';margin-right:6px;"></span>' + gm.label + '</td>'
+                + '<td>' + secondsToTime(stdSec) + '</td>'
+                + '<td class="' + gapClass + '">' + gapStr + '</td>'
+                + '<td>' + predictStr + '</td>'
+                + '</tr>';
+        });
+
+        cardHtml += '</tbody></table></div>';
+        gridHtml += cardHtml;
+
+        if (currentEventNearest) {
+            nearestAchievements.push(currentEventNearest);
+        }
+    });
+
+    document.getElementById('gradeGrid').innerHTML = gridHtml || '<div class="no-data">暂无匹配等级标准的项目数据</div>';
+
+    // 生成总览摘要
+    if (eventsToAnalyze.length === 0) {
+        document.getElementById('gradeSummaryContent').innerHTML = '暂无匹配等级标准的项目数据。';
+        return;
+    }
+
+    // 统计各等级达标情况
+    var achieveCounts = { '三级': 0, '二级': 0, '一级': 0, '健将': 0 };
+    var totalEvents = eventsToAnalyze.length;
+    eventsToAnalyze.forEach(function(event) {
+        var recs = byEvent[event];
+        var bestRec = recs.reduce(function(a, b) {
+            var ta = timeToSeconds(a.time), tb = timeToSeconds(b.time);
+            if (ta !== null && tb !== null && ta < tb) return a;
+            return b;
+        }, recs[0]);
+        var bestSec = timeToSeconds(bestRec.time);
+        var standards = getCurrentGradeStandards()[event];
+        GRADE_META.forEach(function(gm) {
+            if (bestSec <= standards[gm.key]) achieveCounts[gm.key]++;
+        });
+    });
+
+    var summaryHtml = '<b>共分析 ' + totalEvents + ' 个项目：</b><br>';
+    GRADE_META.forEach(function(gm) {
+        var count = achieveCounts[gm.key];
+        var bar = '';
+        if (count > 0) {
+            bar = ' <span style="display:inline-block;height:10px;width:' + (count / totalEvents * 80) + 'px;background:' + gm.color + ';border-radius:5px;vertical-align:middle;"></span>';
+        }
+        summaryHtml += '<span style="color:' + gm.color + ';">■ ' + gm.label + '：</span><b>' + count + '/' + totalEvents + '</b> 个项目已达标' + bar + '<br>';
+    });
+
+    // 最近的达标目标
+    if (nearestAchievements.length > 0) {
+        // 找到最容易达标的
+        nearestAchievements.sort(function(a, b) { return a.gap - b.gap; });
+        var nearest = nearestAchievements[0];
+        summaryHtml += '<br><b>🎯 最近目标：</b>' + nearest.event + ' — ' + nearest.grade;
+        if (nearest.monthsNeeded !== null && nearest.monthsNeeded > 0) {
+            var estDate = new Date();
+            estDate.setMonth(estDate.getMonth() + Math.ceil(nearest.monthsNeeded));
+            summaryHtml += '，预计约 <b>' + Math.ceil(nearest.monthsNeeded) + ' 个月</b>（' + estDate.getFullYear() + '年' + (estDate.getMonth() + 1) + '月）可达成';
+        }
+        summaryHtml += '。';
+    }
+
+    document.getElementById('gradeSummaryContent').innerHTML = summaryHtml;
+}
+</script>
+</body>
+</html>
