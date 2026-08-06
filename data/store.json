@@ -232,6 +232,18 @@
   "swimScores": [],
   "training": [
     {
+      "id": "mrf6a8bk0",
+      "date": "2026-08-06",
+      "type": "test",
+      "event": "200米仰泳",
+      "pool": "25米池",
+      "time": "3:08.00",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
       "id": "mrf6a8bk1",
       "date": "2026-08-06",
       "type": "test",
