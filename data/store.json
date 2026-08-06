@@ -1,0 +1,1300 @@
+{
+  "growth": [
+    {
+      "id": "g01",
+      "date": "2015-10-10",
+      "height": 50,
+      "weight": 3.7
+    },
+    {
+      "id": "g02",
+      "date": "2016-05-31",
+      "height": 70,
+      "weight": 7.8
+    },
+    {
+      "id": "g03",
+      "date": "2017-01-10",
+      "height": 75,
+      "weight": 9.8
+    },
+    {
+      "id": "g04",
+      "date": "2017-04-08",
+      "height": 78,
+      "weight": 10.5
+    },
+    {
+      "id": "g05",
+      "date": "2017-12-16",
+      "height": 84,
+      "weight": 11.5
+    },
+    {
+      "id": "g06",
+      "date": "2018-08-19",
+      "height": 90,
+      "weight": 12.9
+    },
+    {
+      "id": "g08",
+      "date": "2018-09-16",
+      "height": 92,
+      "weight": 13.5
+    },
+    {
+      "id": "g07",
+      "date": "2019-05-03",
+      "height": 97,
+      "weight": 15
+    },
+    {
+      "id": "g09",
+      "date": "2020-01-31",
+      "height": 105,
+      "weight": 16.5
+    },
+    {
+      "id": "g10",
+      "date": "2021-06-24",
+      "height": 109.1,
+      "weight": 21.6
+    },
+    {
+      "id": "g11",
+      "date": "2021-08-25",
+      "height": 113,
+      "weight": 22.5
+    },
+    {
+      "id": "g12",
+      "date": "2023-01-08",
+      "height": 123,
+      "weight": 27.3
+    },
+    {
+      "id": "g13",
+      "date": "2024-06-14",
+      "height": 130,
+      "weight": 35
+    },
+    {
+      "id": "g14",
+      "date": "2025-04-24",
+      "height": 135,
+      "weight": 37.2
+    },
+    {
+      "id": "g15",
+      "date": "2026-01-16",
+      "height": 139,
+      "weight": 42.9
+    },
+    {
+      "id": "g16",
+      "date": "2026-07-08",
+      "height": 141.9,
+      "weight": 39
+    },
+    {
+      "id": "g17",
+      "date": "2026-07-13",
+      "height": 143,
+      "weight": 39.2
+    },
+    {
+      "id": "g18",
+      "date": "2026-07-15",
+      "height": 143,
+      "weight": 38.7
+    },
+    {
+      "id": "g19",
+      "date": "2026-07-16",
+      "height": 143,
+      "weight": 38.3
+    },
+    {
+      "id": "g20",
+      "date": "2026-07-17",
+      "height": 143,
+      "weight": 38.1
+    },
+    {
+      "id": "g21",
+      "date": "2026-07-18",
+      "height": 143,
+      "weight": 38.1
+    },
+    {
+      "id": "g22",
+      "date": "2026-07-19",
+      "height": 143,
+      "weight": 38.2
+    },
+    {
+      "id": "g23",
+      "date": "2026-07-20",
+      "height": 143,
+      "weight": 38.2
+    },
+    {
+      "id": "g24",
+      "date": "2026-07-21",
+      "height": 144,
+      "weight": 38.6
+    },
+    {
+      "id": "g25",
+      "date": "2026-07-22",
+      "height": 144,
+      "weight": 38.0
+    },
+    {
+      "id": "g26",
+      "date": "2026-07-23",
+      "height": 144,
+      "weight": 37.8
+    },
+    {
+      "id": "g27",
+      "date": "2026-07-24",
+      "height": 144,
+      "weight": 37.8
+    },
+    {
+      "id": "g28",
+      "date": "2026-07-25",
+      "height": 144,
+      "weight": 37.6
+    },
+    {
+      "id": "g29",
+      "date": "2026-07-26",
+      "height": 144,
+      "weight": 37.4
+    },
+    {
+      "id": "g30",
+      "date": "2026-07-27",
+      "height": 144,
+      "weight": 37.7
+    },
+    {
+      "id": "g31",
+      "date": "2026-07-29",
+      "height": 144,
+      "weight": 37.7
+    },
+    {
+      "id": "g32",
+      "date": "2026-07-30",
+      "height": 144,
+      "weight": 37.4
+    },
+    {
+      "id": "g33",
+      "date": "2026-07-31",
+      "height": 144,
+      "weight": 37.3
+    },
+    {
+      "id": "g34",
+      "date": "2026-08-02",
+      "height": 144,
+      "weight": 37.3
+    },
+    {
+      "id": "g35",
+      "date": "2026-08-03",
+      "height": 144,
+      "weight": 37.0
+    },
+    {
+      "id": "g36",
+      "date": "2026-08-04",
+      "height": 144,
+      "weight": 36.7
+    },
+    {
+      "id": "g37",
+      "date": "2026-08-05",
+      "height": 144,
+      "weight": 36.7
+    },
+    {
+      "id": "g38",
+      "date": "2026-08-06",
+      "height": 144,
+      "weight": 36.7
+    }
+  ],
+  "swimScores": [],
+  "training": [
+    {
+      "id": "mrf6a8bk1",
+      "date": "2026-08-06",
+      "type": "test",
+      "event": "100米仰泳",
+      "pool": "25米池",
+      "time": "1:26.83",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf6a8bk2",
+      "date": "2026-08-06",
+      "type": "test",
+      "event": "100米仰泳",
+      "pool": "25米池",
+      "time": "1:27.35",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试（第二次）"
+    },
+    {
+      "id": "mrf6a8fr1",
+      "date": "2026-08-06",
+      "type": "test",
+      "event": "50米自由泳",
+      "pool": "25米池",
+      "time": "34.85",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf6a8bf1",
+      "date": "2026-08-06",
+      "type": "test",
+      "event": "50米蝶泳",
+      "pool": "25米池",
+      "time": "38.58",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf6a8bk3",
+      "date": "2026-08-06",
+      "type": "test",
+      "event": "50米仰泳",
+      "pool": "25米池",
+      "time": "42.73",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf5a8fr1",
+      "date": "2026-08-05",
+      "type": "test",
+      "event": "50米自由泳",
+      "pool": "25米池",
+      "time": "35.13",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf5a8fr2",
+      "date": "2026-08-05",
+      "type": "test",
+      "event": "50米自由泳",
+      "pool": "25米池",
+      "time": "34.85",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf4a8bf1",
+      "date": "2026-08-04",
+      "type": "test",
+      "event": "200米蝶泳",
+      "pool": "25米池",
+      "time": "3:01.00",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf2a8bf1",
+      "date": "2026-08-02",
+      "type": "test",
+      "event": "50米蝶泳",
+      "pool": "25米池",
+      "time": "37.01",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf1a8bf1",
+      "date": "2026-08-01",
+      "type": "test",
+      "event": "50米蝶泳",
+      "pool": "25米池",
+      "time": "37.35",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf1a8bf2",
+      "date": "2026-08-01",
+      "type": "test",
+      "event": "100米蝶泳",
+      "pool": "25米池",
+      "time": "1:21.57",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf31a7fr1",
+      "date": "2026-07-31",
+      "type": "test",
+      "event": "50米自由泳",
+      "pool": "25米池",
+      "time": "34.24",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf31a7bf",
+      "date": "2026-07-31",
+      "type": "test",
+      "event": "50米蛙泳",
+      "pool": "25米池",
+      "time": "49.48",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf27a7bf",
+      "date": "2026-07-27",
+      "type": "test",
+      "event": "100米蝶泳",
+      "pool": "25米池",
+      "time": "1:23.44",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf27a7bf2",
+      "date": "2026-07-27",
+      "type": "test",
+      "event": "50米蝶泳",
+      "pool": "25米池",
+      "time": "37.35",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf29a7fr",
+      "date": "2026-07-29",
+      "type": "test",
+      "event": "50米自由泳",
+      "pool": "25米池",
+      "time": "34.32",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf28a7fr",
+      "date": "2026-07-28",
+      "type": "test",
+      "event": "200米自由泳",
+      "pool": "25米池",
+      "time": "2:39.65",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf27a7im",
+      "date": "2026-07-27",
+      "type": "test",
+      "event": "200米混合泳",
+      "pool": "25米池",
+      "time": "3:07.51",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf26a7fr",
+      "date": "2026-07-26",
+      "type": "test",
+      "event": "50米自由泳",
+      "pool": "25米池",
+      "time": "34.80",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf25a7bf1",
+      "date": "2026-07-25",
+      "type": "test",
+      "event": "50米蛙泳",
+      "pool": "25米池",
+      "time": "48.63",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf25a7bf2",
+      "date": "2026-07-25",
+      "type": "test",
+      "event": "100米蛙泳",
+      "pool": "25米池",
+      "time": "1:50.00",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf24a7bf",
+      "date": "2026-07-24",
+      "type": "test",
+      "event": "100米蝶泳",
+      "pool": "25米池",
+      "time": "1:27.00",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf23a7bf",
+      "date": "2026-07-23",
+      "type": "test",
+      "event": "100米蝶泳",
+      "pool": "25米池",
+      "time": "1:27.15",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf22a7im",
+      "date": "2026-07-22",
+      "type": "test",
+      "event": "400米混合泳",
+      "pool": "25米池",
+      "time": "6:36.00",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf21a7fr",
+      "date": "2026-07-21",
+      "type": "test",
+      "event": "100米自由泳",
+      "pool": "25米池",
+      "time": "1:16.36",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf20a7fr",
+      "date": "2026-07-20",
+      "type": "test",
+      "event": "50米自由泳",
+      "pool": "25米池",
+      "time": "34.57",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf19a7bf2",
+      "date": "2026-07-19",
+      "type": "test",
+      "event": "50米蛙泳",
+      "pool": "25米池",
+      "time": "50.20",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf18a7bf1",
+      "date": "2026-07-18",
+      "type": "test",
+      "event": "50米蝶泳",
+      "pool": "25米池",
+      "time": "37.98",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf18a7bf2",
+      "date": "2026-07-18",
+      "type": "test",
+      "event": "50米蝶泳",
+      "pool": "25米池",
+      "time": "38.56",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf17a7bf",
+      "date": "2026-07-17",
+      "type": "test",
+      "event": "50米蛙泳",
+      "pool": "25米池",
+      "time": "50.79",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf17a7im",
+      "date": "2026-07-17",
+      "type": "test",
+      "event": "200米混合泳",
+      "pool": "25米池",
+      "time": "3:07.53",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf15a7bf",
+      "date": "2026-07-15",
+      "type": "test",
+      "event": "100米蝶泳",
+      "pool": "25米池",
+      "time": "1:26.10",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf16a7yt",
+      "date": "2026-07-16",
+      "type": "test",
+      "event": "100米仰泳",
+      "pool": "25米池",
+      "time": "1:28.61",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrff7a2k4t",
+      "date": "2026-07-14",
+      "type": "test",
+      "event": "100米自由泳",
+      "pool": "25米池",
+      "time": "1:14.28",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrfez7a2k3t",
+      "date": "2026-07-13",
+      "type": "test",
+      "event": "100米仰泳",
+      "pool": "25米池",
+      "time": "1:29.00",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrfe7a2k5t",
+      "date": "2026-07-07",
+      "type": "test",
+      "event": "100米自由泳",
+      "pool": "25米池",
+      "time": "1:15.00",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf5x9a2k1t",
+      "date": "2026-07-12",
+      "type": "test",
+      "event": "100米自由泳",
+      "pool": "25米池",
+      "time": "1:19.00",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf5x9a2k2t",
+      "date": "2026-07-11",
+      "type": "test",
+      "event": "200米混合泳",
+      "pool": "25米池",
+      "time": "3:09.00",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mregakmkwi231t",
+      "date": "2026-07-09",
+      "type": "test",
+      "event": "200米混合泳",
+      "pool": "25米池",
+      "time": "3:09.00",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrd4b751159p",
+      "date": "2026-07-08",
+      "type": "test",
+      "event": "50米蝶泳",
+      "pool": "25米池",
+      "time": "39.00",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    }
+  ],
+  "study": [
+    {
+      "id": "mrd4rvfyfn5cxd_一年级上_期中_语文",
+      "date": "2022-11-15",
+      "semester": "一年级上",
+      "examType": "期中",
+      "subject": "语文",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfyj2l04i_一年级上_期中_数学",
+      "date": "2022-11-15",
+      "semester": "一年级上",
+      "examType": "期中",
+      "subject": "数学",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfym341j3_一年级上_期中_英语",
+      "date": "2022-11-15",
+      "semester": "一年级上",
+      "examType": "期中",
+      "subject": "英语",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfyr0or6c_一年级上_期末_语文",
+      "date": "2023-01-10",
+      "semester": "一年级上",
+      "examType": "期末",
+      "subject": "语文",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfyhprngw_一年级上_期末_数学",
+      "date": "2023-01-10",
+      "semester": "一年级上",
+      "examType": "期末",
+      "subject": "数学",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfy5xlk54_一年级上_期末_英语",
+      "date": "2023-01-10",
+      "semester": "一年级上",
+      "examType": "期末",
+      "subject": "英语",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfy1ondxb_一年级下_期中_语文",
+      "date": "2023-04-15",
+      "semester": "一年级下",
+      "examType": "期中",
+      "subject": "语文",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfyb68lg7_一年级下_期中_数学",
+      "date": "2023-04-15",
+      "semester": "一年级下",
+      "examType": "期中",
+      "subject": "数学",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfyaigjte_一年级下_期中_英语",
+      "date": "2023-04-15",
+      "semester": "一年级下",
+      "examType": "期中",
+      "subject": "英语",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfybgu84i_一年级下_期末_语文",
+      "date": "2023-06-20",
+      "semester": "一年级下",
+      "examType": "期末",
+      "subject": "语文",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzzoopuc_一年级下_期末_数学",
+      "date": "2023-06-20",
+      "semester": "一年级下",
+      "examType": "期末",
+      "subject": "数学",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzw8ctze_一年级下_期末_英语",
+      "date": "2023-06-20",
+      "semester": "一年级下",
+      "examType": "期末",
+      "subject": "英语",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfz1m9nzk_二年级上_期中_语文",
+      "date": "2023-11-15",
+      "semester": "二年级上",
+      "examType": "期中",
+      "subject": "语文",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzjqq3yq_二年级上_期中_数学",
+      "date": "2023-11-15",
+      "semester": "二年级上",
+      "examType": "期中",
+      "subject": "数学",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfz4ykpcu_二年级上_期中_英语",
+      "date": "2023-11-15",
+      "semester": "二年级上",
+      "examType": "期中",
+      "subject": "英语",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzeizo0z_二年级上_期末_语文",
+      "date": "2024-01-10",
+      "semester": "二年级上",
+      "examType": "期末",
+      "subject": "语文",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzvpt0c7_二年级上_期末_数学",
+      "date": "2024-01-10",
+      "semester": "二年级上",
+      "examType": "期末",
+      "subject": "数学",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzwi7zf8_二年级上_期末_英语",
+      "date": "2024-01-10",
+      "semester": "二年级上",
+      "examType": "期末",
+      "subject": "英语",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzfp0ssh_二年级下_期中_语文",
+      "date": "2024-04-15",
+      "semester": "二年级下",
+      "examType": "期中",
+      "subject": "语文",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzd2sr58_二年级下_期中_数学",
+      "date": "2024-04-15",
+      "semester": "二年级下",
+      "examType": "期中",
+      "subject": "数学",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzkmbhlf_二年级下_期中_英语",
+      "date": "2024-04-15",
+      "semester": "二年级下",
+      "examType": "期中",
+      "subject": "英语",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfz9kojqm_二年级下_期末_语文",
+      "date": "2024-06-20",
+      "semester": "二年级下",
+      "examType": "期末",
+      "subject": "语文",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfz44r8su_二年级下_期末_数学",
+      "date": "2024-06-20",
+      "semester": "二年级下",
+      "examType": "期末",
+      "subject": "数学",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzl7aghh_二年级下_期末_英语",
+      "date": "2024-06-20",
+      "semester": "二年级下",
+      "examType": "期末",
+      "subject": "英语",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzsamkt3_三年级上_期中_语文",
+      "date": "2024-11-15",
+      "semester": "三年级上",
+      "examType": "期中",
+      "subject": "语文",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfz7a0f2o_三年级上_期中_数学",
+      "date": "2024-11-15",
+      "semester": "三年级上",
+      "examType": "期中",
+      "subject": "数学",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzmni8py_三年级上_期中_英语",
+      "date": "2024-11-15",
+      "semester": "三年级上",
+      "examType": "期中",
+      "subject": "英语",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfz66w5yi_三年级上_期末_语文",
+      "date": "2025-01-10",
+      "semester": "三年级上",
+      "examType": "期末",
+      "subject": "语文",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzvz2bfg_三年级上_期末_数学",
+      "date": "2025-01-10",
+      "semester": "三年级上",
+      "examType": "期末",
+      "subject": "数学",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfz3w9ut3_三年级上_期末_英语",
+      "date": "2025-01-10",
+      "semester": "三年级上",
+      "examType": "期末",
+      "subject": "英语",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfz67g7l8_三年级下_期中_语文",
+      "date": "2025-04-15",
+      "semester": "三年级下",
+      "examType": "期中",
+      "subject": "语文",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzv83ci1_三年级下_期中_数学",
+      "date": "2025-04-15",
+      "semester": "三年级下",
+      "examType": "期中",
+      "subject": "数学",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzh4aqki_三年级下_期中_英语",
+      "date": "2025-04-15",
+      "semester": "三年级下",
+      "examType": "期中",
+      "subject": "英语",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzoanqiu_三年级下_期末_语文",
+      "date": "2025-06-20",
+      "semester": "三年级下",
+      "examType": "期末",
+      "subject": "语文",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzhvsez7_三年级下_期末_数学",
+      "date": "2025-06-20",
+      "semester": "三年级下",
+      "examType": "期末",
+      "subject": "数学",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfz0ovcx7_三年级下_期末_英语",
+      "date": "2025-06-20",
+      "semester": "三年级下",
+      "examType": "期末",
+      "subject": "英语",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzl0onnk_四年级上_期中_语文",
+      "date": "2025-11-15",
+      "semester": "四年级上",
+      "examType": "期中",
+      "subject": "语文",
+      "score": 80,
+      "fullScore": 100,
+      "rank": "B",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzejn0t7_四年级上_期中_数学",
+      "date": "2025-11-15",
+      "semester": "四年级上",
+      "examType": "期中",
+      "subject": "数学",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzi4m317_四年级上_期中_英语",
+      "date": "2025-11-15",
+      "semester": "四年级上",
+      "examType": "期中",
+      "subject": "英语",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfz108icc_四年级上_期末_语文",
+      "date": "2026-01-10",
+      "semester": "四年级上",
+      "examType": "期末",
+      "subject": "语文",
+      "score": 80,
+      "fullScore": 100,
+      "rank": "B",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzgbrjcc_四年级上_期末_数学",
+      "date": "2026-01-10",
+      "semester": "四年级上",
+      "examType": "期末",
+      "subject": "数学",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrd4rvfzdmlycq_四年级上_期末_英语",
+      "date": "2026-01-10",
+      "semester": "四年级上",
+      "examType": "期末",
+      "subject": "英语",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrefzly89gykld_四年级下_期末_语文",
+      "date": "2026-06-20",
+      "semester": "四年级下",
+      "examType": "期末",
+      "subject": "语文",
+      "score": 70,
+      "fullScore": 100,
+      "rank": "C",
+      "notes": ""
+    },
+    {
+      "id": "mrefzly8js3b7b_四年级下_期末_数学",
+      "date": "2026-06-20",
+      "semester": "四年级下",
+      "examType": "期末",
+      "subject": "数学",
+      "score": 80,
+      "fullScore": 100,
+      "rank": "B",
+      "notes": ""
+    },
+    {
+      "id": "mrefzly8x5pn40_四年级下_期末_英语",
+      "date": "2026-06-20",
+      "semester": "四年级下",
+      "examType": "期末",
+      "subject": "英语",
+      "score": 70,
+      "fullScore": 100,
+      "rank": "C",
+      "notes": ""
+    },
+    {
+      "id": "mrefzly831y1ee_四年级下_期末_科学",
+      "date": "2026-06-20",
+      "semester": "四年级下",
+      "examType": "期末",
+      "subject": "科学",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrefzly8tgt3g8_四年级下_期末_体育",
+      "date": "2026-06-20",
+      "semester": "四年级下",
+      "examType": "期末",
+      "subject": "体育",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrefzly8zpf0kq_四年级下_期末_音乐",
+      "date": "2026-06-20",
+      "semester": "四年级下",
+      "examType": "期末",
+      "subject": "音乐",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrefzly8eue8zv_四年级下_期末_美术",
+      "date": "2026-06-20",
+      "semester": "四年级下",
+      "examType": "期末",
+      "subject": "美术",
+      "score": 80,
+      "fullScore": 100,
+      "rank": "B",
+      "notes": ""
+    },
+    {
+      "id": "mrefzly9k07erk_四年级下_期末_道德与法治",
+      "date": "2026-06-20",
+      "semester": "四年级下",
+      "examType": "期末",
+      "subject": "道德与法治",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrefzly9yww7go_四年级下_期末_信息科技",
+      "date": "2026-06-20",
+      "semester": "四年级下",
+      "examType": "期末",
+      "subject": "信息科技",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrefzly9nqvd5w_四年级下_期末_综合实践活动",
+      "date": "2026-06-20",
+      "semester": "四年级下",
+      "examType": "期末",
+      "subject": "综合实践活动",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    },
+    {
+      "id": "mrefzly9c4n7v0_四年级下_期末_劳动",
+      "date": "2026-06-20",
+      "semester": "四年级下",
+      "examType": "期末",
+      "subject": "劳动",
+      "score": 90,
+      "fullScore": 100,
+      "rank": "A",
+      "notes": ""
+    }
+  ]
+}
