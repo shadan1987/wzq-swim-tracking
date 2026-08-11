@@ -800,38 +800,45 @@ tr.wzq-row:hover { background: #e0e7ff; }
 <!-- ==================== 训练计划模块 ==================== -->
 <div id="view-plan" class="container" style="display:none;">
     <h2 style="margin:6px 0 2px; color:#0f172a;">📋 王子期 每日训练计划</h2>
-    <p style="color:#64748b; font-size:13px; margin-bottom:14px;">基于教练训练方案制定 | 暑假期间每日水上6000-8000米 | 体能打卡可点击切换完成状态</p>
+    <p style="color:#64748b; font-size:13px; margin-bottom:14px;">基于教练训练方案制定 | 暑假期间每天训练，水上6000-8000米/天 | 体能打卡可点击切换完成状态</p>
 
     <!-- 今日状态横幅 -->
     <div id="planBanner"></div>
+
+    <!-- 智能调整建议（根据最新测试成绩动态生成） -->
+    <div class="plan-section" id="planSmartAdviceSection" style="border-left:4px solid var(--brand); display:none;">
+        <h3>🤖 智能调整建议（基于最新测试成绩）</h3>
+        <p class="plan-desc" id="planSmartAdviceDate">正在分析最近测试数据...</p>
+        <div id="planSmartAdviceContent"></div>
+    </div>
 
     <!-- 训练量统计 -->
     <div class="plan-stat-grid" id="planStatGrid"></div>
 
     <!-- 每日训练时间轴 -->
     <div class="plan-section">
-        <h3>🕐 每日训练时间轴</h3>
-        <p class="plan-desc">暑假期间每日训练流程，水上训练量6000-8000米。10点多下水，游至12点半后放松400米，再冲刺测试一个项目。</p>
+        <h3>🕐 每日训练时间轴（暑假每日）</h3>
+        <p class="plan-desc">暑假期间每天训练，水上训练量6000-8000米。早9点开始跑步5公里，之后陆上训练（拉力器+引体向上80个），10点多下水，一直游到12点半后放松400米，再冲刺一个项目。</p>
         <div class="plan-timeline">
             <div class="plan-time-item">
                 <div class="time-label">09:00 - 09:30</div>
-                <div class="time-content">晨跑 5公里</div>
+                <div class="time-content">🏃 晨跑 5公里</div>
                 <div class="time-detail">热身慢跑，培养心肺耐力。配速控制在6:00-6:30/km。</div>
             </div>
             <div class="plan-time-item accent">
                 <div class="time-label">09:30 - 10:00</div>
-                <div class="time-content">陆上训练</div>
-                <div class="time-detail">拉力器训练 + 引体向上80个（分多组完成，每组8-12个）</div>
+                <div class="time-content">🏋️ 陆上训练</div>
+                <div class="time-detail">拉力器训练 + 引体向上80个（分多组完成，每组8-12个，组间休息60-90秒）</div>
             </div>
             <div class="plan-time-item">
                 <div class="time-label">10:00 - 12:30</div>
-                <div class="time-content">水上训练 6000-8000米</div>
-                <div class="time-detail">主项专项训练 + 技术 drills + 有氧耐力 + 速度训练。蝶泳专项量控制在总量的15-20%。</div>
+                <div class="time-content">🏊 水上训练 6000-8000米</div>
+                <div class="time-detail" id="planWaterDetail">主项专项训练 + 技术 drills + 有氧耐力 + 速度训练。蝶泳专项量控制在总量的15-20%。</div>
             </div>
             <div class="plan-time-item success">
                 <div class="time-label">12:30 - 12:45</div>
-                <div class="time-content">放松 400米 + 冲刺测试</div>
-                <div class="time-detail">放松游400米后，冲刺测试一个项目（蝶泳/自由泳/仰泳轮换）</div>
+                <div class="time-content">🧘 放松 400米 + 冲刺测试</div>
+                <div class="time-detail" id="planSprintDetail">放松游400米后，冲刺测试一个项目（蝶泳/自由泳/仰泳轮换）</div>
             </div>
         </div>
     </div>
@@ -839,7 +846,7 @@ tr.wzq-row:hover { background: #e0e7ff; }
     <!-- 家中体能打卡 -->
     <div class="plan-section">
         <h3>💪 每日家中体能安排</h3>
-        <p class="plan-desc">点击卡片可标记完成状态，进度自动保存到浏览器。寒暑假、周末或不来训练时，<b style="color:var(--danger);">体能翻倍</b>！</p>
+        <p class="plan-desc">点击卡片可标记完成状态，进度自动保存到浏览器。暑假期间每天训练，体能按标准量执行。<b style="color:var(--brand);">非训练日（开学后周末/节假日不来训练时）体能翻倍</b>！</p>
         <div style="display:flex; align-items:center; gap:16px; margin-bottom:14px;">
             <div class="plan-progress-ring">
                 <svg width="56" height="56" viewBox="0 0 56 56">
@@ -859,7 +866,7 @@ tr.wzq-row:hover { background: #e0e7ff; }
     <!-- 周训练计划表 -->
     <div class="plan-section">
         <h3>📅 周训练计划安排</h3>
-        <p class="plan-desc">每周6天训练（周日休息），水上日量6000-8000米。每日安排：早9点5公里跑步+陆上训练，10点多下水游至12点半。</p>
+        <p class="plan-desc" id="planWeekDesc">暑假期间每天训练，水上日量6000-8000米。每日安排：早9点5公里跑步+陆上训练，10点多下水游至12点半。</p>
         <div style="overflow-x:auto;">
             <table class="plan-week-table">
                 <thead>
@@ -877,17 +884,24 @@ tr.wzq-row:hover { background: #e0e7ff; }
         </div>
     </div>
 
+    <!-- 最近测试成绩快览 -->
+    <div class="plan-section">
+        <h3>📊 最近测试成绩快览</h3>
+        <p class="plan-desc">展示最近7天的测试成绩，用于辅助调整训练计划。</p>
+        <div id="planRecentTests"></div>
+    </div>
+
     <!-- 训练原则 -->
     <div class="plan-section">
         <h3>📌 训练原则与注意事项</h3>
         <div style="font-size:13px; color:var(--text-secondary); line-height:2;">
             <div style="margin-bottom:8px;">1. <b>蝶泳专项量</b>控制在总量的15-20%（每周约1000-1500米蝶泳），避免过度训练导致肩部损伤。</div>
             <div style="margin-bottom:8px;">2. <b>引体向上</b>分多组完成，每组8-12个，组间休息60-90秒。注意全程控制下放速度。</div>
-            <div style="margin-bottom:8px;">3. <b>单杠悬垂</b>用手机设置倒计时，上去按开始，下来按停。累计12分钟（训练日）/ 30分钟（节假日寒暑假）。</div>
+            <div style="margin-bottom:8px;">3. <b>单杠悬垂</b>用手机设置倒计时，上去按开始，下来按停。训练日累计12分钟 / 非训练日30分钟。</div>
             <div style="margin-bottom:8px;">4. <b>打腿练习</b>坐在凳子上屁股坐出一半，脚戴0.5-1公斤沙袋，单脚500次。</div>
-            <div style="margin-bottom:8px;">5. <b>体能双倍日</b>（寒暑假、周六日、不来训练时）：所有体能项目数量翻倍！</div>
+            <div style="margin-bottom:8px;">5. <b>暑假期间</b>每天训练，体能按标准量执行；<b style="color:var(--danger);">非训练日</b>（开学后周末/节假日不来训练时）体能翻倍！</div>
             <div style="margin-bottom:8px;">6. <b>每日跑步</b>3000-6000米，晨跑5公里为训练日标准量。</div>
-            <div>7. <b>训练后</b>放松400米 + 冲刺测试一个项目，记录成绩追踪进步。</div>
+            <div>7. <b>训练后</b>放松400米 + 冲刺测试一个项目，记录成绩追踪进步，根据成绩动态调整次日训练重点。</div>
         </div>
     </div>
 </div>
@@ -2994,7 +3008,7 @@ function confirmUpload() {
 
 // ===== Init =====
 // 页面数据版本号：每次更新种子数据后递增，用于自动清除旧版 localStorage
-const WZQ_DATA_VERSION = '2026-08-11-v2';
+const WZQ_DATA_VERSION = '2026-08-11-v3';
 
 window.onload = function() {
     // 版本检查：如果种子数据已更新，自动清除旧缓存
@@ -4771,26 +4785,40 @@ var FITNESS_ITEMS = [
     { id: 'run',         icon: '🏃', name: '跑步',           normalTarget: '3000-6000米',     doubleTarget: '6000米+',         unit: '米' },
 ];
 
-// 周训练计划数据
-var WEEK_PLAN = [
+// 暑假周训练计划（每天训练，无休息日）
+var WEEK_PLAN_SUMMER = [
     { day: '周一', run: '5km', land: '拉力器+引体80', focus: '蝶泳专项 + 自由泳速度', volume: '6000-7000m', sprint: '50米蝶泳' },
     { day: '周二', run: '5km', land: '拉力器+引体80', focus: '自由泳有氧耐力 + 仰泳技术', volume: '7000-8000m', sprint: '50米自由泳' },
     { day: '周三', run: '5km', land: '拉力器+引体80', focus: '蝶泳技术drills + 蛙泳', volume: '6000-7000m', sprint: '50米仰泳' },
     { day: '周四', run: '5km', land: '拉力器+引体80', focus: '混合泳 + 全面发展', volume: '7000-8000m', sprint: '100米蝶泳' },
     { day: '周五', run: '5km', land: '拉力器+引体80', focus: '蝶泳速度耐力 + 自由泳', volume: '6000-7000m', sprint: '50米蝶泳' },
     { day: '周六', run: '5km', land: '拉力器+引体80', focus: '综合测试日 + 弱项强化', volume: '5000-6000m', sprint: '自选项目' },
+    { day: '周日', run: '5km', land: '拉力器+引体80', focus: '有氧恢复 + 技术细化', volume: '6000-7000m', sprint: '弱项测试' },
+];
+
+// 开学后周训练计划（周末不训练，体能翻倍）
+var WEEK_PLAN_SCHOOL = [
+    { day: '周一', run: '5km', land: '拉力器+引体80', focus: '蝶泳专项 + 自由泳速度', volume: '6000-7000m', sprint: '50米蝶泳' },
+    { day: '周二', run: '5km', land: '拉力器+引体80', focus: '自由泳有氧耐力 + 仰泳技术', volume: '7000-8000m', sprint: '50米自由泳' },
+    { day: '周三', run: '5km', land: '拉力器+引体80', focus: '蝶泳技术drills + 蛙泳', volume: '6000-7000m', sprint: '50米仰泳' },
+    { day: '周四', run: '5km', land: '拉力器+引体80', focus: '混合泳 + 全面发展', volume: '7000-8000m', sprint: '100米蝶泳' },
+    { day: '周五', run: '5km', land: '拉力器+引体80', focus: '蝶泳速度耐力 + 自由泳', volume: '6000-7000m', sprint: '50米蝶泳' },
+    { day: '周六', run: '休息', land: '体能双倍', focus: '休息恢复', volume: '—', sprint: '—' },
     { day: '周日', run: '休息', land: '体能双倍', focus: '休息恢复', volume: '—', sprint: '—' },
 ];
 
-// 判断今天是否为体能双倍日（寒暑假、周末、不来训练时）
+// 判断是否暑假期间（7月-8月每天训练）
+function isSummerVacation() {
+    var month = new Date().getMonth() + 1;
+    return (month >= 7 && month <= 8) || (month === 1 || month === 2);
+}
+
+// 判断今天是否为体能双倍日
+// 暑假期间每天训练，体能不翻倍；开学后周末不来训练时体能翻倍
 function isDoubleFitnessDay() {
-    var now = new Date();
-    var month = now.getMonth() + 1;  // 1-12
-    var day = now.getDay();          // 0=周日, 6=周六
-    var isWeekend = (day === 0 || day === 6);
-    // 寒暑假：7月-8月（暑假），1月-2月（寒假）
-    var isVacation = (month >= 7 && month <= 8) || (month === 1 || month === 2);
-    return isWeekend || isVacation;
+    if (isSummerVacation()) return false; // 暑假每天训练，不翻倍
+    var day = new Date().getDay();
+    return (day === 0 || day === 6); // 开学后周末翻倍
 }
 
 // 获取今日日期字符串
@@ -4815,27 +4843,261 @@ function saveFitnessState(state) {
     localStorage.setItem(key, JSON.stringify(state));
 }
 
+// 将成绩字符串转换为秒数（用于比较）
+function parseTimeToSeconds(timeStr) {
+    if (!timeStr) return 0;
+    var parts = timeStr.split(':');
+    if (parts.length === 2) {
+        return parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
+    }
+    return parseFloat(timeStr);
+}
+
+// 获取某项目最近N次测试成绩
+function getRecentTestsByEvent(eventName, limit) {
+    if (typeof trainingData === 'undefined' || !trainingData.length) return [];
+    var tests = trainingData.filter(function(r) {
+        return r.type === 'test' && r.event === eventName && r.time;
+    });
+    tests.sort(function(a, b) { return a.date < b.date ? 1 : -1; });
+    return tests.slice(0, limit || 5);
+}
+
+// 获取所有最近7天的测试成绩
+function getRecentTests(days) {
+    if (typeof trainingData === 'undefined' || !trainingData.length) return [];
+    var cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - (days || 7));
+    var cutoffStr = cutoff.getFullYear() + '-' + String(cutoff.getMonth() + 1).padStart(2, '0') + '-' + String(cutoff.getDate()).padStart(2, '0');
+    var tests = trainingData.filter(function(r) {
+        return r.type === 'test' && r.time && r.date >= cutoffStr;
+    });
+    tests.sort(function(a, b) { return a.date < b.date ? 1 : -1; });
+    return tests;
+}
+
+// 分析成绩趋势：返回 improving/stagnant/regressing
+function analyzeTrend(eventName) {
+    var tests = getRecentTestsByEvent(eventName, 3);
+    if (tests.length < 2) return { trend: 'insufficient', tests: tests };
+    var latest = parseTimeToSeconds(tests[0].time);
+    var previous = parseTimeToSeconds(tests[1].time);
+    var diff = previous - latest; // 正数=进步，负数=退步
+    var pct = Math.abs(diff) / previous * 100;
+    if (pct < 0.5) return { trend: 'stagnant', diff: diff, pct: pct, tests: tests };
+    return { trend: diff > 0 ? 'improving' : 'regressing', diff: diff, pct: pct, tests: tests };
+}
+
+// 智能调整建议：根据最近测试成绩分析并给出建议
+function generateSmartAdvice() {
+    var section = document.getElementById('planSmartAdviceSection');
+    var content = document.getElementById('planSmartAdviceContent');
+    var dateLabel = document.getElementById('planSmartAdviceDate');
+    if (!section || !content) return;
+
+    var recentTests = getRecentTests(7);
+    if (recentTests.length === 0) {
+        section.style.display = 'none';
+        return;
+    }
+
+    section.style.display = 'block';
+    var latestDate = recentTests[0].date;
+    dateLabel.textContent = '最近测试日期：' + latestDate + ' | 共 ' + recentTests.length + ' 条测试记录（最近7天）';
+
+    var events = ['50米蝶泳', '50米自由泳', '100米蝶泳', '100米仰泳', '50米仰泳', '50米蛙泳', '100米蛙泳', '200米仰泳', '200米蝶泳'];
+    var adviceItems = [];
+
+    events.forEach(function(evt) {
+        var analysis = analyzeTrend(evt);
+        if (analysis.tests.length === 0) return;
+
+        var best = analysis.tests[0];
+        var bestTime = best.time;
+        var bestDate = best.date;
+
+        // 找历史最佳
+        var allTests = getRecentTestsByEvent(evt, 50);
+        var histBest = allTests[0];
+        allTests.forEach(function(t) {
+            if (parseTimeToSeconds(t.time) < parseTimeToSeconds(histBest.time)) histBest = t;
+        });
+
+        var icon = '';
+        var trendText = '';
+        var advice = '';
+        var color = '';
+
+        if (analysis.trend === 'improving') {
+            icon = '📈';
+            trendText = '进步 ' + analysis.diff.toFixed(2) + '秒 (' + analysis.pct.toFixed(1) + '%)';
+            color = 'var(--success)';
+            advice = '保持当前训练节奏，可适当增加' + evt + '的强度训练';
+        } else if (analysis.trend === 'regressing') {
+            icon = '📉';
+            trendText = '退步 ' + Math.abs(analysis.diff).toFixed(2) + '秒 (' + analysis.pct.toFixed(1) + '%)';
+            color = 'var(--danger)';
+            advice = '建议增加' + evt + '技术drills，减少高强度冲刺，注重动作规范';
+        } else if (analysis.trend === 'stagnant') {
+            icon = '➡️';
+            trendText = '持平';
+            color = 'var(--warning)';
+            advice = '建议变换' + evt + '训练方式，加入间歇训练或阻力训练突破瓶颈';
+        } else {
+            icon = '❓';
+            trendText = '数据不足';
+            color = 'var(--text-muted)';
+            advice = '继续记录' + evt + '测试成绩以便分析';
+        }
+
+        // 是否为历史最佳
+        var isBest = (bestDate === histBest.date && bestTime === histBest.time);
+        var bestBadge = isBest ? '<span style="background:var(--success); color:#fff; font-size:11px; padding:2px 8px; border-radius:99px; margin-left:6px;">历史最佳</span>' : '';
+
+        adviceItems.push(
+            '<div style="display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--border-soft);">' +
+                '<div style="font-size:20px;">' + icon + '</div>' +
+                '<div style="flex:1;">' +
+                    '<div style="font-weight:600; color:var(--text-primary); font-size:14px;">' + evt + bestBadge + '</div>' +
+                    '<div style="font-size:12px; color:' + color + '; margin:2px 0;">最近：' + bestTime + ' (' + bestDate + ') | 趋势：' + trendText + '</div>' +
+                    '<div style="font-size:12px; color:var(--text-secondary);">历史最佳：' + histBest.time + ' (' + histBest.date + ')</div>' +
+                    '<div style="font-size:12px; color:var(--brand); margin-top:4px;">💡 ' + advice + '</div>' +
+                '</div>' +
+            '</div>'
+        );
+    });
+
+    // 找出最需要关注的项目（退步最多或成绩最弱）
+    var weakest = [];
+    var improving = [];
+    events.forEach(function(evt) {
+        var analysis = analyzeTrend(evt);
+        if (analysis.trend === 'regressing') weakest.push({ evt: evt, diff: analysis.diff });
+        if (analysis.trend === 'improving') improving.push({ evt: evt, diff: analysis.diff });
+    });
+
+    var summary = '';
+    if (weakest.length > 0) {
+        weakest.sort(function(a, b) { return a.diff - b.diff; });
+        summary += '<div style="background:#fef2f2; border-radius:8px; padding:12px 16px; margin-bottom:10px; font-size:13px; color:#991b1b;">' +
+            '⚠️ <b>重点关注</b>：' + weakest.map(function(w) { return w.evt + '（退步' + Math.abs(w.diff).toFixed(2) + '秒）'; }).join('、') +
+            '。建议在次日训练中增加该项目技术训练量，减少强度冲刺。</div>';
+    }
+    if (improving.length > 0) {
+        improving.sort(function(a, b) { return b.diff - a.diff; });
+        summary += '<div style="background:#f0fdf4; border-radius:8px; padding:12px 16px; margin-bottom:10px; font-size:13px; color:#166534;">' +
+            '✅ <b>进步明显</b>：' + improving.map(function(i) { return i.evt + '（进步' + i.diff.toFixed(2) + '秒）'; }).join('、') +
+            '。保持当前训练节奏，可作为冲刺测试首选项目。</div>';
+    }
+
+    content.innerHTML = summary + adviceItems.join('');
+}
+
+// 动态调整今日冲刺测试建议
+function adjustSprintSuggestion() {
+    var sprintDetail = document.getElementById('planSprintDetail');
+    if (!sprintDetail) return;
+
+    // 找出最近退步的项目，建议优先测试
+    var events = ['50米蝶泳', '50米自由泳', '100米蝶泳', '100米仰泳'];
+    var regressings = [];
+    events.forEach(function(evt) {
+        var analysis = analyzeTrend(evt);
+        if (analysis.trend === 'regressing') regressings.push(evt);
+    });
+
+    if (regressings.length > 0) {
+        sprintDetail.innerHTML = '放松游400米后，建议优先冲刺测试 <b style="color:var(--danger);">' + regressings.join(' / ') + '</b>（近期需关注的项目），检验调整效果';
+    } else {
+        // 找进步最大的项目，建议测试保持状态
+        var best = null;
+        var bestDiff = 0;
+        events.forEach(function(evt) {
+            var analysis = analyzeTrend(evt);
+            if (analysis.trend === 'improving' && analysis.diff > bestDiff) {
+                bestDiff = analysis.diff;
+                best = evt;
+            }
+        });
+        if (best) {
+            sprintDetail.innerHTML = '放松游400米后，建议冲刺测试 <b style="color:var(--success);">' + best + '</b>（近期进步最大），巩固状态';
+        } else {
+            sprintDetail.innerHTML = '放松游400米后，冲刺测试一个项目（蝶泳/自由泳/仰泳轮换）';
+        }
+    }
+}
+
+// 渲染最近测试成绩快览
+function renderRecentTests() {
+    var container = document.getElementById('planRecentTests');
+    if (!container) return;
+    var tests = getRecentTests(7);
+    if (tests.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">最近7天暂无测试成绩记录</div>';
+        return;
+    }
+
+    // 按日期分组
+    var grouped = {};
+    tests.forEach(function(t) {
+        if (!grouped[t.date]) grouped[t.date] = [];
+        grouped[t.date].push(t);
+    });
+
+    var html = '';
+    Object.keys(grouped).sort(function(a, b) { return a < b ? 1 : -1; }).forEach(function(date) {
+        var dayTests = grouped[date];
+        html += '<div style="margin-bottom:12px;">';
+        html += '<div style="font-weight:700; color:var(--brand); font-size:13px; margin-bottom:6px;">📅 ' + date + '</div>';
+        html += '<div style="display:flex; flex-wrap:wrap; gap:8px;">';
+        dayTests.forEach(function(t) {
+            // 找历史最佳
+            var allTests = getRecentTestsByEvent(t.event, 50);
+            var histBestSec = parseTimeToSeconds(allTests[0].time);
+            allTests.forEach(function(at) {
+                var sec = parseTimeToSeconds(at.time);
+                if (sec < histBestSec) histBestSec = sec;
+            });
+            var isBest = parseTimeToSeconds(t.time) <= histBestSec;
+            var badge = isBest ? '<span style="background:var(--success); color:#fff; font-size:10px; padding:1px 6px; border-radius:99px; margin-left:4px;">PB</span>' : '';
+
+            html += '<div style="background:var(--bg-soft); border-radius:8px; padding:8px 12px; font-size:13px;">' +
+                '<span style="color:var(--text-secondary);">' + t.event + '</span>' +
+                '<span style="font-weight:700; color:var(--text-primary); margin-left:6px;">' + t.time + '</span>' +
+                badge +
+                '</div>';
+        });
+        html += '</div></div>';
+    });
+    container.innerHTML = html;
+}
+
 // 渲染训练计划主函数
 function renderTrainingPlan() {
     var isDouble = isDoubleFitnessDay();
-    renderPlanBanner(isDouble);
+    var isSummer = isSummerVacation();
+    renderPlanBanner(isDouble, isSummer);
     renderPlanStats(isDouble);
     renderFitnessGrid(isDouble);
-    renderWeekPlan();
+    renderWeekPlan(isSummer);
+    generateSmartAdvice();
+    adjustSprintSuggestion();
+    renderRecentTests();
 }
 
 // 渲染状态横幅
-function renderPlanBanner(isDouble) {
+function renderPlanBanner(isDouble, isSummer) {
     var banner = document.getElementById('planBanner');
-    if (isDouble) {
-        var now = new Date();
-        var month = now.getMonth() + 1;
-        var reason = '';
-        if (month >= 7 && month <= 8) reason = '暑假期间';
-        else if (month === 1 || month === 2) reason = '寒假期间';
-        else { var d = now.getDay(); reason = (d === 0) ? '周日' : '周六'; }
+    if (isSummer) {
+        banner.className = 'plan-banner normal';
+        var month = new Date().getMonth() + 1;
+        var season = (month >= 7 && month <= 8) ? '暑假' : '寒假';
+        banner.innerHTML = '<span class="plan-banner-icon">🏊</span> ' + season + '期间<b>每天训练</b>，水上训练量 6000-8000米/天，体能按标准量执行（不翻倍）';
+    } else if (isDouble) {
+        var d = new Date().getDay();
+        var reason = (d === 0) ? '周日' : '周六';
         banner.className = 'plan-banner holiday';
-        banner.innerHTML = '<span class="plan-banner-icon">🔥</span> 今日是 <b>' + reason + '</b>，体能项目翻倍！所有家中体能训练量×2';
+        banner.innerHTML = '<span class="plan-banner-icon">🔥</span> 今日是 <b>' + reason + '</b>（非训练日），家中体能项目翻倍！所有体能训练量×2';
     } else {
         banner.className = 'plan-banner normal';
         banner.innerHTML = '<span class="plan-banner-icon">🏊</span> 今日为训练日，按标准训练计划执行。水上训练量 6000-8000米';
@@ -4912,10 +5174,21 @@ function updateFitnessProgress() {
 }
 
 // 渲染周训练计划表
-function renderWeekPlan() {
+function renderWeekPlan(isSummer) {
     var body = document.getElementById('planWeekBody');
-    body.innerHTML = WEEK_PLAN.map(function(row) {
-        var isRest = row.day === '周日';
+    var desc = document.getElementById('planWeekDesc');
+    var plan = isSummer ? WEEK_PLAN_SUMMER : WEEK_PLAN_SCHOOL;
+
+    if (desc) {
+        if (isSummer) {
+            desc.textContent = '暑假期间每天训练（无休息日），水上日量6000-8000米。每日安排：早9点5公里跑步+陆上训练，10点多下水游至12点半。';
+        } else {
+            desc.textContent = '开学后每周5天训练（周末休息体能翻倍），水上日量6000-8000米。每日安排：早9点5公里跑步+陆上训练，10点多下水游至12点半。';
+        }
+    }
+
+    body.innerHTML = plan.map(function(row) {
+        var isRest = row.volume === '—';
         return '<tr>' +
             '<td class="day-cell">' + row.day + (isRest ? ' <span class="rest-day">(休息)</span>' : '') + '</td>' +
             '<td>' + row.run + '</td>' +
