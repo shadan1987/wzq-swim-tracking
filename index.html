@@ -449,6 +449,47 @@ tr.wzq-row:hover { background: #e0e7ff; }
     .fitness-grid { grid-template-columns: 1fr; }
     .plan-stat-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* 每日计划详情卡片 */
+.plan-day-card { background: var(--bg-card); border-radius: var(--radius-md); padding: 18px 22px; box-shadow: var(--shadow-sm); margin-bottom: 14px; border-left: 4px solid var(--brand); }
+.plan-day-card.today { border-left-color: var(--success); box-shadow: 0 0 0 2px rgba(16,185,129,.15), var(--shadow-sm); }
+.plan-day-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+.plan-day-card-title { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+.plan-day-card-meta { font-size: 12px; color: var(--text-secondary); }
+.plan-day-card-volume { font-size: 13px; font-weight: 700; color: var(--brand); background: var(--brand-soft); padding: 3px 10px; border-radius: var(--radius-full); }
+.plan-set-list { list-style: none; padding: 0; margin: 0; }
+.plan-set-item { display: flex; align-items: flex-start; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border-soft); font-size: 13px; line-height: 1.6; }
+.plan-set-item:last-child { border-bottom: none; }
+.plan-set-num { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--brand-soft); color: var(--brand); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.plan-set-content { flex: 1; color: var(--text-primary); }
+.plan-set-distance { flex-shrink: 0; font-size: 12px; font-weight: 600; color: var(--accent); white-space: nowrap; }
+
+/* 每日计划输入表单 */
+.plan-form-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 1000; align-items: center; justify-content: center; }
+.plan-form-overlay.show { display: flex; }
+.plan-form-modal { background: var(--bg-card); border-radius: var(--radius-lg); padding: 24px 28px; max-width: 600px; width: 90%; max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
+.plan-form-modal h3 { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+.plan-form-group { margin-bottom: 14px; }
+.plan-form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+.plan-form-group input, .plan-form-group textarea, .plan-form-group select { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit; }
+.plan-form-group textarea { min-height: 80px; resize: vertical; }
+.plan-form-hint { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+.plan-form-btns { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
+.plan-form-btn { padding: 8px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: var(--transition); }
+.plan-form-btn.primary { background: var(--brand); color: #fff; }
+.plan-form-btn.primary:hover { background: var(--brand-dark); }
+.plan-form-btn.secondary { background: var(--bg-soft); color: var(--text-secondary); border: 1px solid var(--border); }
+.plan-form-btn.secondary:hover { background: var(--border); }
+.plan-form-btn.danger { background: var(--danger); color: #fff; }
+.plan-add-btn { background: var(--brand); color: #fff; border: none; border-radius: var(--radius-sm); padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 6px; }
+.plan-add-btn:hover { background: var(--brand-dark); }
+.plan-day-card-actions { display: flex; gap: 6px; }
+.plan-day-card-actions button { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px 10px; font-size: 12px; cursor: pointer; color: var(--text-secondary); transition: var(--transition); }
+.plan-day-card-actions button:hover { background: var(--brand-soft); color: var(--brand); }
+
+/* 日期选择器 */
+.plan-date-nav { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.plan-date-nav select { padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; }
 </style>
 </head>
 <body>
@@ -800,12 +841,12 @@ tr.wzq-row:hover { background: #e0e7ff; }
 <!-- ==================== 训练计划模块 ==================== -->
 <div id="view-plan" class="container" style="display:none;">
     <h2 style="margin:6px 0 2px; color:#0f172a;">📋 王子期 每日训练计划</h2>
-    <p style="color:#64748b; font-size:13px; margin-bottom:14px;">基于教练训练方案制定 | 暑假期间每天训练，水上6000-8000米/天 | 体能打卡可点击切换完成状态</p>
+    <p style="color:#64748b; font-size:13px; margin-bottom:14px;">基于教练训练方案制定 | 暑假期间每天训练，水上6000-8000米/天 | 可输入和编辑每日训练计划</p>
 
     <!-- 今日状态横幅 -->
     <div id="planBanner"></div>
 
-    <!-- 智能调整建议（根据最新测试成绩动态生成） -->
+    <!-- 智能调整建议 -->
     <div class="plan-section" id="planSmartAdviceSection" style="border-left:4px solid var(--brand); display:none;">
         <h3>🤖 智能调整建议（基于最新测试成绩）</h3>
         <p class="plan-desc" id="planSmartAdviceDate">正在分析最近测试数据...</p>
@@ -841,6 +882,31 @@ tr.wzq-row:hover { background: #e0e7ff; }
                 <div class="time-detail" id="planSprintDetail">放松游400米后，冲刺测试一个项目（蝶泳/自由泳/仰泳轮换）</div>
             </div>
         </div>
+    </div>
+
+    <!-- 每日水上训练计划（可编辑） -->
+    <div class="plan-section">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+            <h3 style="margin:0;">📝 每日水上训练计划详情</h3>
+            <button class="plan-add-btn" onclick="openPlanForm()">＋ 添加/编辑训练计划</button>
+        </div>
+        <p class="plan-desc">以下记录教练制定的每日具体水上训练内容，包含训练组数、距离、装备等。点击「添加/编辑」可输入新的每日训练计划。</p>
+        
+        <!-- 日期筛选 -->
+        <div class="plan-date-nav">
+            <label style="font-size:13px; font-weight:600; color:var(--text-primary);">选择日期：</label>
+            <select id="planDateSelect" onchange="renderDayPlanDetail()"></select>
+        </div>
+        
+        <!-- 当日计划详情 -->
+        <div id="planDayDetailContainer"></div>
+    </div>
+
+    <!-- 历史训练计划记录（来自教练图片） -->
+    <div class="plan-section">
+        <h3>📸 教练训练计划记录（图片提取）</h3>
+        <p class="plan-desc">以下为教练发送的训练计划图片中提取的记录，作为训练参考。</p>
+        <div id="planHistoryContainer"></div>
     </div>
 
     <!-- 家中体能打卡 -->
@@ -902,6 +968,44 @@ tr.wzq-row:hover { background: #e0e7ff; }
             <div style="margin-bottom:8px;">5. <b>暑假期间</b>每天训练，体能按标准量执行；<b style="color:var(--danger);">非训练日</b>（开学后周末/节假日不来训练时）体能翻倍！</div>
             <div style="margin-bottom:8px;">6. <b>每日跑步</b>3000-6000米，晨跑5公里为训练日标准量。</div>
             <div>7. <b>训练后</b>放松400米 + 冲刺测试一个项目，记录成绩追踪进步，根据成绩动态调整次日训练重点。</div>
+        </div>
+    </div>
+</div>
+
+<!-- 每日训练计划输入弹窗 -->
+<div class="plan-form-overlay" id="planFormOverlay">
+    <div class="plan-form-modal">
+        <h3 id="planFormTitle">添加每日训练计划</h3>
+        <div class="plan-form-group">
+            <label>训练日期</label>
+            <input type="date" id="planFormDate">
+            <div class="plan-form-hint">选择该训练计划对应的日期</div>
+        </div>
+        <div class="plan-form-group">
+            <label>训练总量（米）</label>
+            <input type="number" id="planFormVolume" placeholder="如 7000" style="width:150px;">
+        </div>
+        <div class="plan-form-group">
+            <label>训练重点</label>
+            <input type="text" id="planFormFocus" placeholder="如 蝶泳专项+自由泳速度">
+        </div>
+        <div class="plan-form-group">
+            <label>水上训练内容（每行一组训练）</label>
+            <textarea id="planFormSets" placeholder="每行一组，格式：训练内容（距离）&#10;例如：&#10;10个50蝶分解（500）&#10;10个50蝶腿（500）&#10;20个50自短冲50秒包干（1000）"></textarea>
+            <div class="plan-form-hint">每行一组训练内容，括号内标注该组距离（米）</div>
+        </div>
+        <div class="plan-form-group">
+            <label>冲刺测试项目</label>
+            <input type="text" id="planFormSprint" placeholder="如 50米蝶泳" style="width:200px;">
+        </div>
+        <div class="plan-form-group">
+            <label>备注</label>
+            <textarea id="planFormNotes" placeholder="其他需要记录的内容..." style="min-height:50px;"></textarea>
+        </div>
+        <div class="plan-form-btns">
+            <button class="plan-form-btn danger" id="planFormDeleteBtn" onclick="deleteDayPlan()" style="display:none;">删除</button>
+            <button class="plan-form-btn secondary" onclick="closePlanForm()">取消</button>
+            <button class="plan-form-btn primary" onclick="saveDayPlan()">保存</button>
         </div>
     </div>
 </div>
@@ -3008,7 +3112,7 @@ function confirmUpload() {
 
 // ===== Init =====
 // 页面数据版本号：每次更新种子数据后递增，用于自动清除旧版 localStorage
-const WZQ_DATA_VERSION = '2026-08-11-v3';
+const WZQ_DATA_VERSION = '2026-08-11-v4';
 
 window.onload = function() {
     // 版本检查：如果种子数据已更新，自动清除旧缓存
@@ -4775,7 +4879,7 @@ function gradeAnalysis() {
 
 // ===================== 训练计划模块 =====================
 
-// 体能项目定义（训练日 / 体能双倍日）
+// 体能项目定义
 var FITNESS_ITEMS = [
     { id: 'squat',       icon: '🦵', name: '下蹲',           normalTarget: '200个',           doubleTarget: '400个',           unit: '个' },
     { id: 'situp',       icon: '💪', name: '仰卧起坐',       normalTarget: '200个',           doubleTarget: '400个',           unit: '个' },
@@ -4785,7 +4889,73 @@ var FITNESS_ITEMS = [
     { id: 'run',         icon: '🏃', name: '跑步',           normalTarget: '3000-6000米',     doubleTarget: '6000米+',         unit: '米' },
 ];
 
-// 暑假周训练计划（每天训练，无休息日）
+// 教练训练计划记录（从图片提取）
+var COACH_PLAN_HISTORY = [
+    {
+        date: '2026-07-03', volume: 6100, focus: '自由泳专项', sprint: '',
+        sets: [
+            { content: '10个自由泳分解50', distance: 500 },
+            { content: '10个50自腿', distance: 500 },
+            { content: '20个50自短冲（50秒包干）', distance: 1000 },
+            { content: '20个50自阻力', distance: 1000 },
+        ],
+        notes: '图片提取，分项合计3000米，标注总量6100米（可能含热身/放松未列出）'
+    },
+    {
+        date: '2026-07-04', volume: 8700, focus: '蝶泳专项+蛙泳', sprint: '',
+        sets: [
+            { content: '10个50蝶分解', distance: 500 },
+            { content: '10个50蝶腿', distance: 500 },
+            { content: '3个100+200+300+100+200+300自', distance: 3600 },
+            { content: '4个手蹼脚蹼阻力100+200+100', distance: 1600 },
+            { content: '10个50+100+150蛙', distance: 2000 },
+            { content: '10个50蝶', distance: 500 },
+            { content: '50+100+150+200蝶', distance: 500 },
+        ],
+        notes: '图片提取，蝶泳占比23%，自由泳41.4%，蛙泳23%'
+    },
+    {
+        date: '2026-07-07', volume: 7050, focus: '蝶泳主项+混合泳', sprint: '',
+        sets: [
+            { content: '400蝶分解', distance: 400 },
+            { content: '600蝶腿', distance: 600 },
+            { content: '20个手蹼脚蹼阻力50蝶', distance: 1000 },
+            { content: '20个手蹼脚蹼50蝶', distance: 1000 },
+            { content: '20个手蹼脚蹼阻力50仰', distance: 1000 },
+            { content: '20个手蹼脚蹼阻力50蛙', distance: 1000 },
+            { content: '20个50自，短冲', distance: 1000 },
+            { content: '20个50蝶', distance: 1000 },
+        ],
+        notes: '图片提取，蝶泳占比最高（4项/3000m），大量使用手蹼脚蹼+阻力训练'
+    },
+];
+
+// 用户自定义每日训练计划（存储在localStorage）
+function getUserPlans() {
+    try { return JSON.parse(localStorage.getItem('wzqUserPlans') || '[]'); } catch(e) { return []; }
+}
+function saveUserPlans(plans) {
+    localStorage.setItem('wzqUserPlans', JSON.stringify(plans));
+}
+
+// 获取所有训练计划（教练历史 + 用户自定义），按日期排序
+function getAllPlans() {
+    var user = getUserPlans();
+    var all = COACH_PLAN_HISTORY.concat(user);
+    all.sort(function(a, b) { return a.date < b.date ? 1 : -1; });
+    return all;
+}
+
+// 根据日期获取计划
+function getPlanByDate(date) {
+    var all = getAllPlans();
+    for (var i = 0; i < all.length; i++) {
+        if (all[i].date === date) return all[i];
+    }
+    return null;
+}
+
+// 暑假周训练计划
 var WEEK_PLAN_SUMMER = [
     { day: '周一', run: '5km', land: '拉力器+引体80', focus: '蝶泳专项 + 自由泳速度', volume: '6000-7000m', sprint: '50米蝶泳' },
     { day: '周二', run: '5km', land: '拉力器+引体80', focus: '自由泳有氧耐力 + 仰泳技术', volume: '7000-8000m', sprint: '50米自由泳' },
@@ -4796,7 +4966,6 @@ var WEEK_PLAN_SUMMER = [
     { day: '周日', run: '5km', land: '拉力器+引体80', focus: '有氧恢复 + 技术细化', volume: '6000-7000m', sprint: '弱项测试' },
 ];
 
-// 开学后周训练计划（周末不训练，体能翻倍）
 var WEEK_PLAN_SCHOOL = [
     { day: '周一', run: '5km', land: '拉力器+引体80', focus: '蝶泳专项 + 自由泳速度', volume: '6000-7000m', sprint: '50米蝶泳' },
     { day: '周二', run: '5km', land: '拉力器+引体80', focus: '自由泳有氧耐力 + 仰泳技术', volume: '7000-8000m', sprint: '50米自由泳' },
@@ -4807,272 +4976,364 @@ var WEEK_PLAN_SCHOOL = [
     { day: '周日', run: '休息', land: '体能双倍', focus: '休息恢复', volume: '—', sprint: '—' },
 ];
 
-// 判断是否暑假期间（7月-8月每天训练）
 function isSummerVacation() {
     var month = new Date().getMonth() + 1;
     return (month >= 7 && month <= 8) || (month === 1 || month === 2);
 }
 
-// 判断今天是否为体能双倍日
-// 暑假期间每天训练，体能不翻倍；开学后周末不来训练时体能翻倍
 function isDoubleFitnessDay() {
-    if (isSummerVacation()) return false; // 暑假每天训练，不翻倍
+    if (isSummerVacation()) return false;
     var day = new Date().getDay();
-    return (day === 0 || day === 6); // 开学后周末翻倍
+    return (day === 0 || day === 6);
 }
 
-// 获取今日日期字符串
 function getTodayKey() {
     var d = new Date();
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 }
 
-// 获取体能打卡状态
 function getFitnessState() {
     var key = 'wzqFitness_' + getTodayKey();
     var state = localStorage.getItem(key);
-    if (state) {
-        try { return JSON.parse(state); } catch (e) {}
-    }
+    if (state) { try { return JSON.parse(state); } catch (e) {} }
     return {};
 }
 
-// 保存体能打卡状态
 function saveFitnessState(state) {
     var key = 'wzqFitness_' + getTodayKey();
     localStorage.setItem(key, JSON.stringify(state));
 }
 
-// 将成绩字符串转换为秒数（用于比较）
 function parseTimeToSeconds(timeStr) {
     if (!timeStr) return 0;
     var parts = timeStr.split(':');
-    if (parts.length === 2) {
-        return parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
-    }
+    if (parts.length === 2) return parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
     return parseFloat(timeStr);
 }
 
-// 获取某项目最近N次测试成绩
 function getRecentTestsByEvent(eventName, limit) {
     if (typeof trainingData === 'undefined' || !trainingData.length) return [];
-    var tests = trainingData.filter(function(r) {
-        return r.type === 'test' && r.event === eventName && r.time;
-    });
+    var tests = trainingData.filter(function(r) { return r.type === 'test' && r.event === eventName && r.time; });
     tests.sort(function(a, b) { return a.date < b.date ? 1 : -1; });
     return tests.slice(0, limit || 5);
 }
 
-// 获取所有最近7天的测试成绩
 function getRecentTests(days) {
     if (typeof trainingData === 'undefined' || !trainingData.length) return [];
     var cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - (days || 7));
     var cutoffStr = cutoff.getFullYear() + '-' + String(cutoff.getMonth() + 1).padStart(2, '0') + '-' + String(cutoff.getDate()).padStart(2, '0');
-    var tests = trainingData.filter(function(r) {
-        return r.type === 'test' && r.time && r.date >= cutoffStr;
-    });
+    var tests = trainingData.filter(function(r) { return r.type === 'test' && r.time && r.date >= cutoffStr; });
     tests.sort(function(a, b) { return a.date < b.date ? 1 : -1; });
     return tests;
 }
 
-// 分析成绩趋势：返回 improving/stagnant/regressing
 function analyzeTrend(eventName) {
     var tests = getRecentTestsByEvent(eventName, 3);
     if (tests.length < 2) return { trend: 'insufficient', tests: tests };
     var latest = parseTimeToSeconds(tests[0].time);
     var previous = parseTimeToSeconds(tests[1].time);
-    var diff = previous - latest; // 正数=进步，负数=退步
+    var diff = previous - latest;
     var pct = Math.abs(diff) / previous * 100;
     if (pct < 0.5) return { trend: 'stagnant', diff: diff, pct: pct, tests: tests };
     return { trend: diff > 0 ? 'improving' : 'regressing', diff: diff, pct: pct, tests: tests };
 }
 
-// 智能调整建议：根据最近测试成绩分析并给出建议
 function generateSmartAdvice() {
     var section = document.getElementById('planSmartAdviceSection');
     var content = document.getElementById('planSmartAdviceContent');
     var dateLabel = document.getElementById('planSmartAdviceDate');
     if (!section || !content) return;
-
     var recentTests = getRecentTests(7);
-    if (recentTests.length === 0) {
-        section.style.display = 'none';
-        return;
-    }
-
+    if (recentTests.length === 0) { section.style.display = 'none'; return; }
     section.style.display = 'block';
     var latestDate = recentTests[0].date;
     dateLabel.textContent = '最近测试日期：' + latestDate + ' | 共 ' + recentTests.length + ' 条测试记录（最近7天）';
-
     var events = ['50米蝶泳', '50米自由泳', '100米蝶泳', '100米仰泳', '50米仰泳', '50米蛙泳', '100米蛙泳', '200米仰泳', '200米蝶泳'];
     var adviceItems = [];
-
     events.forEach(function(evt) {
         var analysis = analyzeTrend(evt);
         if (analysis.tests.length === 0) return;
-
         var best = analysis.tests[0];
-        var bestTime = best.time;
-        var bestDate = best.date;
-
-        // 找历史最佳
         var allTests = getRecentTestsByEvent(evt, 50);
         var histBest = allTests[0];
-        allTests.forEach(function(t) {
-            if (parseTimeToSeconds(t.time) < parseTimeToSeconds(histBest.time)) histBest = t;
-        });
-
-        var icon = '';
-        var trendText = '';
-        var advice = '';
-        var color = '';
-
-        if (analysis.trend === 'improving') {
-            icon = '📈';
-            trendText = '进步 ' + analysis.diff.toFixed(2) + '秒 (' + analysis.pct.toFixed(1) + '%)';
-            color = 'var(--success)';
-            advice = '保持当前训练节奏，可适当增加' + evt + '的强度训练';
-        } else if (analysis.trend === 'regressing') {
-            icon = '📉';
-            trendText = '退步 ' + Math.abs(analysis.diff).toFixed(2) + '秒 (' + analysis.pct.toFixed(1) + '%)';
-            color = 'var(--danger)';
-            advice = '建议增加' + evt + '技术drills，减少高强度冲刺，注重动作规范';
-        } else if (analysis.trend === 'stagnant') {
-            icon = '➡️';
-            trendText = '持平';
-            color = 'var(--warning)';
-            advice = '建议变换' + evt + '训练方式，加入间歇训练或阻力训练突破瓶颈';
-        } else {
-            icon = '❓';
-            trendText = '数据不足';
-            color = 'var(--text-muted)';
-            advice = '继续记录' + evt + '测试成绩以便分析';
-        }
-
-        // 是否为历史最佳
-        var isBest = (bestDate === histBest.date && bestTime === histBest.time);
+        allTests.forEach(function(t) { if (parseTimeToSeconds(t.time) < parseTimeToSeconds(histBest.time)) histBest = t; });
+        var icon = '', trendText = '', advice = '', color = '';
+        if (analysis.trend === 'improving') { icon = '📈'; trendText = '进步 ' + analysis.diff.toFixed(2) + '秒 (' + analysis.pct.toFixed(1) + '%)'; color = 'var(--success)'; advice = '保持当前训练节奏，可适当增加' + evt + '的强度训练'; }
+        else if (analysis.trend === 'regressing') { icon = '📉'; trendText = '退步 ' + Math.abs(analysis.diff).toFixed(2) + '秒 (' + analysis.pct.toFixed(1) + '%)'; color = 'var(--danger)'; advice = '建议增加' + evt + '技术drills，减少高强度冲刺，注重动作规范'; }
+        else if (analysis.trend === 'stagnant') { icon = '➡️'; trendText = '持平'; color = 'var(--warning)'; advice = '建议变换' + evt + '训练方式，加入间歇训练或阻力训练突破瓶颈'; }
+        else { icon = '❓'; trendText = '数据不足'; color = 'var(--text-muted)'; advice = '继续记录' + evt + '测试成绩以便分析'; }
+        var isBest = (best.date === histBest.date && best.time === histBest.time);
         var bestBadge = isBest ? '<span style="background:var(--success); color:#fff; font-size:11px; padding:2px 8px; border-radius:99px; margin-left:6px;">历史最佳</span>' : '';
-
-        adviceItems.push(
-            '<div style="display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--border-soft);">' +
-                '<div style="font-size:20px;">' + icon + '</div>' +
-                '<div style="flex:1;">' +
-                    '<div style="font-weight:600; color:var(--text-primary); font-size:14px;">' + evt + bestBadge + '</div>' +
-                    '<div style="font-size:12px; color:' + color + '; margin:2px 0;">最近：' + bestTime + ' (' + bestDate + ') | 趋势：' + trendText + '</div>' +
-                    '<div style="font-size:12px; color:var(--text-secondary);">历史最佳：' + histBest.time + ' (' + histBest.date + ')</div>' +
-                    '<div style="font-size:12px; color:var(--brand); margin-top:4px;">💡 ' + advice + '</div>' +
-                '</div>' +
-            '</div>'
-        );
+        adviceItems.push('<div style="display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--border-soft);"><div style="font-size:20px;">' + icon + '</div><div style="flex:1;"><div style="font-weight:600; color:var(--text-primary); font-size:14px;">' + evt + bestBadge + '</div><div style="font-size:12px; color:' + color + '; margin:2px 0;">最近：' + best.time + ' (' + best.date + ') | 趋势：' + trendText + '</div><div style="font-size:12px; color:var(--text-secondary);">历史最佳：' + histBest.time + ' (' + histBest.date + ')</div><div style="font-size:12px; color:var(--brand); margin-top:4px;">💡 ' + advice + '</div></div></div>');
     });
-
-    // 找出最需要关注的项目（退步最多或成绩最弱）
-    var weakest = [];
-    var improving = [];
-    events.forEach(function(evt) {
-        var analysis = analyzeTrend(evt);
-        if (analysis.trend === 'regressing') weakest.push({ evt: evt, diff: analysis.diff });
-        if (analysis.trend === 'improving') improving.push({ evt: evt, diff: analysis.diff });
-    });
-
+    var weakest = [], improving = [];
+    events.forEach(function(evt) { var a = analyzeTrend(evt); if (a.trend === 'regressing') weakest.push({evt:evt, diff:a.diff}); if (a.trend === 'improving') improving.push({evt:evt, diff:a.diff}); });
     var summary = '';
-    if (weakest.length > 0) {
-        weakest.sort(function(a, b) { return a.diff - b.diff; });
-        summary += '<div style="background:#fef2f2; border-radius:8px; padding:12px 16px; margin-bottom:10px; font-size:13px; color:#991b1b;">' +
-            '⚠️ <b>重点关注</b>：' + weakest.map(function(w) { return w.evt + '（退步' + Math.abs(w.diff).toFixed(2) + '秒）'; }).join('、') +
-            '。建议在次日训练中增加该项目技术训练量，减少强度冲刺。</div>';
-    }
-    if (improving.length > 0) {
-        improving.sort(function(a, b) { return b.diff - a.diff; });
-        summary += '<div style="background:#f0fdf4; border-radius:8px; padding:12px 16px; margin-bottom:10px; font-size:13px; color:#166534;">' +
-            '✅ <b>进步明显</b>：' + improving.map(function(i) { return i.evt + '（进步' + i.diff.toFixed(2) + '秒）'; }).join('、') +
-            '。保持当前训练节奏，可作为冲刺测试首选项目。</div>';
-    }
-
+    if (weakest.length > 0) { weakest.sort(function(a, b) { return a.diff - b.diff; }); summary += '<div style="background:#fef2f2; border-radius:8px; padding:12px 16px; margin-bottom:10px; font-size:13px; color:#991b1b;">⚠️ <b>重点关注</b>：' + weakest.map(function(w) { return w.evt + '（退步' + Math.abs(w.diff).toFixed(2) + '秒）'; }).join('、') + '。建议在次日训练中增加该项目技术训练量，减少强度冲刺。</div>'; }
+    if (improving.length > 0) { improving.sort(function(a, b) { return b.diff - a.diff; }); summary += '<div style="background:#f0fdf4; border-radius:8px; padding:12px 16px; margin-bottom:10px; font-size:13px; color:#166534;">✅ <b>进步明显</b>：' + improving.map(function(i) { return i.evt + '（进步' + i.diff.toFixed(2) + '秒）'; }).join('、') + '。保持当前训练节奏，可作为冲刺测试首选项目。</div>'; }
     content.innerHTML = summary + adviceItems.join('');
 }
 
-// 动态调整今日冲刺测试建议
 function adjustSprintSuggestion() {
     var sprintDetail = document.getElementById('planSprintDetail');
     if (!sprintDetail) return;
-
-    // 找出最近退步的项目，建议优先测试
     var events = ['50米蝶泳', '50米自由泳', '100米蝶泳', '100米仰泳'];
     var regressings = [];
-    events.forEach(function(evt) {
-        var analysis = analyzeTrend(evt);
-        if (analysis.trend === 'regressing') regressings.push(evt);
-    });
-
-    if (regressings.length > 0) {
-        sprintDetail.innerHTML = '放松游400米后，建议优先冲刺测试 <b style="color:var(--danger);">' + regressings.join(' / ') + '</b>（近期需关注的项目），检验调整效果';
-    } else {
-        // 找进步最大的项目，建议测试保持状态
-        var best = null;
-        var bestDiff = 0;
-        events.forEach(function(evt) {
-            var analysis = analyzeTrend(evt);
-            if (analysis.trend === 'improving' && analysis.diff > bestDiff) {
-                bestDiff = analysis.diff;
-                best = evt;
-            }
-        });
-        if (best) {
-            sprintDetail.innerHTML = '放松游400米后，建议冲刺测试 <b style="color:var(--success);">' + best + '</b>（近期进步最大），巩固状态';
-        } else {
-            sprintDetail.innerHTML = '放松游400米后，冲刺测试一个项目（蝶泳/自由泳/仰泳轮换）';
-        }
-    }
+    events.forEach(function(evt) { var a = analyzeTrend(evt); if (a.trend === 'regressing') regressings.push(evt); });
+    if (regressings.length > 0) { sprintDetail.innerHTML = '放松游400米后，建议优先冲刺测试 <b style="color:var(--danger);">' + regressings.join(' / ') + '</b>（近期需关注的项目），检验调整效果'; }
+    else { var best = null, bestDiff = 0; events.forEach(function(evt) { var a = analyzeTrend(evt); if (a.trend === 'improving' && a.diff > bestDiff) { bestDiff = a.diff; best = evt; } }); if (best) { sprintDetail.innerHTML = '放松游400米后，建议冲刺测试 <b style="color:var(--success);">' + best + '</b>（近期进步最大），巩固状态'; } else { sprintDetail.innerHTML = '放松游400米后，冲刺测试一个项目（蝶泳/自由泳/仰泳轮换）'; } }
 }
 
-// 渲染最近测试成绩快览
 function renderRecentTests() {
     var container = document.getElementById('planRecentTests');
     if (!container) return;
     var tests = getRecentTests(7);
-    if (tests.length === 0) {
-        container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">最近7天暂无测试成绩记录</div>';
-        return;
-    }
-
-    // 按日期分组
+    if (tests.length === 0) { container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">最近7天暂无测试成绩记录</div>'; return; }
     var grouped = {};
-    tests.forEach(function(t) {
-        if (!grouped[t.date]) grouped[t.date] = [];
-        grouped[t.date].push(t);
-    });
-
+    tests.forEach(function(t) { if (!grouped[t.date]) grouped[t.date] = []; grouped[t.date].push(t); });
     var html = '';
     Object.keys(grouped).sort(function(a, b) { return a < b ? 1 : -1; }).forEach(function(date) {
         var dayTests = grouped[date];
-        html += '<div style="margin-bottom:12px;">';
-        html += '<div style="font-weight:700; color:var(--brand); font-size:13px; margin-bottom:6px;">📅 ' + date + '</div>';
-        html += '<div style="display:flex; flex-wrap:wrap; gap:8px;">';
+        html += '<div style="margin-bottom:12px;"><div style="font-weight:700; color:var(--brand); font-size:13px; margin-bottom:6px;">📅 ' + date + '</div><div style="display:flex; flex-wrap:wrap; gap:8px;">';
         dayTests.forEach(function(t) {
-            // 找历史最佳
             var allTests = getRecentTestsByEvent(t.event, 50);
             var histBestSec = parseTimeToSeconds(allTests[0].time);
-            allTests.forEach(function(at) {
-                var sec = parseTimeToSeconds(at.time);
-                if (sec < histBestSec) histBestSec = sec;
-            });
+            allTests.forEach(function(at) { var sec = parseTimeToSeconds(at.time); if (sec < histBestSec) histBestSec = sec; });
             var isBest = parseTimeToSeconds(t.time) <= histBestSec;
             var badge = isBest ? '<span style="background:var(--success); color:#fff; font-size:10px; padding:1px 6px; border-radius:99px; margin-left:4px;">PB</span>' : '';
-
-            html += '<div style="background:var(--bg-soft); border-radius:8px; padding:8px 12px; font-size:13px;">' +
-                '<span style="color:var(--text-secondary);">' + t.event + '</span>' +
-                '<span style="font-weight:700; color:var(--text-primary); margin-left:6px;">' + t.time + '</span>' +
-                badge +
-                '</div>';
+            html += '<div style="background:var(--bg-soft); border-radius:8px; padding:8px 12px; font-size:13px;"><span style="color:var(--text-secondary);">' + t.event + '</span><span style="font-weight:700; color:var(--text-primary); margin-left:6px;">' + t.time + '</span>' + badge + '</div>';
         });
         html += '</div></div>';
     });
     container.innerHTML = html;
 }
 
-// 渲染训练计划主函数
+// ===== 每日计划详情渲染 =====
+function renderDayPlanDetail() {
+    var select = document.getElementById('planDateSelect');
+    var container = document.getElementById('planDayDetailContainer');
+    if (!select || !container) return;
+    var selectedDate = select.value;
+    var plan = getPlanByDate(selectedDate);
+
+    if (!plan) {
+        container.innerHTML = '<div style="text-align:center; padding:24px; color:var(--text-muted); font-size:14px;">该日期暂无训练计划，点击「添加/编辑训练计划」创建</div>';
+        return;
+    }
+
+    var today = getTodayKey();
+    var isToday = (plan.date === today);
+    var isCoachRecord = COACH_PLAN_HISTORY.some(function(c) { return c.date === plan.date; });
+
+    var html = '<div class="plan-day-card' + (isToday ? ' today' : '') + '">';
+    html += '<div class="plan-day-card-header">';
+    html += '<div><div class="plan-day-card-title">📅 ' + plan.date + (isToday ? ' （今天）' : '') + (isCoachRecord ? ' <span style="background:var(--accent); color:#fff; font-size:10px; padding:1px 6px; border-radius:99px; margin-left:4px;">教练计划</span>' : '') + '</div>';
+    if (plan.focus) html += '<div class="plan-day-card-meta">训练重点：' + plan.focus + '</div>';
+    html += '</div>';
+    html += '<div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">';
+    html += '<span class="plan-day-card-volume">总量 ' + plan.volume + '米</span>';
+    if (!isCoachRecord) {
+        html += '<div class="plan-day-card-actions"><button onclick="editDayPlan(\'' + plan.date + '\')">编辑</button></div>';
+    }
+    html += '</div>';
+    html += '</div>';
+
+    if (plan.sets && plan.sets.length > 0) {
+        html += '<ul class="plan-set-list">';
+        plan.sets.forEach(function(set, idx) {
+            html += '<li class="plan-set-item"><span class="plan-set-num">' + (idx + 1) + '</span><span class="plan-set-content">' + set.content + '</span><span class="plan-set-distance">' + set.distance + '米</span></li>';
+        });
+        html += '</ul>';
+        // 计算分项合计
+        var total = plan.sets.reduce(function(sum, s) { return sum + s.distance; }, 0);
+        html += '<div style="margin-top:8px; font-size:12px; color:var(--text-muted);">分项合计：' + total + '米' + (total !== plan.volume ? ' | 标注总量：' + plan.volume + '米' : '') + '</div>';
+    }
+
+    if (plan.sprint) {
+        html += '<div style="margin-top:8px; padding:8px 12px; background:var(--brand-soft); border-radius:var(--radius-sm); font-size:13px; color:var(--brand);">🎯 冲刺测试：' + plan.sprint + '</div>';
+    }
+    if (plan.notes) {
+        html += '<div style="margin-top:8px; font-size:12px; color:var(--text-muted); line-height:1.6;">📝 ' + plan.notes + '</div>';
+    }
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+// 渲染教练历史训练计划
+function renderPlanHistory() {
+    var container = document.getElementById('planHistoryContainer');
+    if (!container) return;
+    var html = '';
+    COACH_PLAN_HISTORY.forEach(function(plan) {
+        html += '<div class="plan-day-card" style="margin-bottom:12px;">';
+        html += '<div class="plan-day-card-header">';
+        html += '<div><div class="plan-day-card-title">📅 ' + plan.date + ' <span style="background:var(--accent); color:#fff; font-size:10px; padding:1px 6px; border-radius:99px; margin-left:4px;">教练计划</span></div>';
+        if (plan.focus) html += '<div class="plan-day-card-meta">训练重点：' + plan.focus + '</div>';
+        html += '</div>';
+        html += '<span class="plan-day-card-volume">总量 ' + plan.volume + '米</span>';
+        html += '</div>';
+        if (plan.sets && plan.sets.length > 0) {
+            html += '<ul class="plan-set-list">';
+            plan.sets.forEach(function(set, idx) {
+                html += '<li class="plan-set-item"><span class="plan-set-num">' + (idx + 1) + '</span><span class="plan-set-content">' + set.content + '</span><span class="plan-set-distance">' + set.distance + '米</span></li>';
+            });
+            html += '</ul>';
+            var total = plan.sets.reduce(function(sum, s) { return sum + s.distance; }, 0);
+            html += '<div style="margin-top:8px; font-size:12px; color:var(--text-muted);">分项合计：' + total + '米' + (total !== plan.volume ? ' | 标注总量：' + plan.volume + '米' : '') + '</div>';
+        }
+        if (plan.notes) html += '<div style="margin-top:8px; font-size:12px; color:var(--text-muted); line-height:1.6;">📝 ' + plan.notes + '</div>';
+        html += '</div>';
+    });
+    container.innerHTML = html;
+}
+
+// 初始化日期选择器
+function initPlanDateSelect() {
+    var select = document.getElementById('planDateSelect');
+    if (!select) return;
+    var all = getAllPlans();
+    var today = getTodayKey();
+    var hasToday = all.some(function(p) { return p.date === today; });
+
+    // 如果今天没有计划，添加一个"今天"选项
+    var options = '';
+    if (!hasToday) {
+        options += '<option value="' + today + '">' + today + '（今天，暂无计划）</option>';
+    }
+    all.forEach(function(p) {
+        var label = p.date;
+        if (p.date === today) label += '（今天）';
+        if (p.focus) label += ' - ' + p.focus;
+        options += '<option value="' + p.date + '">' + label + '</option>';
+    });
+    select.innerHTML = options;
+
+    // 默认选中今天或最近的计划
+    if (hasToday) {
+        select.value = today;
+    } else if (all.length > 0) {
+        select.value = all[0].date;
+    } else {
+        select.value = today;
+    }
+    renderDayPlanDetail();
+}
+
+// ===== 训练计划表单 =====
+var editingPlanDate = null;
+
+function openPlanForm(date) {
+    var overlay = document.getElementById('planFormOverlay');
+    var title = document.getElementById('planFormTitle');
+    var deleteBtn = document.getElementById('planFormDeleteBtn');
+
+    editingPlanDate = date || null;
+
+    if (date) {
+        var plan = getPlanByDate(date);
+        if (plan) {
+            title.textContent = '编辑训练计划 - ' + date;
+            document.getElementById('planFormDate').value = plan.date;
+            document.getElementById('planFormVolume').value = plan.volume || '';
+            document.getElementById('planFormFocus').value = plan.focus || '';
+            document.getElementById('planFormSprint').value = plan.sprint || '';
+            document.getElementById('planFormNotes').value = plan.notes || '';
+            var setsText = '';
+            if (plan.sets) {
+                plan.sets.forEach(function(s) {
+                    setsText += s.content + '（' + s.distance + '）\n';
+                });
+            }
+            document.getElementById('planFormSets').value = setsText.trim();
+            deleteBtn.style.display = 'inline-block';
+        }
+    } else {
+        title.textContent = '添加每日训练计划';
+        document.getElementById('planFormDate').value = getTodayKey();
+        document.getElementById('planFormVolume').value = '';
+        document.getElementById('planFormFocus').value = '';
+        document.getElementById('planFormSprint').value = '';
+        document.getElementById('planFormNotes').value = '';
+        document.getElementById('planFormSets').value = '';
+        deleteBtn.style.display = 'none';
+    }
+
+    overlay.classList.add('show');
+}
+
+function closePlanForm() {
+    document.getElementById('planFormOverlay').classList.remove('show');
+    editingPlanDate = null;
+}
+
+function editDayPlan(date) {
+    openPlanForm(date);
+}
+
+function saveDayPlan() {
+    var date = document.getElementById('planFormDate').value;
+    var volume = parseInt(document.getElementById('planFormVolume').value) || 0;
+    var focus = document.getElementById('planFormFocus').value.trim();
+    var sprint = document.getElementById('planFormSprint').value.trim();
+    var notes = document.getElementById('planFormNotes').value.trim();
+    var setsText = document.getElementById('planFormSets').value.trim();
+
+    if (!date) { alert('请选择训练日期'); return; }
+
+    // 解析训练组
+    var sets = [];
+    if (setsText) {
+        var lines = setsText.split('\n');
+        lines.forEach(function(line) {
+            line = line.trim();
+            if (!line) return;
+            // 尝试提取括号内的距离
+            var match = line.match(/[（(](\d+)[）)]/);
+            var distance = match ? parseInt(match[1]) : 0;
+            var content = line.replace(/[（(]\d+[）)]/g, '').trim();
+            if (content) sets.push({ content: content, distance: distance });
+        });
+    }
+
+    var plan = { date: date, volume: volume, focus: focus, sprint: sprint, sets: sets, notes: notes };
+
+    // 保存到用户计划
+    var userPlans = getUserPlans();
+    var existingIdx = -1;
+    for (var i = 0; i < userPlans.length; i++) {
+        if (userPlans[i].date === date) { existingIdx = i; break; }
+    }
+
+    if (existingIdx >= 0) {
+        userPlans[existingIdx] = plan;
+    } else {
+        userPlans.push(plan);
+    }
+
+    saveUserPlans(userPlans);
+    closePlanForm();
+    initPlanDateSelect();
+
+    // 选中刚保存的日期
+    var select = document.getElementById('planDateSelect');
+    if (select) select.value = date;
+    renderDayPlanDetail();
+}
+
+function deleteDayPlan() {
+    if (!editingPlanDate) return;
+    if (!confirm('确定删除 ' + editingPlanDate + ' 的训练计划吗？')) return;
+
+    var userPlans = getUserPlans();
+    userPlans = userPlans.filter(function(p) { return p.date !== editingPlanDate; });
+    saveUserPlans(userPlans);
+
+    closePlanForm();
+    initPlanDateSelect();
+}
+
+// ===== 主渲染函数 =====
 function renderTrainingPlan() {
     var isDouble = isDoubleFitnessDay();
     var isSummer = isSummerVacation();
@@ -5083,9 +5344,10 @@ function renderTrainingPlan() {
     generateSmartAdvice();
     adjustSprintSuggestion();
     renderRecentTests();
+    renderPlanHistory();
+    initPlanDateSelect();
 }
 
-// 渲染状态横幅
 function renderPlanBanner(isDouble, isSummer) {
     var banner = document.getElementById('planBanner');
     if (isSummer) {
@@ -5104,7 +5366,6 @@ function renderPlanBanner(isDouble, isSummer) {
     }
 }
 
-// 渲染训练量统计
 function renderPlanStats(isDouble) {
     var grid = document.getElementById('planStatGrid');
     var multiplier = isDouble ? 2 : 1;
@@ -5121,7 +5382,6 @@ function renderPlanStats(isDouble) {
     }).join('');
 }
 
-// 渲染体能打卡卡片
 function renderFitnessGrid(isDouble) {
     var grid = document.getElementById('fitnessGrid');
     var state = getFitnessState();
@@ -5129,74 +5389,44 @@ function renderFitnessGrid(isDouble) {
         var target = isDouble ? item.doubleTarget : item.normalTarget;
         var done = state[item.id] === true;
         var doubleBadge = isDouble ? '<span class="fitness-double-badge">×2</span>' : '';
-        return '<div class="fitness-card' + (done ? ' done' : '') + '" onclick="toggleFitnessDone(\'' + item.id + '\')">' +
-            '<div class="fitness-header">' +
-                '<span class="fitness-name">' + item.icon + ' ' + item.name + doubleBadge + '</span>' +
-                '<span class="fitness-checkbox">' + (done ? '✓' : '') + '</span>' +
-            '</div>' +
-            '<div class="fitness-target">目标：' + target + '</div>' +
-        '</div>';
+        return '<div class="fitness-card' + (done ? ' done' : '') + '" onclick="toggleFitnessDone(\'' + item.id + '\')"><div class="fitness-header"><span class="fitness-name">' + item.icon + ' ' + item.name + doubleBadge + '</span><span class="fitness-checkbox">' + (done ? '✓' : '') + '</span></div><div class="fitness-target">目标：' + target + '</div></div>';
     }).join('');
     updateFitnessProgress();
 }
 
-// 切换体能打卡状态
 function toggleFitnessDone(itemId) {
     var state = getFitnessState();
     state[itemId] = !state[itemId];
     saveFitnessState(state);
-    var isDouble = isDoubleFitnessDay();
-    renderFitnessGrid(isDouble);
+    renderFitnessGrid(isDoubleFitnessDay());
 }
 
-// 重置今日打卡
 function resetFitnessChecklist() {
-    var key = 'wzqFitness_' + getTodayKey();
-    localStorage.removeItem(key);
-    var isDouble = isDoubleFitnessDay();
-    renderFitnessGrid(isDouble);
+    localStorage.removeItem('wzqFitness_' + getTodayKey());
+    renderFitnessGrid(isDoubleFitnessDay());
 }
 
-// 更新进度环
 function updateFitnessProgress() {
     var state = getFitnessState();
     var doneCount = 0;
-    FITNESS_ITEMS.forEach(function(item) {
-        if (state[item.id]) doneCount++;
-    });
+    FITNESS_ITEMS.forEach(function(item) { if (state[item.id]) doneCount++; });
     var total = FITNESS_ITEMS.length;
     var circle = document.getElementById('fitnessProgressCircle');
     var text = document.getElementById('fitnessProgressText');
-    var circumference = 2 * Math.PI * 24; // ~150.8
+    var circumference = 2 * Math.PI * 24;
     var offset = circumference - (doneCount / total) * circumference;
     if (circle) circle.style.strokeDashoffset = offset;
     if (text) text.textContent = doneCount + '/' + total;
 }
 
-// 渲染周训练计划表
 function renderWeekPlan(isSummer) {
     var body = document.getElementById('planWeekBody');
     var desc = document.getElementById('planWeekDesc');
     var plan = isSummer ? WEEK_PLAN_SUMMER : WEEK_PLAN_SCHOOL;
-
-    if (desc) {
-        if (isSummer) {
-            desc.textContent = '暑假期间每天训练（无休息日），水上日量6000-8000米。每日安排：早9点5公里跑步+陆上训练，10点多下水游至12点半。';
-        } else {
-            desc.textContent = '开学后每周5天训练（周末休息体能翻倍），水上日量6000-8000米。每日安排：早9点5公里跑步+陆上训练，10点多下水游至12点半。';
-        }
-    }
-
+    if (desc) { desc.textContent = isSummer ? '暑假期间每天训练（无休息日），水上日量6000-8000米。每日安排：早9点5公里跑步+陆上训练，10点多下水游至12点半。' : '开学后每周5天训练（周末休息体能翻倍），水上日量6000-8000米。每日安排：早9点5公里跑步+陆上训练，10点多下水游至12点半。'; }
     body.innerHTML = plan.map(function(row) {
         var isRest = row.volume === '—';
-        return '<tr>' +
-            '<td class="day-cell">' + row.day + (isRest ? ' <span class="rest-day">(休息)</span>' : '') + '</td>' +
-            '<td>' + row.run + '</td>' +
-            '<td>' + row.land + '</td>' +
-            '<td' + (isRest ? ' class="rest-day"' : '') + '>' + row.focus + '</td>' +
-            '<td>' + row.volume + '</td>' +
-            '<td>' + row.sprint + '</td>' +
-        '</tr>';
+        return '<tr><td class="day-cell">' + row.day + (isRest ? ' <span class="rest-day">(休息)</span>' : '') + '</td><td>' + row.run + '</td><td>' + row.land + '</td><td' + (isRest ? ' class="rest-day"' : '') + '>' + row.focus + '</td><td>' + row.volume + '</td><td>' + row.sprint + '</td></tr>';
     }).join('');
 }
 </script>
