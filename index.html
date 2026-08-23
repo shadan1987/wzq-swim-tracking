@@ -2000,7 +2000,7 @@ function dateToTs(dateStr) {
 }
 function tsToLabel(ts) {
     var d = new Date(ts);
-    return (d.getMonth() + 1) + '/' + d.getDate();
+    return d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
 }
 
 // ===== Global state =====
