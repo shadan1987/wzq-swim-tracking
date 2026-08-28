@@ -1007,6 +1007,102 @@
       "duration": 0,
       "intensity": "",
       "notes": "训练后测试"
+    },
+    {
+      "id": "mrf27a8fr1",
+      "date": "2026-08-27",
+      "type": "test",
+      "event": "50米自由泳",
+      "pool": "25米池",
+      "time": "34.02",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf27a8bf1",
+      "date": "2026-08-27",
+      "type": "test",
+      "event": "100米蝶泳",
+      "pool": "25米池",
+      "time": "1:21.26",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf27a8bk1",
+      "date": "2026-08-27",
+      "type": "test",
+      "event": "50米仰泳",
+      "pool": "25米池",
+      "time": "43.10",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf27a8fr2",
+      "date": "2026-08-27",
+      "type": "test",
+      "event": "200米自由泳",
+      "pool": "25米池",
+      "time": "2:37.46",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf28a8bf1",
+      "date": "2026-08-28",
+      "type": "test",
+      "event": "50米蝶泳",
+      "pool": "25米池",
+      "time": "36.91",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf28a8bk1",
+      "date": "2026-08-28",
+      "type": "test",
+      "event": "100米蛙泳",
+      "pool": "25米池",
+      "time": "1:46.12",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf28a8bk2",
+      "date": "2026-08-28",
+      "type": "test",
+      "event": "50米蛙泳",
+      "pool": "25米池",
+      "time": "49.95",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf28a8im1",
+      "date": "2026-08-28",
+      "type": "test",
+      "event": "200米混合泳",
+      "pool": "25米池",
+      "time": "3:01.01",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
     }
   ],
   "study": [
