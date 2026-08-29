@@ -1103,6 +1103,30 @@
       "duration": 0,
       "intensity": "",
       "notes": "训练后测试"
+    },
+    {
+      "id": "mrf29a8fr1",
+      "date": "2026-08-29",
+      "type": "test",
+      "event": "100米自由泳",
+      "pool": "25米池",
+      "time": "1:13.09",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf29a8fr2",
+      "date": "2026-08-29",
+      "type": "test",
+      "event": "400米自由泳",
+      "pool": "25米池",
+      "time": "5:22.11",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
     }
   ],
   "study": [
