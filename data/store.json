@@ -293,6 +293,12 @@
       "date": "2026-08-24",
       "height": 144,
       "weight": 36.0
+    },
+    {
+      "id": "g50",
+      "date": "2026-08-31",
+      "height": 144,
+      "weight": 35.8
     }
   ],
   "swimScores": [
@@ -1123,6 +1129,30 @@
       "event": "400米自由泳",
       "pool": "25米池",
       "time": "5:22.11",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf30a8bk1",
+      "date": "2026-08-30",
+      "type": "test",
+      "event": "100米仰泳",
+      "pool": "25米池",
+      "time": "1:27.31",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试"
+    },
+    {
+      "id": "mrf30a8im1",
+      "date": "2026-08-30",
+      "type": "test",
+      "event": "400米混合泳",
+      "pool": "25米池",
+      "time": "6:15.59",
       "content": "",
       "duration": 0,
       "intensity": "",
