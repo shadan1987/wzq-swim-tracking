@@ -1157,6 +1157,30 @@
       "duration": 0,
       "intensity": "",
       "notes": "训练后测试"
+    },
+    {
+      "id": "mrf10a9fr1",
+      "date": "2026-09-10",
+      "type": "test",
+      "event": "50米自由泳",
+      "pool": "50米池",
+      "time": "33.65",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试（50米池）"
+    },
+    {
+      "id": "mrf10a9bf1",
+      "date": "2026-09-10",
+      "type": "test",
+      "event": "50米蝶泳",
+      "pool": "50米池",
+      "time": "37.60",
+      "content": "",
+      "duration": 0,
+      "intensity": "",
+      "notes": "训练后测试（50米池）"
     }
   ],
   "study": [
